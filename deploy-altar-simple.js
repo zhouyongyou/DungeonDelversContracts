@@ -10,10 +10,10 @@ async function main() {
   
   const deployer = new ethers.Wallet(process.env.PRIVATE_KEY, provider);
   
-  console.log('🔨 部署 AltarOfAscensionVRF...');
+  console.log('🔨 部署 AltarOfAscension...');
   console.log('部署者地址:', deployer.address);
   
-  const altarArtifact = await hre.artifacts.readArtifact("AltarOfAscensionVRF");
+  const altarArtifact = await hre.artifacts.readArtifact("AltarOfAscension");
   const altarFactory = new ethers.ContractFactory(
     altarArtifact.abi,
     altarArtifact.bytecode,
@@ -30,7 +30,7 @@ async function main() {
   await altarContract.waitForDeployment();
   
   const altarAddress = await altarContract.getAddress();
-  console.log('✅ AltarOfAscensionVRF 部署成功:', altarAddress);
+  console.log('✅ AltarOfAscension 部署成功:', altarAddress);
 }
 
 main().then(() => process.exit(0)).catch((error) => {

@@ -210,12 +210,12 @@ function syncABIs() {
   const abiFiles = [
     'Hero.json',
     'Relic.json', 
-    'PartyV3.json',
+    'Party.json',
     'VIPStaking.json',
     'PlayerProfile.json',
     'DungeonMaster.json',
     'PlayerVault.json',
-    'AltarOfAscensionVRF.json',
+    'AltarOfAscension.json',
     'VRFManagerV2Plus.json'
   ];
 

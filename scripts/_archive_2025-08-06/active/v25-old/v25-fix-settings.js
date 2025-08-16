@@ -88,7 +88,7 @@ ${colors.reset}`);
     const contractsToConnect = [
       { name: 'HERO', artifact: 'Hero' },
       { name: 'RELIC', artifact: 'Relic' },
-      { name: 'PARTY', artifact: 'PartyV3' },
+      { name: 'PARTY', artifact: 'Party' },
       { name: 'ALTAROFASCENSION', artifact: 'AltarOfAscensionV2Fixed' },
       { name: 'DUNGEONSTORAGE', artifact: 'DungeonStorage' },
       { name: 'PLAYERPROFILE', artifact: 'PlayerProfile' },

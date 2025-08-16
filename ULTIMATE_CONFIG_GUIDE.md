@@ -104,7 +104,7 @@ node scripts/ultimate-config-system.js subgraph
 - Party.json
 - DungeonMaster.json
 - DungeonStorage.json
-- AltarOfAscensionVRF.json
+- AltarOfAscension.json
 - VRFConsumerV2Plus.json
 
 ## 🔍 配置格式轉換

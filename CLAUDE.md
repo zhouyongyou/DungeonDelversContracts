@@ -171,10 +171,10 @@ node scripts/ultimate-config-system.js validate   # 驗證所有配置
 系統自動管理以下 7 個核心合約的 ABI：
 1. **Hero** - 英雄 NFT
 2. **Relic** - 聖物 NFT
-3. **Party** (PartyV3) - 隊伍 NFT
+3. **Party** (Party) - 隊伍 NFT
 4. **DungeonMaster** - 地城邏輯
 5. **DungeonStorage** - 地城存儲
-6. **AltarOfAscensionVRF** - 升星祭壇
+6. **AltarOfAscension** - 升星祭壇
 7. **VRFConsumerV2Plus** - VRF 消費者
 
 ### 🛡️ 安全特性

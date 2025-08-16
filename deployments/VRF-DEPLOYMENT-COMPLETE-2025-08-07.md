@@ -14,7 +14,7 @@ BSC Mainnet (Chain ID: 56)
 | Hero | `0x671d937b171e2ba2c4dc23c133b07e4449f283ef` | ✅ 已驗證 |
 | Relic | `0x42bf1bd8fc5a8dfdd0e97de131246ec0e3ec73da` | ✅ 已驗證 |
 | DungeonMaster | `0xc0bbae55cf9245f76628d2c5299cd6fa35cd102a` | ✅ 已驗證 |
-| AltarOfAscensionVRF | `0xa86749237d4631ad92ba859d0b0df4770f6147ba` | ✅ 已驗證 |
+| AltarOfAscension | `0xa86749237d4631ad92ba859d0b0df4770f6147ba` | ✅ 已驗證 |
 
 ## VRF 配置詳情
 - **VRF Coordinator**: `0xd691f04bc0C9a24Edb78af9E005Cf85768F694C9`
@@ -28,13 +28,13 @@ BSC Mainnet (Chain ID: 56)
 - ✅ Hero.setVRFManager(VRFConsumerV2Plus)
 - ✅ Relic.setVRFManager(VRFConsumerV2Plus)
 - ✅ DungeonMaster.setVRFManager(VRFConsumerV2Plus)
-- ✅ AltarOfAscensionVRF.setVRFManager(VRFConsumerV2Plus)
+- ✅ AltarOfAscension.setVRFManager(VRFConsumerV2Plus)
 
 ### 2. VRF 授權設置
 - ✅ VRFConsumerV2Plus.setAuthorizedContract(Hero, true)
 - ✅ VRFConsumerV2Plus.setAuthorizedContract(Relic, true)
 - ✅ VRFConsumerV2Plus.setAuthorizedContract(DungeonMaster, true)
-- ✅ VRFConsumerV2Plus.setAuthorizedContract(AltarOfAscensionVRF, true)
+- ✅ VRFConsumerV2Plus.setAuthorizedContract(AltarOfAscension, true)
 
 ### 3. 合約互連設置
 - ✅ Hero.setDungeonCore(0x8a2D2b1961135127228EdD71Ff98d6B097915a13)
@@ -44,7 +44,7 @@ BSC Mainnet (Chain ID: 56)
 - ✅ Relic.setAscensionAltarAddress(0xa86749237d4631ad92ba859d0b0df4770f6147ba)
 - ✅ DungeonMaster.setDungeonCore(0x8a2D2b1961135127228EdD71Ff98d6B097915a13)
 - ✅ DungeonMaster.setDungeonStorage(0x88EF98E7F9095610d7762C30165854f271525B97)
-- ✅ AltarOfAscensionVRF.setDungeonCore(0x8a2D2b1961135127228EdD71Ff98d6B097915a13)
+- ✅ AltarOfAscension.setDungeonCore(0x8a2D2b1961135127228EdD71Ff98d6B097915a13)
 
 ## 📋 待完成步驟
 
@@ -70,7 +70,7 @@ npx hardhat run scripts/test-vrf-mint.js --network bsc
 - Hero: https://bscscan.com/address/0x671d937b171e2ba2c4dc23c133b07e4449f283ef#code
 - Relic: https://bscscan.com/address/0x42bf1bd8fc5a8dfdd0e97de131246ec0e3ec73da#code
 - DungeonMaster: https://bscscan.com/address/0xc0bbae55cf9245f76628d2c5299cd6fa35cd102a#code
-- AltarOfAscensionVRF: https://bscscan.com/address/0xa86749237d4631ad92ba859d0b0df4770f6147ba#code
+- AltarOfAscension: https://bscscan.com/address/0xa86749237d4631ad92ba859d0b0df4770f6147ba#code
 
 ## 技術說明
 

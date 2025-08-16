@@ -39,7 +39,7 @@ async function main() {
   };
   
   try {
-    const party = await hre.ethers.getContractAt("PartyV3", PARTY_ADDRESS);
+    const party = await hre.ethers.getContractAt("Party", PARTY_ADDRESS);
     
     console.log("📋 開始更新 Party 合約設置...");
     console.log("=====================================");

@@ -151,11 +151,11 @@ async function main() {
     
     // 6. Deploy Party V3 NFT
     log('\n6️⃣  Deploying Party V3 NFT...', 'magenta');
-    const PartyV3 = await ethers.getContractFactory("PartyV3");
-    const partyV3 = await PartyV3.deploy(deployer.address);
+    const Party = await ethers.getContractFactory("Party");
+    const partyV3 = await Party.deploy(deployer.address);
     await partyV3.deployed();
     addresses.PARTY_ADDRESS = partyV3.address;
-    saveDeployment('PartyV3', partyV3.address, network);
+    saveDeployment('Party', partyV3.address, network);
     log(`✅ Party V3 deployed at: ${partyV3.address}`, 'green');
     
     // ============ Phase 4: Deploy Game Mechanics ============

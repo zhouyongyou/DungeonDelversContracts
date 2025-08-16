@@ -1,4 +1,4 @@
-// contracts/PartyV3.sol
+// contracts/Party.sol
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
@@ -10,7 +10,7 @@ import "@openzeppelin/contracts/token/ERC721/utils/ERC721Holder.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 import "../interfaces/interfaces.sol";
 
-contract PartyV3 is ERC721, Ownable, ReentrancyGuard, Pausable, ERC721Holder {
+contract Party is ERC721, Ownable, ReentrancyGuard, Pausable, ERC721Holder {
     using Strings for uint256;
     string public baseURI;
     string private _contractURI;

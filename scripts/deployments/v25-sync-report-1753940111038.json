@@ -36,8 +36,8 @@
       "backup": "/Users/sotadic/Documents/GitHub/DungeonDelvers/src/abis/Party.json.backup-1753940111013"
     },
     {
-      "original": "/Users/sotadic/Documents/GitHub/DungeonDelvers/DDgraphql/dungeon-delvers/abis/PartyV3.json",
-      "backup": "/Users/sotadic/Documents/GitHub/DungeonDelvers/DDgraphql/dungeon-delvers/abis/PartyV3.json.backup-1753940111014"
+      "original": "/Users/sotadic/Documents/GitHub/DungeonDelvers/DDgraphql/dungeon-delvers/abis/Party.json",
+      "backup": "/Users/sotadic/Documents/GitHub/DungeonDelvers/DDgraphql/dungeon-delvers/abis/Party.json.backup-1753940111014"
     },
     {
       "original": "/Users/sotadic/Documents/GitHub/DungeonDelvers/src/abis/VIPStaking.json",
@@ -158,7 +158,7 @@
     "ORACLE": {
       "address": "0xd5A7E1F84D4E3032b9217f8Bf60f532088999158",
       "deploymentBlock": 55808316,
-      "contractName": "Oracle_V22_Adaptive"
+      "contractName": "Oracle"
     },
     "DUNGEONCORE": {
       "address": "0xA1c1e58fB2077b5Db861902B4A15F50b54F3f7e4",
@@ -193,7 +193,7 @@
     "PARTY": {
       "address": "0xA4BA997d806FeAde847Cf82a070a694a9e51fAf2",
       "deploymentBlock": 55808316,
-      "contractName": "PartyV3"
+      "contractName": "Party"
     },
     "VIPSTAKING": {
       "address": "0x17D2BF72720d0E6BE6658e92729820350F6B4080",

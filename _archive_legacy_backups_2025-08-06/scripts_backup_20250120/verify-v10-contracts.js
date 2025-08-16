@@ -48,9 +48,9 @@ async function main() {
       constructorArguments: [addresses.DUNGEONMASTERWALLET_ADDRESS || "0x10925A7138649C7E1794CE646182eeb5BF8ba647"]
     },
     {
-      name: "PartyV3",
+      name: "Party",
       address: addresses.PARTY_ADDRESS,
-      contract: "contracts/Party_V3.sol:PartyV3",
+      contract: "contracts/Party_V3.sol:Party",
       constructorArguments: [addresses.DUNGEONMASTERWALLET_ADDRESS || "0x10925A7138649C7E1794CE646182eeb5BF8ba647"]
     },
     {

@@ -46,7 +46,7 @@ async function main() {
     // 2. 修復 Party 合約的 DungeonCore 連接
     try {
         log('\n🔧 修復 Party 合約的 DungeonCore 連接...', 'yellow');
-        const party = await ethers.getContractAt("PartyV3", PARTY_ADDRESS);
+        const party = await ethers.getContractAt("Party", PARTY_ADDRESS);
         
         // 檢查當前狀態
         const currentCore = await party.dungeonCoreContract();

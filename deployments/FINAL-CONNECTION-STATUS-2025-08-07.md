@@ -24,7 +24,7 @@
 | Hero | 0x980d224ec4d198d94f34a8af76a19c00dabe2436 | ✅ |
 | Relic | 0x980d224ec4d198d94f34a8af76a19c00dabe2436 | ✅ |
 | DungeonMaster | 0x980d224ec4d198d94f34a8af76a19c00dabe2436 | ✅ |
-| AltarOfAscensionVRF | 0x980d224ec4d198d94f34a8af76a19c00dabe2436 | ✅ |
+| AltarOfAscension | 0x980d224ec4d198d94f34a8af76a19c00dabe2436 | ✅ |
 
 ### 3. VRF 授權設置 (已完成)
 | 被授權合約 | 在 VRFConsumerV2Plus 的狀態 |
@@ -32,7 +32,7 @@
 | Hero | ✅ 已授權 |
 | Relic | ✅ 已授權 |
 | DungeonMaster | ✅ 已授權 |
-| AltarOfAscensionVRF | ✅ 已授權 |
+| AltarOfAscension | ✅ 已授權 |
 
 ### 4. 各合約的 DungeonCore 連接 (已完成)
 | 合約 | DungeonCore 地址 | 狀態 |
@@ -40,7 +40,7 @@
 | Hero | 0x8a2D2b1961135127228EdD71Ff98d6B097915a13 | ✅ |
 | Relic | 0x8a2D2b1961135127228EdD71Ff98d6B097915a13 | ✅ |
 | DungeonMaster | 0x8a2D2b1961135127228EdD71Ff98d6B097915a13 | ✅ |
-| AltarOfAscensionVRF | 0x8a2D2b1961135127228EdD71Ff98d6B097915a13 | ✅ |
+| AltarOfAscension | 0x8a2D2b1961135127228EdD71Ff98d6B097915a13 | ✅ |
 | Party | 0x8a2D2b1961135127228EdD71Ff98d6B097915a13 | ✅ |
 
 ### 5. 其他重要連接 (已完成)

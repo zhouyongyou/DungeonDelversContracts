@@ -3,7 +3,7 @@ const fs = require("fs");
 const path = require("path");
 
 async function main() {
-  console.log("🚀 部署 DungeonMasterV7 和 PartyV3...");
+  console.log("🚀 部署 DungeonMasterV7 和 Party...");
 
   // 獲取部署者
   const [deployer] = await hre.ethers.getSigners();
@@ -13,14 +13,14 @@ async function main() {
   const currentBlock = await hre.ethers.provider.getBlockNumber();
   console.log("📊 當前區塊號:", currentBlock);
 
-  // 部署 PartyV3
-  console.log("\n📦 部署 PartyV3...");
-  const PartyV3 = await hre.ethers.getContractFactory("PartyV3");
-  const partyV3 = await PartyV3.deploy(deployer.address);
+  // 部署 Party
+  console.log("\n📦 部署 Party...");
+  const Party = await hre.ethers.getContractFactory("Party");
+  const partyV3 = await Party.deploy(deployer.address);
   await partyV3.waitForDeployment();
 
   const partyV3Address = await partyV3.getAddress();
-  console.log("✅ PartyV3 已部署至:", partyV3Address);
+  console.log("✅ Party 已部署至:", partyV3Address);
 
   // 部署 DungeonMasterV7
   console.log("\n📦 部署 DungeonMasterV7...");
@@ -38,22 +38,22 @@ async function main() {
   const heroAddress = process.env.HERO_ADDRESS;
   const relicAddress = process.env.RELIC_ADDRESS;
 
-  console.log("\n🔧 設定 PartyV3 參數...");
+  console.log("\n🔧 設定 Party 參數...");
   
-  // 設定 PartyV3 的合約連接
+  // 設定 Party 的合約連接
   if (dungeonCoreAddress) {
     await partyV3.setDungeonCore(dungeonCoreAddress);
-    console.log("✅ PartyV3 已設定 DungeonCore:", dungeonCoreAddress);
+    console.log("✅ Party 已設定 DungeonCore:", dungeonCoreAddress);
   }
 
   if (heroAddress) {
     await partyV3.setHeroContract(heroAddress);
-    console.log("✅ PartyV3 已設定 Hero Contract:", heroAddress);
+    console.log("✅ Party 已設定 Hero Contract:", heroAddress);
   }
 
   if (relicAddress) {
     await partyV3.setRelicContract(relicAddress);
-    console.log("✅ PartyV3 已設定 Relic Contract:", relicAddress);
+    console.log("✅ Party 已設定 Relic Contract:", relicAddress);
   }
 
   console.log("\n🔧 設定 DungeonMasterV7 參數...");
@@ -89,11 +89,11 @@ async function main() {
     deployer: deployer.address,
     blockNumber: currentBlock,
     contracts: {
-      PartyV3: partyV3Address,
+      Party: partyV3Address,
       DungeonMasterV7: dungeonMasterV7Address
     },
     gasUsed: {
-      PartyV3: (await partyV3.deploymentTransaction()).gasLimit?.toString(),
+      Party: (await partyV3.deploymentTransaction()).gasLimit?.toString(),
       DungeonMasterV7: (await dungeonMasterV7.deploymentTransaction()).gasLimit?.toString()
     }
   };
@@ -113,7 +113,7 @@ async function main() {
   console.log("\n🎉 部署完成！");
   console.log("=".repeat(60));
   console.log("📋 新合約地址:");
-  console.log(`PartyV3: ${partyV3Address}`);
+  console.log(`Party: ${partyV3Address}`);
   console.log(`DungeonMasterV7: ${dungeonMasterV7Address}`);
   console.log("=".repeat(60));
   

@@ -144,7 +144,7 @@ async function main() {
     // 5. 部署 AltarOfAscension 合約
     console.log(`${colors.yellow}🔨 5. 部署 AltarOfAscension (VRF-Only)...${colors.reset}`);
     
-    const altarArtifact = await hre.artifacts.readArtifact("AltarOfAscensionVRF");
+    const altarArtifact = await hre.artifacts.readArtifact("AltarOfAscension");
     const altarFactory = new ethers.ContractFactory(
       altarArtifact.abi,
       altarArtifact.bytecode,

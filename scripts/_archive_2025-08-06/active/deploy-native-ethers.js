@@ -6,7 +6,7 @@ require('dotenv').config();
 // 合約 ABI 和 Bytecode
 const heroArtifact = require('../../artifacts/contracts/current/nft/Hero.sol/Hero.json');
 const relicArtifact = require('../../artifacts/contracts/current/nft/Relic.sol/Relic.json');
-const altarArtifact = require('../../artifacts/contracts/current/core/AltarOfAscension.sol/AltarOfAscensionVRF.json');
+const altarArtifact = require('../../artifacts/contracts/current/core/AltarOfAscension.sol/AltarOfAscension.json');
 const dungeonMasterArtifact = require('../../artifacts/contracts/current/core/DungeonMaster.sol/DungeonMaster.json');
 
 async function main() {

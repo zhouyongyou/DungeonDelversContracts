@@ -27,7 +27,7 @@ contracts/
 │   └── AltarOfAscension.sol
 ├── interfaces/              # 介面定義
 │   ├── interfaces.sol
-│   └── IPartyV3.sol
+│   └── IParty.sol
 └── test/                    # 測試合約
     ├── Test_SoulShard.sol
     └── Test_USD1.sol

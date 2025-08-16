@@ -4,10 +4,10 @@ pragma solidity ^0.8.20;
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 
 /**
- * @title IPartyV3 - PartyV3 合約接口
- * @notice 定義 PartyV3 的標準接口，供 DungeonMasterV6 使用
+ * @title IParty - Party 合約接口
+ * @notice 定義 Party 的標準接口，供 DungeonMasterV6 使用
  */
-interface IPartyV3 is IERC721 {
+interface IParty is IERC721 {
     // --- 基礎查詢 ---
     
     /**

@@ -51,7 +51,7 @@
 | `"DM: SoulShard token not set"` | `"DungeonMaster: SoulShard token contract not configured"` |
 | `"DM: Success rate > 100"` | `"DungeonMaster: Success rate cannot exceed 100%"` |
 
-### 4. **Oracle_V22_Adaptive.sol** - 修復 1 個錯誤訊息
+### 4. **Oracle.sol** - 修復 1 個錯誤訊息
 
 | 原始錯誤訊息 | 修復後錯誤訊息 |
 |-------------|----------------|

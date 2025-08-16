@@ -31,7 +31,7 @@ async function copyABIs() {
   const abiFiles = [
     { source: 'nft/Hero.sol/Hero.json', target: 'Hero.json' },
     { source: 'nft/Relic.sol/Relic.json', target: 'Relic.json' },
-    { source: 'nft/Party_V3.sol/PartyV3.json', target: 'PartyV3.json' },
+    { source: 'nft/Party_V3.sol/Party.json', target: 'Party.json' },
     { source: 'nft/VIPStaking.sol/VIPStaking.json', target: 'VIPStaking.json' },
     { source: 'nft/PlayerProfile.sol/PlayerProfile.json', target: 'PlayerProfile.json' },
     { source: 'core/DungeonCore.sol/DungeonCore.json', target: 'DungeonCore.json' },

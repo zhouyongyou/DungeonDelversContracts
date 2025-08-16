@@ -54,9 +54,9 @@ async function main() {
         
         console.log("✅ Relic 部署成功:", relicAddress);
 
-        // 3. 部署 AltarOfAscensionVRF 合約
+        // 3. 部署 AltarOfAscension 合約
         console.log("\n📦 部署 AltarOfAscension 合約...");
-        const AltarOfAscension = await hre.ethers.getContractFactory("AltarOfAscensionVRF");
+        const AltarOfAscension = await hre.ethers.getContractFactory("AltarOfAscension");
         const altar = await AltarOfAscension.deploy(deployer.address);
         await altar.waitForDeployment();
         const altarAddress = await altar.getAddress();

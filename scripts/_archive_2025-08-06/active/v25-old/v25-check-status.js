@@ -112,14 +112,14 @@ ${colors.reset}`);
     // 檢查 Hero/Relic BaseURI
     await this.checkBaseURI('HERO', 'Hero');
     await this.checkBaseURI('RELIC', 'Relic');
-    await this.checkBaseURI('PARTY', 'PartyV3');
+    await this.checkBaseURI('PARTY', 'Party');
     await this.checkBaseURI('PLAYERPROFILE', 'PlayerProfile');
     await this.checkBaseURI('VIPSTAKING', 'VIPStaking');
     
     // 檢查 ContractURI
     await this.checkContractURI('HERO', 'Hero');
     await this.checkContractURI('RELIC', 'Relic');
-    await this.checkContractURI('PARTY', 'PartyV3');
+    await this.checkContractURI('PARTY', 'Party');
   }
 
   async checkBaseURI(contractName, artifactName) {
@@ -235,7 +235,7 @@ ${colors.reset}`);
       const address = this.v25Config.contracts.PARTY?.address;
       if (!address) return;
       
-      const Contract = await hre.ethers.getContractFactory('PartyV3');
+      const Contract = await hre.ethers.getContractFactory('Party');
       const contract = Contract.attach(address);
       
       // 檢查 Hero Contract

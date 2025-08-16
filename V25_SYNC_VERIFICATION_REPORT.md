@@ -69,14 +69,14 @@
 |------|------|----------|------|
 | Hero.json | `abis/Hero/Hero.json` | 2025-08-07 07:07 | ✅ |
 | Relic.json | `abis/Relic/Relic.json` | 2025-08-07 07:07 | ✅ |
-| AltarOfAscensionVRF.json | `abis/AltarOfAscension/AltarOfAscensionVRF.json` | 2025-08-07 07:08 | ✅ |
+| AltarOfAscension.json | `abis/AltarOfAscension/AltarOfAscension.json` | 2025-08-07 07:08 | ✅ |
 | DungeonMaster.json | `abis/DungeonMaster/DungeonMaster.json` | 2025-08-07 01:55 | ✅ |
 | VRFManagerV2Plus.json | `abis/VRFManagerV2Plus/VRFManagerV2Plus.json` | 2025-08-07 01:55 | ✅ |
-| PartyV3.json | `abis/PartyV3/PartyV3.json` | 2025-08-02 10:10 | ⚠️ 需要確認 |
+| Party.json | `abis/Party/Party.json` | 2025-08-02 10:10 | ⚠️ 需要確認 |
 
 ## ⚠️ 需要注意的事項
 
-1. **PartyV3 ABI**：最後更新是 8/2，可能需要重新生成以確保與 V25 合約匹配
+1. **Party ABI**：最後更新是 8/2，可能需要重新生成以確保與 V25 合約匹配
 2. **後端環境變數**：已創建備份文件 `.env.backup-20250807`
 3. **子圖部署**：需要執行以下命令來部署新版本：
    ```bash

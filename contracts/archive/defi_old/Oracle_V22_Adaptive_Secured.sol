@@ -1,4 +1,4 @@
-// contracts/defi/Oracle_V22_Adaptive_Secured.sol (安全加固版)
+// contracts/defi/Oracle_Secured.sol (安全加固版)
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
@@ -95,7 +95,7 @@ library TickMath {
 }
 
 /**
- * @title Oracle_V22_Adaptive_Secured
+ * @title Oracle_Secured
  * @notice DungeonDelvers Oracle V22 - 安全加固版
  * @dev 安全改進：
  * 1. 最小安全週期設為 5 分鐘
@@ -103,7 +103,7 @@ library TickMath {
  * 3. 添加 ReentrancyGuard
  * 4. 記錄上次價格用於比較
  */
-contract Oracle_V22_Adaptive_Secured is Ownable, ReentrancyGuard {
+contract Oracle_Secured is Ownable, ReentrancyGuard {
     using MulDiv for uint256;
 
     // ========== 狀態變數 ==========

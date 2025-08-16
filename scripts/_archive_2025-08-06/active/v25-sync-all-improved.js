@@ -57,11 +57,11 @@ const ABI_SYNC_CONFIG = [
   },
   {
     contractName: 'PARTY',
-    artifactName: 'PartyV3',
+    artifactName: 'Party',
     contractFile: 'Party',
     destinations: [
       { type: 'frontend', path: 'src/abis/Party.json' },
-      { type: 'subgraph', path: 'abis/PartyV3.json' }
+      { type: 'subgraph', path: 'abis/Party.json' }
     ]
   },
   {
@@ -109,7 +109,7 @@ const ABI_SYNC_CONFIG = [
   },
   {
     contractName: 'ORACLE',
-    artifactName: 'Oracle_V22_Adaptive',
+    artifactName: 'Oracle',
     destinations: [
       { type: 'frontend', path: 'src/abis/Oracle.json' }
     ]
@@ -412,7 +412,7 @@ ${colors.reset}`);
           ORACLE: {
             address: masterConfig.contracts.mainnet.ORACLE_ADDRESS,
             deploymentBlock: 56184733,
-            contractName: 'Oracle_V22_Adaptive'
+            contractName: 'Oracle'
           },
           DUNGEONCORE: {
             address: masterConfig.contracts.mainnet.DUNGEONCORE_ADDRESS,
@@ -447,7 +447,7 @@ ${colors.reset}`);
           PARTY: {
             address: masterConfig.contracts.mainnet.PARTY_ADDRESS,
             deploymentBlock: 56184733,
-            contractName: 'PartyV3'
+            contractName: 'Party'
           },
           VIPSTAKING: {
             address: masterConfig.contracts.mainnet.VIPSTAKING_ADDRESS,
@@ -593,7 +593,7 @@ ${colors.reset}`);
       'Hero': 'nft',
       'Relic': 'nft',
       'Party': 'nft',
-      'PartyV3': 'nft',
+      'Party': 'nft',
       'VIPStaking': 'nft',
       'PlayerProfile': 'nft',
       'AltarOfAscension': 'utils',
@@ -601,7 +601,7 @@ ${colors.reset}`);
       'DungeonMaster': 'core',
       'DungeonMasterV2_Fixed': 'core',
       'DungeonCore': 'core',
-      'Oracle_V22_Adaptive': 'core',
+      'Oracle': 'core',
       'PlayerVault': 'core',
       'DungeonStorage': 'core',
       'SoulShardToken': 'token'

@@ -64,7 +64,7 @@ const DEPLOYMENT_CONFIG = {
 const DEPLOYMENT_ORDER = [
   // 代幣合約
   ...(DEPLOYMENT_CONFIG.deployNewTokens ? ['Test_SoulShard'] : []),
-  // 'Oracle_V22_Adaptive', // 使用現有的 Oracle
+  // 'Oracle', // 使用現有的 Oracle
   
   // 核心合約
   'PlayerVault',
@@ -75,7 +75,7 @@ const DEPLOYMENT_ORDER = [
   // NFT 合約（支援 VRF）
   'Hero',        // 使用支援 VRF 的版本
   'Relic',       // 使用支援 VRF 的版本
-  'PartyV3',
+  'Party',
   
   // 功能合約
   'VIPStaking',
@@ -85,7 +85,7 @@ const DEPLOYMENT_ORDER = [
 
 // 合約名稱映射
 const CONTRACT_NAME_MAP = {
-  'Oracle_V22_Adaptive': 'ORACLE',
+  'Oracle': 'ORACLE',
   'Test_SoulShard': 'SOULSHARD',
   'PlayerVault': 'PLAYERVAULT',
   'DungeonCore': 'DUNGEONCORE',
@@ -93,7 +93,7 @@ const CONTRACT_NAME_MAP = {
   'DungeonMaster': 'DUNGEONMASTER',
   'Hero': 'HERO',
   'Relic': 'RELIC',
-  'PartyV3': 'PARTY',
+  'Party': 'PARTY',
   'VIPStaking': 'VIPSTAKING',
   'PlayerProfile': 'PLAYERPROFILE',
   'AltarOfAscension': 'ALTAROFASCENSION'
@@ -181,8 +181,8 @@ async function main() {
           contract = await SoulShard.deploy("SoulShard", "SOUL");
           break;
 
-        case 'Oracle_V22_Adaptive':
-          const Oracle = await hre.ethers.getContractFactory("Oracle_V22_Adaptive");
+        case 'Oracle':
+          const Oracle = await hre.ethers.getContractFactory("Oracle");
           // Oracle 需要 pool, soulShard 和 USD token 地址
           const poolAddress = DEPLOYMENT_CONFIG.existingContracts.UNISWAP_POOL;
           const soulShardAddress = deployedContracts.SOULSHARD || DEPLOYMENT_CONFIG.existingContracts.SOULSHARD;
@@ -225,8 +225,8 @@ async function main() {
           contract = await Relic.deploy(deployer.address);
           break;
 
-        case 'PartyV3':
-          const Party = await hre.ethers.getContractFactory("PartyV3");
+        case 'Party':
+          const Party = await hre.ethers.getContractFactory("Party");
           contract = await Party.deploy("DungeonDelversParty", "PARTY");
           break;
 
@@ -347,7 +347,7 @@ async function main() {
     await (await relic.setSoulShardToken(deployedContracts.SOULSHARD)).wait();
     await (await relic.setAscensionAltarAddress(deployedContracts.ALTAROFASCENSION)).wait();
     
-    const party = await hre.ethers.getContractAt("PartyV3", deployedContracts.PARTY);
+    const party = await hre.ethers.getContractAt("Party", deployedContracts.PARTY);
     await (await party.setDungeonCore(deployedContracts.DUNGEONCORE)).wait();
     
     console.log(`${colors.green}[✓]${colors.reset} 所有模組 DungeonCore 設置完成`);

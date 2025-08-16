@@ -27,7 +27,7 @@ const colors = {
 // 合約配置
 const CONTRACT_PATHS = {
   // DeFi
-  ORACLE: 'defi/Oracle_V22_Adaptive.sol:Oracle_V22_Adaptive',
+  ORACLE: 'defi/Oracle.sol:Oracle',
   SOULSHARD: 'defi/SoulShard.sol:SoulShard',
   PLAYERVAULT: 'defi/PlayerVault.sol:PlayerVault',
   

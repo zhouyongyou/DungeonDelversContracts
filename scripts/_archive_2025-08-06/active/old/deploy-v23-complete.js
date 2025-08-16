@@ -45,10 +45,10 @@ const DEPLOYMENT_ORDER = [
 
 // 合約路徑映射
 const CONTRACT_PATHS = {
-  ORACLE: 'defi/Oracle_V22_Adaptive.sol:Oracle_V22_Adaptive',
+  ORACLE: 'defi/Oracle.sol:Oracle',
   HERO: 'nft/Hero.sol:Hero',
   RELIC: 'nft/Relic.sol:Relic',
-  PARTY: 'nft/Party.sol:PartyV3',
+  PARTY: 'nft/Party.sol:Party',
   PLAYERVAULT: 'defi/PlayerVault.sol:PlayerVault',
   PLAYERPROFILE: 'nft/PlayerProfile.sol:PlayerProfile',
   VIPSTAKING: 'nft/VIPStaking.sol:VIPStaking',

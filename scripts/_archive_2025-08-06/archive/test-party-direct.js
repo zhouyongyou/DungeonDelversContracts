@@ -6,7 +6,7 @@ async function testParty() {
 
   const PARTY_ADDRESS = "0x847DceaE26aF1CFc09beC195CE87a9b5701863A7";
   
-  // 嘗試獲取 PartyV3 合約
+  // 嘗試獲取 Party 合約
   try {
     // 先用最基本的函數測試
     const party = await ethers.getContractAt([
@@ -22,7 +22,7 @@ async function testParty() {
     console.log("  擁有者:", await party.owner());
     console.log("  總供應量:", await party.totalSupply());
     
-    // 測試 PartyV3 特有的函數
+    // 測試 Party 特有的函數
     const partyV3 = await ethers.getContractAt([
       "function dungeonCore() external view returns (address)",
       "function heroContract() external view returns (address)",
@@ -32,7 +32,7 @@ async function testParty() {
       "function getPartyPowerQuick(uint256[] calldata heroTokenIds) external view returns (uint256)"
     ], PARTY_ADDRESS);
 
-    console.log("\nPartyV3 函數測試：");
+    console.log("\nParty 函數測試：");
     console.log("  DungeonCore:", await partyV3.dungeonCore());
     console.log("  Hero 合約:", await partyV3.heroContract());
     console.log("  Relic 合約:", await partyV3.relicContract());

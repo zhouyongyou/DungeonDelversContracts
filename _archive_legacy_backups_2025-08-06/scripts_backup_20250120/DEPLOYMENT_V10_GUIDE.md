@@ -53,7 +53,7 @@ V10 Final 是 DungeonDelvers 專案最完整的部署腳本版本，整合了所
 ### NFT 合約
 3. **Hero** - 英雄 NFT (ERC721)
 4. **Relic** - 聖物 NFT (ERC721)
-5. **PartyV3** - 隊伍 NFT (ERC721)
+5. **Party** - 隊伍 NFT (ERC721)
 6. **VIPStaking** - VIP 質押 NFT
 7. **PlayerProfile** - 玩家檔案 NFT
 
@@ -72,7 +72,7 @@ V10 Final 是 DungeonDelvers 專案最完整的部署腳本版本，整合了所
 - 生成 .env 格式文件
 
 ### 從 V6 整合
-- PartyV3 部署邏輯
+- Party 部署邏輯
 - 雙向合約連接設定
 
 ### 從 V7 整合
@@ -195,7 +195,7 @@ npx hardhat run scripts/verify-v10-contracts.js --network bsc
    ```
    Artifact for contract "Party" not found
    ```
-   解決：確保使用正確的合約名稱 "PartyV3"
+   解決：確保使用正確的合約名稱 "Party"
 
 2. **Gas 估算失敗**
    - 檢查錢包餘額

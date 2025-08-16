@@ -61,10 +61,10 @@
         },
         {
           "contractName": "PARTY",
-          "sourceFile": "/Users/sotadic/Documents/DungeonDelversContracts/artifacts/contracts/current/nft/Party.sol/PartyV3.json",
+          "sourceFile": "/Users/sotadic/Documents/DungeonDelversContracts/artifacts/contracts/current/nft/Party.sol/Party.json",
           "destinations": [
             "/Users/sotadic/Documents/GitHub/DungeonDelvers/src/abis/Party.json",
-            "/Users/sotadic/Documents/GitHub/DungeonDelvers/DDgraphql/dungeon-delvers/abis/PartyV3.json"
+            "/Users/sotadic/Documents/GitHub/DungeonDelvers/DDgraphql/dungeon-delvers/abis/Party.json"
           ],
           "abiSize": 58340,
           "success": true
@@ -302,8 +302,8 @@
         "backupTime": "2025-08-06T10:04:10.749Z"
       },
       {
-        "originalFile": "/Users/sotadic/Documents/GitHub/DungeonDelvers/DDgraphql/dungeon-delvers/abis/PartyV3.json",
-        "backupFile": "/Users/sotadic/Documents/GitHub/DungeonDelvers/DDgraphql/dungeon-delvers/abis/PartyV3.json.abi-sync-1754474649654",
+        "originalFile": "/Users/sotadic/Documents/GitHub/DungeonDelvers/DDgraphql/dungeon-delvers/abis/Party.json",
+        "backupFile": "/Users/sotadic/Documents/GitHub/DungeonDelvers/DDgraphql/dungeon-delvers/abis/Party.json.abi-sync-1754474649654",
         "backupSize": 69865,
         "backupTime": "2025-08-06T10:04:10.750Z"
       },

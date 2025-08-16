@@ -71,7 +71,7 @@ const V25_UNIFIED_CONFIG = {
     abi: {
         source: 'artifacts/contracts',
         output: 'deployments/abi',
-        contracts: ['Hero', 'Relic', 'Party', 'DungeonMaster', 'DungeonStorage', 'AltarOfAscensionVRF', 'VRFConsumerV2Plus']
+        contracts: ['Hero', 'Relic', 'Party', 'DungeonMaster', 'DungeonStorage', 'AltarOfAscension', 'VRFConsumerV2Plus']
     }
 };
 

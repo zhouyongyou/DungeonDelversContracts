@@ -43,7 +43,7 @@ const CONTRACTS_TO_DEPLOY = [
   'DungeonMaster',
   'Hero',
   'Relic',
-  'PartyV3',
+  'Party',
   'AltarOfAscension'
 ];
 
@@ -126,8 +126,8 @@ async function main() {
           contract = await Relic.deploy(deployer.address);
           break;
 
-        case 'PartyV3':
-          const Party = await hre.ethers.getContractFactory("PartyV3");
+        case 'Party':
+          const Party = await hre.ethers.getContractFactory("Party");
           contract = await Party.deploy("DungeonDelversParty", "PARTY");
           break;
 
@@ -222,7 +222,7 @@ async function main() {
     await (await hero.setDungeonCore(deployedContracts.DUNGEONCORE)).wait();
     await (await relic.setDungeonCore(deployedContracts.DUNGEONCORE)).wait();
     
-    const party = await hre.ethers.getContractAt("PartyV3", deployedContracts.PARTYV3);
+    const party = await hre.ethers.getContractAt("Party", deployedContracts.PARTYV3);
     await (await party.setDungeonCore(deployedContracts.DUNGEONCORE)).wait();
     
     console.log(`${colors.green}[✓]${colors.reset} 所有模組 DungeonCore 設置完成`);

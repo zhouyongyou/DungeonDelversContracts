@@ -233,13 +233,13 @@ async function main() {
     
     // 6. Deploy Party V3 NFT（修正：使用正確的合約名稱）
     log('\n6️⃣  Deploying Party V3 NFT...', 'magenta');
-    const PartyV3 = await ethers.getContractFactory("PartyV3");
-    const partyV3 = await PartyV3.deploy(deployer.address);
+    const Party = await ethers.getContractFactory("Party");
+    const partyV3 = await Party.deploy(deployer.address);
     await partyV3.waitForDeployment();
     addresses.PARTY_ADDRESS = await partyV3.getAddress();
     deployedContracts.partyV3 = partyV3;
     await partyV3.setBaseURI(`${METADATA_SERVER_URL}/api/party/`);
-    saveDeployment('PartyV3', addresses.PARTY_ADDRESS, network);
+    saveDeployment('Party', addresses.PARTY_ADDRESS, network);
     log(`✅ Party V3 deployed at: ${addresses.PARTY_ADDRESS}`, 'green');
     log(`   BaseURI set to: ${METADATA_SERVER_URL}/api/party/`, 'cyan');
     
@@ -464,7 +464,7 @@ async function main() {
     const contractInfo = {
       Hero: { fileName: "Hero", contractName: "Hero" },
       Relic: { fileName: "Relic", contractName: "Relic" },
-      PartyV3: { fileName: "Party_V3", contractName: "PartyV3" },
+      Party: { fileName: "Party_V3", contractName: "Party" },
       VIPStaking: { fileName: "VIPStaking", contractName: "VIPStaking" },
       PlayerProfile: { fileName: "PlayerProfile", contractName: "PlayerProfile" },
       PlayerVault: { fileName: "PlayerVault", contractName: "PlayerVault" },

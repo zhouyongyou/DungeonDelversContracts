@@ -171,12 +171,12 @@ async function main() {
     
     // 6. Deploy Party V3 NFT
     log('\n6️⃣  Deploying Party V3 NFT...', 'magenta');
-    const PartyV3 = await ethers.getContractFactory("PartyV3");
-    const partyV3 = await PartyV3.deploy(deployer.address);
+    const Party = await ethers.getContractFactory("Party");
+    const partyV3 = await Party.deploy(deployer.address);
     await partyV3.waitForDeployment();
     addresses.PARTY_ADDRESS = await partyV3.getAddress();
     await partyV3.setBaseURI(`${METADATA_SERVER_URL}/api/party/`);
-    saveDeployment('PartyV3', addresses.PARTY_ADDRESS, network);
+    saveDeployment('Party', addresses.PARTY_ADDRESS, network);
     log(`✅ Party V3 deployed at: ${addresses.PARTY_ADDRESS}`, 'green');
     log(`   BaseURI set to: ${METADATA_SERVER_URL}/api/party/`, 'cyan');
     

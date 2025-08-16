@@ -89,7 +89,7 @@ async function main() {
         console.log("\n5️⃣ 部署其他核心合約...");
         
         // Party（使用原版）
-        const Party = await hre.ethers.getContractFactory("PartyV3");
+        const Party = await hre.ethers.getContractFactory("Party");
         const party = await Party.deploy(
             deployConfig.Party.name,
             deployConfig.Party.symbol

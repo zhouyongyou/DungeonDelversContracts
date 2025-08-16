@@ -42,10 +42,10 @@ const contracts = {
     constructorArgs: ["0x10925A7138649C7E1794CE646182eeb5BF8ba647"],
     contractPath: "contracts/nft/Relic.sol:Relic"
   },
-  PartyV3: {
+  Party: {
     address: "0x54025749950137d64469fb11263B475F6A346b83",
     constructorArgs: ["0x10925A7138649C7E1794CE646182eeb5BF8ba647"],
-    contractPath: "contracts/nft/Party_V3.sol:PartyV3"
+    contractPath: "contracts/nft/Party_V3.sol:Party"
   },
   PlayerVault: {
     address: "0xe7f2B5C1544a7C2530F4094AF1E492574B66bAa2",

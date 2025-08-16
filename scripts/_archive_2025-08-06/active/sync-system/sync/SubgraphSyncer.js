@@ -158,7 +158,7 @@ class SubgraphSyncer {
     const contractMappings = [
       { name: 'Hero', key: 'HERO' },
       { name: 'Relic', key: 'RELIC' },
-      { name: 'PartyV3', key: 'PARTY' },
+      { name: 'Party', key: 'PARTY' },
       { name: 'VIPStaking', key: 'VIPSTAKING' },
       { name: 'PlayerProfile', key: 'PLAYERPROFILE' },
       { name: 'AltarOfAscension', key: 'ALTAROFASCENSION' },

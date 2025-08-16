@@ -86,14 +86,14 @@ async function main() {
     deployedContracts.RELIC_ADDRESS = relicAddress;
     log(`✅ Relic 部署成功: ${relicAddress}`, 'green');
 
-    // 6. 部署 PartyV3
-    log('\n👥 6/12 部署 PartyV3...', 'yellow');
-    const PartyV3 = await ethers.getContractFactory("PartyV3");
-    const party = await PartyV3.deploy(deployerAddress);
+    // 6. 部署 Party
+    log('\n👥 6/12 部署 Party...', 'yellow');
+    const Party = await ethers.getContractFactory("Party");
+    const party = await Party.deploy(deployerAddress);
     await party.waitForDeployment();
     const partyAddress = await party.getAddress();
     deployedContracts.PARTY_ADDRESS = partyAddress;
-    log(`✅ PartyV3 部署成功: ${partyAddress}`, 'green');
+    log(`✅ Party 部署成功: ${partyAddress}`, 'green');
 
     // 7. 部署 DungeonCore (需要 3 個參數：owner, usdToken, soulShardToken)
     log('\n🏰 7/12 部署 DungeonCore...', 'yellow');

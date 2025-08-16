@@ -131,7 +131,7 @@ async function main() {
     const moduleConnections = [
         { name: 'Hero', address: addresses.HERO, contractName: 'Hero' },
         { name: 'Relic', address: addresses.RELIC, contractName: 'Relic' },
-        { name: 'Party', address: addresses.PARTY, contractName: 'PartyV3' },
+        { name: 'Party', address: addresses.PARTY, contractName: 'Party' },
         { name: 'PlayerVault', address: addresses.PLAYER_VAULT, contractName: 'PlayerVault' },
         { name: 'PlayerProfile', address: addresses.PLAYER_PROFILE, contractName: 'PlayerProfile' },
         { name: 'VipStaking', address: addresses.VIP_STAKING, contractName: 'VIPStaking' }

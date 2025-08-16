@@ -382,10 +382,10 @@ VITE_DEVELOPER_ADDRESS=0x10925A7138649C7E1794CE646182eeb5BF8ba647
         const abiContracts = [
             { name: 'Hero', artifactName: 'Hero' },
             { name: 'Relic', artifactName: 'Relic' },
-            { name: 'Party', artifactName: 'PartyV3' },
+            { name: 'Party', artifactName: 'Party' },
             { name: 'DungeonMaster', artifactName: 'DungeonMaster' },
             { name: 'DungeonStorage', artifactName: 'DungeonStorage' },
-            { name: 'AltarOfAscensionVRF', artifactName: 'AltarOfAscensionVRF' },
+            { name: 'AltarOfAscension', artifactName: 'AltarOfAscension' },
             { name: 'VRFConsumerV2Plus', artifactName: 'VRFConsumerV2Plus' }
         ];
         let successCount = 0;

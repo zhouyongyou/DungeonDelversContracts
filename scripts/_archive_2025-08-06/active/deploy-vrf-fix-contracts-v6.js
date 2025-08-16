@@ -51,7 +51,7 @@ async function main() {
 
         // 3. 部署 AltarOfAscension 合約
         console.log("\n📦 部署 AltarOfAscension 合約...");
-        const AltarFactory = await ethers.getContractFactory("AltarOfAscensionVRF");
+        const AltarFactory = await ethers.getContractFactory("AltarOfAscension");
         const altarContract = await AltarFactory.deploy(deployer.address);
         await altarContract.waitForDeployment();
         const altarAddress = await altarContract.getAddress();

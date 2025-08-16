@@ -216,7 +216,7 @@ async function main() {
     deployedAddresses.RELIC = await relic.getAddress();
 
     logStep(++currentStep, totalSteps, '部署 Party NFT 合約', 'yellow');
-    const party = await deployContract("contracts/nft/Party_V3.sol:PartyV3", deployerAddress);
+    const party = await deployContract("contracts/nft/Party_V3.sol:Party", deployerAddress);
     deployedAddresses.PARTY = await party.getAddress();
 
     // Step 7: 部署祭壇合約

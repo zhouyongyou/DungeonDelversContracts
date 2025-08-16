@@ -72,6 +72,31 @@
       {
         "indexed": true,
         "internalType": "address",
+        "name": "user",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "requestId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "reason",
+        "type": "string"
+      }
+    ],
+    "name": "EmergencyCleanup",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
         "name": "previousOwner",
         "type": "address"
       },
@@ -246,37 +271,6 @@
       {
         "indexed": true,
         "internalType": "address",
-        "name": "user",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256[]",
-        "name": "tokenIds",
-        "type": "uint256[]"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "materialTokenId",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "requestId",
-        "type": "uint256"
-      }
-    ],
-    "name": "UpgradeRequested",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "address",
         "name": "player",
         "type": "address"
       },
@@ -344,7 +338,7 @@
           }
         ],
         "indexed": false,
-        "internalType": "struct AltarOfAscensionVRF.UpgradeRule",
+        "internalType": "struct AltarOfAscension.UpgradeRule",
         "name": "rule",
         "type": "tuple"
       }
@@ -358,17 +352,11 @@
       {
         "indexed": true,
         "internalType": "address",
-        "name": "player",
+        "name": "vrfManager",
         "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "string",
-        "name": "reason",
-        "type": "string"
       }
     ],
-    "name": "VIPQueryFailed",
+    "name": "VRFManagerSet",
     "type": "event"
   },
   {
@@ -376,12 +364,18 @@
     "inputs": [
       {
         "indexed": true,
-        "internalType": "address",
-        "name": "vrfManager",
-        "type": "address"
+        "internalType": "uint256",
+        "name": "requestId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "randomWordsCount",
+        "type": "uint256"
       }
     ],
-    "name": "VRFManagerSet",
+    "name": "VRFRequestFulfilled",
     "type": "event"
   },
   {
@@ -464,6 +458,19 @@
   {
     "inputs": [
       {
+        "internalType": "address",
+        "name": "user",
+        "type": "address"
+      }
+    ],
+    "name": "emergencyCleanupUser",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "uint256[]",
         "name": "tokenIds",
         "type": "uint256[]"
@@ -472,6 +479,25 @@
     "name": "emergencyUnlock",
     "outputs": [],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint8",
+        "name": "_baseRarity",
+        "type": "uint8"
+      }
+    ],
+    "name": "getUpgradeCost",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "totalCost",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -512,7 +538,7 @@
             "type": "uint256"
           }
         ],
-        "internalType": "struct AltarOfAscensionVRF.UpgradeRequest",
+        "internalType": "struct AltarOfAscension.UpgradeRequest",
         "name": "",
         "type": "tuple"
       }
@@ -804,7 +830,7 @@
             "type": "bool"
           }
         ],
-        "internalType": "struct AltarOfAscensionVRF.UpgradeRule",
+        "internalType": "struct AltarOfAscension.UpgradeRule",
         "name": "_rule",
         "type": "tuple"
       }

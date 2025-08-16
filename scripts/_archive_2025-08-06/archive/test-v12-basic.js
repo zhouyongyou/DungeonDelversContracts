@@ -100,26 +100,26 @@ async function main() {
     log(`❌ Hero 測試失敗: ${error.message}`, 'red');
   }
   
-  // 5. 測試 PartyV3 新功能
-  log('\n5️⃣ 測試 PartyV3 新功能...', 'yellow');
+  // 5. 測試 Party 新功能
+  log('\n5️⃣ 測試 Party 新功能...', 'yellow');
   try {
-    const party = await ethers.getContractAt("PartyV3", addresses.PARTY);
+    const party = await ethers.getContractAt("Party", addresses.PARTY);
     
     // 測試是否有 getPartyPowerQuick 函數
     try {
       // 嘗試調用一個不存在的隊伍 ID
       await party.getPartyPowerQuick(99999);
-      log('✅ PartyV3 包含 getPartyPowerQuick 函數', 'green');
+      log('✅ Party 包含 getPartyPowerQuick 函數', 'green');
     } catch (error) {
       if (error.message.includes("getPartyPowerQuick")) {
-        log('❌ PartyV3 缺少 getPartyPowerQuick 函數', 'red');
+        log('❌ Party 缺少 getPartyPowerQuick 函數', 'red');
       } else {
         // 函數存在但隊伍不存在，這是正常的
-        log('✅ PartyV3 包含 getPartyPowerQuick 函數', 'green');
+        log('✅ Party 包含 getPartyPowerQuick 函數', 'green');
       }
     }
   } catch (error) {
-    log(`❌ PartyV3 測試失敗: ${error.message}`, 'red');
+    log(`❌ Party 測試失敗: ${error.message}`, 'red');
   }
   
   // 總結

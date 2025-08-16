@@ -54,15 +54,15 @@ async function main() {
     console.log("✅ Relic 部署至:", relicAddress);
     deployment.contracts.Relic = relicAddress;
 
-    // 1.3 PartyV3
-    console.log("\n📦 部署 PartyV3...");
-    const PartyV3 = await hre.ethers.getContractFactory("PartyV3");
-    const partyV3 = await PartyV3.deploy(deployer.address);
+    // 1.3 Party
+    console.log("\n📦 部署 Party...");
+    const Party = await hre.ethers.getContractFactory("Party");
+    const partyV3 = await Party.deploy(deployer.address);
     await partyV3.waitForDeployment();
     const partyV3Address = await partyV3.getAddress();
     await partyV3.setBaseURI(`${METADATA_SERVER_URL}/api/party/`);
-    console.log("✅ PartyV3 部署至:", partyV3Address);
-    deployment.contracts.PartyV3 = partyV3Address;
+    console.log("✅ Party 部署至:", partyV3Address);
+    deployment.contracts.Party = partyV3Address;
 
     // 1.4 VIPStaking
     console.log("\n📦 部署 VIPStaking...");
@@ -180,11 +180,11 @@ async function main() {
       console.log("✅ SoulShard Token 已設定");
     }
 
-    // 3.4 PartyV3 設定 Hero 和 Relic 合約
-    console.log("\n🔧 PartyV3 設定 NFT 合約...");
+    // 3.4 Party 設定 Hero 和 Relic 合約
+    console.log("\n🔧 Party 設定 NFT 合約...");
     await partyV3.setHeroContract(heroAddress);
     await partyV3.setRelicContract(relicAddress);
-    console.log("✅ PartyV3 已連接 Hero 和 Relic");
+    console.log("✅ Party 已連接 Hero 和 Relic");
 
     // ===== 4. 儲存部署記錄 =====
     const deploymentPath = path.join(

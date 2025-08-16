@@ -41,8 +41,8 @@
 - ✅ `src/config/contracts.ts` - V25 合約地址更新
 - ✅ `src/lib/abis/DungeonMaster.json` - 新 ABI
 - ✅ `src/lib/abis/DungeonStorage.json` - 新 ABI
-- ✅ `src/lib/abis/AltarOfAscension.json` - 新 ABI (AltarOfAscensionVRF)
-- ✅ `src/lib/abis/Party.json` - 新 ABI (PartyV3)
+- ✅ `src/lib/abis/AltarOfAscension.json` - 新 ABI (AltarOfAscension)
+- ✅ `src/lib/abis/Party.json` - 新 ABI (Party)
 
 ### ✅ 子圖項目同步完成
 **路徑**: `/Users/sotadic/Documents/GitHub/DungeonDelvers/DDgraphql/dungeon-delvers/`
@@ -51,8 +51,8 @@
 - ✅ `networks.json` - 所有地址和起始區塊更新為 56664525
 - ✅ `abis/DungeonMaster.json` - 新 ABI
 - ✅ `abis/DungeonStorage.json` - 新 ABI  
-- ✅ `abis/AltarOfAscension.json` - 新 ABI (AltarOfAscensionVRF)
-- ✅ `abis/Party.json` - 新 ABI (PartyV3)
+- ✅ `abis/AltarOfAscension.json` - 新 ABI (AltarOfAscension)
+- ✅ `abis/Party.json` - 新 ABI (Party)
 
 ## 🔧 技術詳情
 
@@ -68,15 +68,15 @@
 # 複製的 ABI 文件
 - core/DungeonMaster.sol/DungeonMaster.json
 - core/DungeonStorage.sol/DungeonStorage.json  
-- core/AltarOfAscension.sol/AltarOfAscensionVRF.json
-- nft/Party.sol/PartyV3.json
+- core/AltarOfAscension.sol/AltarOfAscension.json
+- nft/Party.sol/Party.json
 ```
 
 ### 合約版本說明
 - **DungeonMaster**: 最新核心邏輯
 - **DungeonStorage**: 最新數據存儲
-- **AltarOfAscension**: VRF 版本 (AltarOfAscensionVRF)
-- **Party**: V3 版本 (PartyV3)
+- **AltarOfAscension**: VRF 版本 (AltarOfAscension)
+- **Party**: V3 版本 (Party)
 
 ## ⚠️ 重要提醒
 

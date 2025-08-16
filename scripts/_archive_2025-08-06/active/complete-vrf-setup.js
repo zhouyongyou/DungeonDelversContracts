@@ -38,7 +38,7 @@ async function main() {
         const heroJson = require(path.join(__dirname, "..", "..", "artifacts", "contracts", "current", "nft", "Hero.sol", "Hero.json"));
         const relicJson = require(path.join(__dirname, "..", "..", "artifacts", "contracts", "current", "nft", "Relic.sol", "Relic.json"));
         const dungeonMasterJson = require(path.join(__dirname, "..", "..", "artifacts", "contracts", "current", "core", "DungeonMaster.sol", "DungeonMaster.json"));
-        const altarJson = require(path.join(__dirname, "..", "..", "artifacts", "contracts", "current", "core", "AltarOfAscension.sol", "AltarOfAscensionVRF.json"));
+        const altarJson = require(path.join(__dirname, "..", "..", "artifacts", "contracts", "current", "core", "AltarOfAscension.sol", "AltarOfAscension.json"));
         const dungeonCoreJson = require(path.join(__dirname, "..", "..", "artifacts", "contracts", "current", "core", "DungeonCore.sol", "DungeonCore.json"));
         
         const hero = new ethers.Contract(CONTRACTS.Hero, heroJson.abi, wallet);

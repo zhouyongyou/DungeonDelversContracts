@@ -136,7 +136,7 @@ function updateSubgraph() {
   const updates = [
     { name: 'Hero', address: V25_CONTRACTS.HERO },
     { name: 'Relic', address: V25_CONTRACTS.RELIC },
-    { name: 'PartyV3', address: V25_CONTRACTS.PARTY },
+    { name: 'Party', address: V25_CONTRACTS.PARTY },
     { name: 'VIPStaking', address: V25_CONTRACTS.VIPSTAKING },
     { name: 'PlayerProfile', address: V25_CONTRACTS.PLAYERPROFILE },
     { name: 'DungeonMaster', address: V25_CONTRACTS.DUNGEONMASTER },
@@ -210,8 +210,8 @@ function copyABIs() {
   const abiMappings = [
     { from: 'current/nft/Hero.sol/Hero.json', to: 'Hero/Hero.json' },
     { from: 'current/nft/Relic.sol/Relic.json', to: 'Relic/Relic.json' },
-    { from: 'current/nft/PartyV3.sol/PartyV3.json', to: 'PartyV3/PartyV3.json' },
-    { from: 'current/AltarOfAscension.sol/AltarOfAscension.json', to: 'AltarOfAscension/AltarOfAscensionVRF.json' },
+    { from: 'current/nft/Party.sol/Party.json', to: 'Party/Party.json' },
+    { from: 'current/AltarOfAscension.sol/AltarOfAscension.json', to: 'AltarOfAscension/AltarOfAscension.json' },
     { from: 'current/DungeonMaster.sol/DungeonMaster.json', to: 'DungeonMaster/DungeonMaster.json' },
     { from: 'current/VRFManagerV2Plus.sol/VRFManagerV2Plus.json', to: 'VRFManagerV2Plus/VRFManagerV2Plus.json' }
   ];

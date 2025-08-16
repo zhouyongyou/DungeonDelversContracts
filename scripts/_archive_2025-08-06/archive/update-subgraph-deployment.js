@@ -70,7 +70,7 @@ function updateSubgraphYaml() {
   const contractMapping = {
     'Hero': 'HERO_ADDRESS',
     'Relic': 'RELIC_ADDRESS',
-    'PartyV3': 'PARTY_ADDRESS',
+    'Party': 'PARTY_ADDRESS',
     'VIPStaking': 'VIPSTAKING_ADDRESS',
     'PlayerProfile': 'PLAYERPROFILE_ADDRESS',
     'DungeonMasterV8': 'DUNGEONMASTER_ADDRESS',

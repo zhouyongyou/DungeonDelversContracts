@@ -63,10 +63,10 @@ const ABI_SYNC_CONFIG = [
   },
   {
     contractName: 'PARTY',
-    artifactName: 'PartyV3',
+    artifactName: 'Party',
     destinations: [
       { type: 'frontend', path: 'src/abis/Party.json' },
-      { type: 'subgraph', path: 'abis/PartyV3.json' }
+      { type: 'subgraph', path: 'abis/Party.json' }
     ]
   },
   {
@@ -110,7 +110,7 @@ const ABI_SYNC_CONFIG = [
   },
   {
     contractName: 'ORACLE',
-    artifactName: 'Oracle_V22_Adaptive',
+    artifactName: 'Oracle',
     destinations: [
       { type: 'frontend', path: 'src/abis/Oracle.json' }
     ]
@@ -174,7 +174,7 @@ class V25UnifiedSync {
       
       // 根據不同合約確定路徑
       let contractPath;
-      if (['Hero', 'Relic', 'PartyV3'].includes(abiConfig.artifactName)) {
+      if (['Hero', 'Relic', 'Party'].includes(abiConfig.artifactName)) {
         contractPath = 'current/nft';
       } else if (['VIPStaking', 'PlayerProfile', 'PlayerVault'].includes(abiConfig.artifactName)) {
         contractPath = 'current/core';
@@ -359,7 +359,7 @@ module.exports = {
         bsc: {
           Hero: { address: config.getAddress('HERO') },
           Relic: { address: config.getAddress('RELIC') },
-          PartyV3: { address: config.getAddress('PARTY') },
+          Party: { address: config.getAddress('PARTY') },
           VIPStaking: { address: config.getAddress('VIPSTAKING') },
           PlayerProfile: { address: config.getAddress('PLAYERPROFILE') },
           AltarOfAscension: { address: config.getAddress('ALTAROFASCENSION') },
@@ -382,7 +382,7 @@ module.exports = {
       const updates = [
         { name: 'Hero', address: config.getAddress('HERO') },
         { name: 'Relic', address: config.getAddress('RELIC') },
-        { name: 'PartyV3', address: config.getAddress('PARTY') },
+        { name: 'Party', address: config.getAddress('PARTY') },
         { name: 'VIPStaking', address: config.getAddress('VIPSTAKING') },
         { name: 'PlayerProfile', address: config.getAddress('PLAYERPROFILE') },
         { name: 'AltarOfAscension', address: config.getAddress('ALTAROFASCENSION') },

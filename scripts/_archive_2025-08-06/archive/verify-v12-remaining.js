@@ -95,7 +95,7 @@ async function main() {
   log('- DungeonStorage: https://bscscan.com/address/0xea21D782CefD785B128346F39f1574c8D6eb64C9#code', 'green');
   log('- Hero: https://bscscan.com/address/0x6f4Bd03ea8607c6e69bCc971b7d3CC9e5801EF5E#code', 'green');
   log('- Relic: https://bscscan.com/address/0x853DAAeC0ae354bF40c732C199Eb09F1a0CD3dC1#code', 'green');
-  log('- PartyV3: https://bscscan.com/address/0x847DceaE26aF1CFc09beC195CE87a9b5701863A7#code', 'green');
+  log('- Party: https://bscscan.com/address/0x847DceaE26aF1CFc09beC195CE87a9b5701863A7#code', 'green');
   
   if (failed > 0) {
     log('\n💡 提示：失敗的合約可能需要手動在 BSCScan 上驗證', 'yellow');

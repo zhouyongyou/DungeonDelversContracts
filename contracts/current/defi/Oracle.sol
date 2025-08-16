@@ -1,4 +1,4 @@
-// contracts/defi/Oracle_V22_Adaptive.sol
+// contracts/defi/Oracle.sol
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
@@ -95,7 +95,7 @@ library TickMath {
 }
 
 /**
- * @title Oracle_V22_Adaptive
+ * @title Oracle
  * @notice DungeonDelvers Oracle V22 - 自適應 TWAP 版本
  * @dev 自動降級 TWAP 週期，確保始終能提供價格
  */

@@ -35,7 +35,7 @@ async function deployOracleV22() {
 
   try {
     // 讀取合約 bytecode
-    const contractPath = path.join(__dirname, '../artifacts/contracts/current/defi/Oracle_V22_Adaptive.sol/Oracle_V22_Adaptive.json');
+    const contractPath = path.join(__dirname, '../artifacts/contracts/current/defi/Oracle.sol/Oracle.json');
     
     if (!fs.existsSync(contractPath)) {
       console.log('❌ 找不到編譯後的合約');

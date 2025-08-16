@@ -44,7 +44,7 @@ require(address(dungeonCoreContract) != address(0), "Relic: DungeonCore not set"
 require(success, "Relic: ETH transfer failed");
 ```
 
-### Oracle_V22_Adaptive.sol
+### Oracle.sol
 ```solidity
 // 當前問題
 require(tick < 887272 && tick > -887272, "T");  // 行 71
@@ -195,7 +195,7 @@ require(quantity > 0 && quantity <= 50, ErrorCodes.E001);
 - [ ] 更新 Hero.sol（8 個錯誤）
 - [ ] 更新 Relic.sol（8 個錯誤）
 - [ ] 更新 DungeonMaster.sol（7 個錯誤）
-- [ ] 更新 Oracle_V22_Adaptive.sol（1 個錯誤）
+- [ ] 更新 Oracle.sol（1 個錯誤）
 
 ### Phase 3：測試（Day 4）
 - [ ] 編譯測試

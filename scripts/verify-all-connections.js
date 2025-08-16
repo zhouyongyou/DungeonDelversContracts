@@ -10,7 +10,7 @@ async function main() {
     Hero: "0x671d937b171e2ba2c4dc23c133b07e4449f283ef",
     Relic: "0x42bf1bd8fc5a8dfdd0e97de131246ec0e3ec73da",
     DungeonMaster: "0xc0bbae55cf9245f76628d2c5299cd6fa35cd102a",
-    AltarOfAscensionVRF: "0xa86749237d4631ad92ba859d0b0df4770f6147ba",
+    AltarOfAscension: "0xa86749237d4631ad92ba859d0b0df4770f6147ba",
     
     // 核心合約
     DungeonCore: "0x8a2D2b1961135127228EdD71Ff98d6B097915a13",
@@ -69,10 +69,10 @@ async function main() {
       results.incorrect.push(`DungeonCore.dungeonMaster = ${coreSettings.dungeonMaster} (應為 ${contracts.DungeonMaster})`);
     }
     
-    if (coreSettings.altarOfAscension.toLowerCase() === contracts.AltarOfAscensionVRF.toLowerCase()) {
-      results.correct.push("DungeonCore.altarOfAscension = AltarOfAscensionVRF ✓");
+    if (coreSettings.altarOfAscension.toLowerCase() === contracts.AltarOfAscension.toLowerCase()) {
+      results.correct.push("DungeonCore.altarOfAscension = AltarOfAscension ✓");
     } else {
-      results.incorrect.push(`DungeonCore.altarOfAscension = ${coreSettings.altarOfAscension} (應為 ${contracts.AltarOfAscensionVRF})`);
+      results.incorrect.push(`DungeonCore.altarOfAscension = ${coreSettings.altarOfAscension} (應為 ${contracts.AltarOfAscension})`);
     }
     
     console.log("\n=====================================");
@@ -159,10 +159,10 @@ async function main() {
     
     // 檢查 Relic 的 AscensionAltar
     const relicAscensionAltar = await relic.ascensionAltarAddress();
-    if (relicAscensionAltar.toLowerCase() === contracts.AltarOfAscensionVRF.toLowerCase()) {
-      results.correct.push("Relic.ascensionAltarAddress = AltarOfAscensionVRF ✓");
+    if (relicAscensionAltar.toLowerCase() === contracts.AltarOfAscension.toLowerCase()) {
+      results.correct.push("Relic.ascensionAltarAddress = AltarOfAscension ✓");
     } else {
-      results.incorrect.push(`Relic.ascensionAltarAddress = ${relicAscensionAltar} (應為 ${contracts.AltarOfAscensionVRF})`);
+      results.incorrect.push(`Relic.ascensionAltarAddress = ${relicAscensionAltar} (應為 ${contracts.AltarOfAscension})`);
     }
     
   } catch (error) {

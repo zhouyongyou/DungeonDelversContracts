@@ -48,7 +48,7 @@ const contracts = {
     address: "0x853DAAeC0ae354bF40c732C199Eb09F1a0CD3dC1",
     constructorArgs: ["0x10925A7138649C7E1794CE646182eeb5BF8ba647"]
   },
-  PartyV3: {
+  Party: {
     address: "0x847DceaE26aF1CFc09beC195CE87a9b5701863A7",
     constructorArgs: ["0x10925A7138649C7E1794CE646182eeb5BF8ba647"]
   },

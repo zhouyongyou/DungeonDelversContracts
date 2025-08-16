@@ -1,4 +1,4 @@
-// AltarOfAscensionVRF.sol - 完整的 VRF 整合版本
+// AltarOfAscension.sol - 完整的 VRF 整合版本
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
@@ -8,7 +8,7 @@ import "@openzeppelin/contracts/utils/Pausable.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import "../interfaces/interfaces.sol";
 
-contract AltarOfAscensionVRF is Ownable, ReentrancyGuard, Pausable, IVRFCallback {
+contract AltarOfAscension is Ownable, ReentrancyGuard, Pausable, IVRFCallback {
     IDungeonCore public dungeonCore;
     IHero public heroContract;
     IRelic public relicContract;

@@ -138,13 +138,13 @@ async function main() {
     log(`✅ Relic: ${relicAddress}`, 'green');
 
     const partyStep = useRealTokens ? 6 : 7;
-    logStep(partyStep, totalSteps, '部署 PartyV3', 'yellow');
-    const PartyV3 = await ethers.getContractFactory("PartyV3");
-    const party = await PartyV3.deploy(deployerAddress);
+    logStep(partyStep, totalSteps, '部署 Party', 'yellow');
+    const Party = await ethers.getContractFactory("Party");
+    const party = await Party.deploy(deployerAddress);
     await party.waitForDeployment();
     const partyAddress = await party.getAddress();
     deployedContracts.PARTY_ADDRESS = partyAddress;
-    log(`✅ PartyV3: ${partyAddress}`, 'green');
+    log(`✅ Party: ${partyAddress}`, 'green');
 
     // ===== 第四階段：管理合約部署 =====
     const storageStep = useRealTokens ? 7 : 8;

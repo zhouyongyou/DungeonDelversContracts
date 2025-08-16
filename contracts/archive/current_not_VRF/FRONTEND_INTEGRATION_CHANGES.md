@@ -188,7 +188,7 @@ await contract.batchSetDungeons(ids, dungeonData);
 - 新增 `checkSolvency()` 公開函數
 - 新增 `EmergencyWithdraw` 事件
 
-### Oracle_V22_Adaptive_Secured
+### Oracle_Secured
 - 新增 `MIN_SAFE_PERIOD` 常數 (300 秒)
 - 新增 `MAX_PRICE_CHANGE_BPS` 常數 (2000 = 20%)
 - 新增 `EmergencyPriceOverride` 事件

@@ -48,7 +48,7 @@
     {
       "timestamp": "2025-07-29T10:13:22.912Z",
       "type": "info",
-      "message": "\n部署 ORACLE (Oracle_V22_Adaptive)..."
+      "message": "\n部署 ORACLE (Oracle)..."
     },
     {
       "timestamp": "2025-07-29T10:13:25.623Z",
@@ -118,7 +118,7 @@
     {
       "timestamp": "2025-07-29T10:13:39.520Z",
       "type": "info",
-      "message": "\n部署 PARTY (PartyV3)..."
+      "message": "\n部署 PARTY (Party)..."
     },
     {
       "timestamp": "2025-07-29T10:13:41.681Z",

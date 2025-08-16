@@ -75,11 +75,11 @@ const VRF_ABI_SYNC_CONFIG = [
   // 非 VRF 合約保持原樣
   {
     contractName: 'PARTY',
-    artifactName: 'PartyV3',
+    artifactName: 'Party',
     contractFile: 'Party',
     destinations: [
       { type: 'frontend', path: 'src/abis/Party.json' },
-      { type: 'subgraph', path: 'abis/PartyV3.json' }
+      { type: 'subgraph', path: 'abis/Party.json' }
     ]
   },
   {
@@ -109,8 +109,8 @@ const VRF_ABI_SYNC_CONFIG = [
   },
   {
     contractName: 'ORACLE',
-    artifactName: 'Oracle_V22_Adaptive',
-    contractFile: 'Oracle_V22_Adaptive',
+    artifactName: 'Oracle',
+    contractFile: 'Oracle',
     destinations: [
       { type: 'frontend', path: 'src/abis/Oracle.json' }
     ]
@@ -291,7 +291,7 @@ ${colors.reset}`);
             },
             ORACLE: {
               address: masterConfig.contracts.mainnet.ORACLE_ADDRESS,
-              contractName: 'Oracle_V22_Adaptive'
+              contractName: 'Oracle'
             },
             DUNGEONCORE: {
               address: masterConfig.contracts.mainnet.DUNGEONCORE_ADDRESS,
@@ -319,7 +319,7 @@ ${colors.reset}`);
             },
             PARTY: {
               address: masterConfig.contracts.mainnet.PARTY_ADDRESS,
-              contractName: 'PartyV3'
+              contractName: 'Party'
             },
             ALTAROFASCENSION: {
               address: masterConfig.contracts.mainnet.ALTAROFASCENSION_ADDRESS,
@@ -479,7 +479,7 @@ ${colors.reset}`);
     const categories = {
       'Hero': 'nft',
       'Relic': 'nft', 
-      'PartyV3': 'nft',
+      'Party': 'nft',
       'VIPStaking': 'nft',
       'PlayerProfile': 'nft',
       'DungeonCore': 'core',
@@ -487,7 +487,7 @@ ${colors.reset}`);
       'AltarOfAscensionV2Fixed': 'core',
       'DungeonMasterV2_Fixed': 'core',
       'PlayerVault': 'defi',
-      'Oracle_V22_Adaptive': 'defi',
+      'Oracle': 'defi',
       'Test_SoulShard': 'defi'
     };
     return categories[artifactName] || 'core';
@@ -591,7 +591,7 @@ export const CONTRACT_ADDRESSES = {
   ALTAROFASCENSION: "${contracts.ALTAROFASCENSION.address}", // AltarOfAscension_UnifiedVRF
   
   // 📦 標準合約
-  PARTY: "${contracts.PARTY.address}",            // PartyV3
+  PARTY: "${contracts.PARTY.address}",            // Party
   VIPSTAKING: "${contracts.VIPSTAKING.address}",  // VIPStaking
   PLAYERPROFILE: "${contracts.PLAYERPROFILE.address}", // PlayerProfile
   

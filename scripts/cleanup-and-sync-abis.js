@@ -18,7 +18,7 @@ const SUBGRAPH_ABI_DIR = path.join(SUBGRAPH_ROOT, 'abis');
 const REQUIRED_ABIS = [
   'Hero.json',
   'Relic.json',
-  'PartyV3.json',
+  'Party.json',
   'DungeonCore.json',
   'DungeonMasterV8.json',  // V25 使用 V8 版本
   'DungeonStorage.json',
@@ -36,7 +36,7 @@ const CLEANUP_PATTERNS = [
   /^VRFManager\.json$/,          // 舊版本
   /^VRFManagerV2Plus\.json$/,    // 應該用 Fixed 版本
   /^Party\.json$/,               // 舊版本，應該用 V3
-  /^AltarOfAscensionVRF\.json$/, // 可能是舊版本
+  /^AltarOfAscension\.json$/, // 可能是舊版本
   /^VRFConsumerV2Plus\.json$/,   // 可能不需要
   /^ERC20\.json$/,               // 通用合約，可能不需要
   /^ERC721\.json$/,              // 通用合約，可能不需要

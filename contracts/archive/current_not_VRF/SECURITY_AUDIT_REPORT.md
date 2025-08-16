@@ -21,7 +21,7 @@
 2. **DungeonMaster.sol** - 遊戲邏輯控制
 3. **DungeonStorage.sol** - 數據存儲（未審計到實際文件）
 4. **PlayerVault.sol** - 玩家資金管理
-5. **Oracle_V22_Adaptive.sol** - 價格預言機
+5. **Oracle.sol** - 價格預言機
 
 ### NFT 合約
 1. **Hero.sol** - 英雄 NFT
@@ -57,7 +57,7 @@ function deposit(address _player, uint256 _amount) external onlyDungeonMaster {
 - 考慮實施儲備金機制
 
 #### 2. **Oracle 價格操縱風險**
-**位置**: `Oracle_V22_Adaptive.sol:171-179`
+**位置**: `Oracle.sol:171-179`
 ```solidity
 function getPriceAdaptive() public view returns (uint256 price, uint32 usedPeriod) {
     for (uint i = 0; i < adaptivePeriods.length; i++) {

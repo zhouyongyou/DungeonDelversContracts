@@ -301,7 +301,7 @@ class V25ImprovedDeployer {
       await this.initialize();
       
       // 部署合約...
-      // await this.deployContract('ORACLE', 'Oracle_V22_Adaptive', [...]);
+      // await this.deployContract('ORACLE', 'Oracle', [...]);
       
       // 設置連接...
       // await this.setupConnections();

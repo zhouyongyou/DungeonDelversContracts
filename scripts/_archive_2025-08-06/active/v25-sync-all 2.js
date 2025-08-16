@@ -54,11 +54,11 @@ const ABI_SYNC_CONFIG = [
   },
   {
     contractName: 'PARTY',
-    artifactName: 'PartyV3',
+    artifactName: 'Party',
     contractFile: 'Party', // 添加實際的合約檔案名稱
     destinations: [
       { type: 'frontend', path: 'src/abis/Party.json' },
-      { type: 'subgraph', path: 'abis/PartyV3.json' }
+      { type: 'subgraph', path: 'abis/Party.json' }
     ]
   },
   {
@@ -106,8 +106,8 @@ const ABI_SYNC_CONFIG = [
   },
   {
     contractName: 'ORACLE',
-    artifactName: 'Oracle_V22_Adaptive',
-    contractFile: 'Oracle_V22_Adaptive', // Oracle 在 defi 目錄中
+    artifactName: 'Oracle',
+    contractFile: 'Oracle', // Oracle 在 defi 目錄中
     destinations: [
       { type: 'frontend', path: 'src/abis/Oracle.json' }
     ]
@@ -283,7 +283,7 @@ ${colors.reset}`);
           ORACLE: {
             address: masterConfig.contracts.mainnet.ORACLE_ADDRESS,
             deploymentBlock: 56184733,
-            contractName: 'Oracle_V22_Adaptive'
+            contractName: 'Oracle'
           },
           DUNGEONCORE: {
             address: masterConfig.contracts.mainnet.DUNGEONCORE_ADDRESS,
@@ -318,7 +318,7 @@ ${colors.reset}`);
           PARTY: {
             address: masterConfig.contracts.mainnet.PARTY_ADDRESS,
             deploymentBlock: 56184733,
-            contractName: 'PartyV3'
+            contractName: 'Party'
           },
           VIPSTAKING: {
             address: masterConfig.contracts.mainnet.VIPSTAKING_ADDRESS,
@@ -1252,7 +1252,7 @@ module.exports = {
           address: this.v25Config.contracts.RELIC?.address,
           startBlock: this.v25Config.startBlock
         },
-        PartyV3: {
+        Party: {
           address: this.v25Config.contracts.PARTY?.address,
           startBlock: this.v25Config.startBlock
         },
@@ -1299,7 +1299,7 @@ module.exports = {
     const updates = [
       { name: 'Hero', address: this.v25Config.contracts.HERO?.address },
       { name: 'Relic', address: this.v25Config.contracts.RELIC?.address },
-      { name: 'PartyV3', address: this.v25Config.contracts.PARTY?.address },
+      { name: 'Party', address: this.v25Config.contracts.PARTY?.address },
       { name: 'VIPStaking', address: this.v25Config.contracts.VIPSTAKING?.address },
       { name: 'PlayerProfile', address: this.v25Config.contracts.PLAYERPROFILE?.address },
       { name: 'AltarOfAscension', address: this.v25Config.contracts.ALTAROFASCENSION?.address },
@@ -1396,7 +1396,7 @@ export function getRelicContractAddress(): string {
     return RELIC_ADDRESS
 }
 
-export function getPartyV3ContractAddress(): string {
+export function getPartyContractAddress(): string {
     return PARTY_V3_ADDRESS
 }
 

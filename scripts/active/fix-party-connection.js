@@ -18,7 +18,7 @@ async function main() {
   
   try {
     // 連接到 Party 合約
-    const party = await hre.ethers.getContractAt('PartyV3', V25_CONTRACTS.PARTY);
+    const party = await hre.ethers.getContractAt('Party', V25_CONTRACTS.PARTY);
     
     // 檢查當前 DungeonCore 地址
     console.log('🔍 檢查當前 DungeonCore 連接...');

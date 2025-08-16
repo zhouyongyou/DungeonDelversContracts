@@ -119,11 +119,11 @@ dataSources:
           handler: handleVRFManagerSet
       file: ./src/relic.ts
   - kind: ethereum/contract
-    name: PartyV3
+    name: Party
     network: bsc
     source:
       address: "${VRF_CONTRACTS.Party}"
-      abi: PartyV3
+      abi: Party
       startBlock: 56631513
     mapping:
       kind: ethereum/events
@@ -133,8 +133,8 @@ dataSources:
         - Party
         - Transfer
       abis:
-        - name: PartyV3
-          file: ./abis/PartyV3.json
+        - name: Party
+          file: ./abis/Party.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handleTransfer
@@ -264,7 +264,7 @@ dataSources:
     network: bsc
     source:
       address: "${VRF_CONTRACTS.AltarOfAscension}"
-      abi: AltarOfAscensionVRF
+      abi: AltarOfAscension
       startBlock: 56631513
     mapping:
       kind: ethereum/events
@@ -273,8 +273,8 @@ dataSources:
       entities:
         - UpgradeAttempt
       abis:
-        - name: AltarOfAscensionVRF
-          file: ./abis/AltarOfAscensionVRF.json
+        - name: AltarOfAscension
+          file: ./abis/AltarOfAscension.json
       eventHandlers:
         - event: UpgradeAttempted(indexed address,indexed address,uint8,uint8,uint256[],uint256[],uint8,uint256,uint8,uint8)
           handler: handleUpgradeAttempted

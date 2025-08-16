@@ -151,11 +151,11 @@ dataSources:
           handler: handleVRFManagerSet
       file: ./src/relic.ts
   - kind: ethereum/contract
-    name: PartyV3
+    name: Party
     network: bsc
     source:
       address: "${config.contracts.PARTY}"
-      abi: PartyV3
+      abi: Party
       startBlock: ${config.blockNumber}
     mapping:
       kind: ethereum/events
@@ -165,8 +165,8 @@ dataSources:
         - Party
         - Transfer
       abis:
-        - name: PartyV3
-          file: ./abis/PartyV3.json
+        - name: Party
+          file: ./abis/Party.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handleTransfer
@@ -298,9 +298,9 @@ export function handleVRFManagerSet(event: VRFManagerSet): void {
     const abiFiles = [
         { source: 'nft/Hero.sol/Hero.json', target: 'Hero.json' },
         { source: 'nft/Relic.sol/Relic.json', target: 'Relic.json' },
-        { source: 'nft/Party.sol/PartyV3.json', target: 'PartyV3.json' },
+        { source: 'nft/Party.sol/Party.json', target: 'Party.json' },
         { source: 'core/DungeonMaster.sol/DungeonMaster.json', target: 'DungeonMaster.json' },
-        { source: 'core/AltarOfAscension.sol/AltarOfAscensionVRF.json', target: 'AltarOfAscension.json' },
+        { source: 'core/AltarOfAscension.sol/AltarOfAscension.json', target: 'AltarOfAscension.json' },
         { source: 'core/DungeonStorage.sol/DungeonStorage.json', target: 'DungeonStorage.json' }
     ];
     
@@ -401,9 +401,9 @@ export function calculateMintFee(quantity: number): { platformFee: bigint, vrfFe
     const frontendAbiFiles = [
         { source: 'nft/Hero.sol/Hero.json', target: 'Hero.json' },
         { source: 'nft/Relic.sol/Relic.json', target: 'Relic.json' },
-        { source: 'nft/Party.sol/PartyV3.json', target: 'Party.json' },
+        { source: 'nft/Party.sol/Party.json', target: 'Party.json' },
         { source: 'core/DungeonMaster.sol/DungeonMaster.json', target: 'DungeonMaster.json' },
-        { source: 'core/AltarOfAscension.sol/AltarOfAscensionVRF.json', target: 'AltarOfAscension.json' },
+        { source: 'core/AltarOfAscension.sol/AltarOfAscension.json', target: 'AltarOfAscension.json' },
         { source: 'core/VRFManager.sol/VRFManager.json', target: 'VRFManager.json' },
         { source: 'core/DungeonStorage.sol/DungeonStorage.json', target: 'DungeonStorage.json' }
     ];

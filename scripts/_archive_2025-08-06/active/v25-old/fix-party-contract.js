@@ -23,7 +23,7 @@ async function main() {
   
   // 使用正確的合約路徑
   const party = await ethers.getContractAt(
-    "contracts/current/nft/Party.sol:PartyV3", 
+    "contracts/current/nft/Party.sol:Party", 
     config.PARTY, 
     signer
   );

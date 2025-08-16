@@ -128,7 +128,7 @@ async function main() {
     
     // 5. Party NFT 驗證
     console.log('5️⃣ Party NFT 連接驗證:');
-    const party = await hre.ethers.getContractAt('PartyV3', V25_CONTRACTS.PARTY);
+    const party = await hre.ethers.getContractAt('Party', V25_CONTRACTS.PARTY);
     
     const partyConnections = [
       { name: 'DungeonCore', expected: V25_CONTRACTS.DUNGEONCORE, actual: await party.dungeonCoreContract() }
@@ -149,7 +149,7 @@ async function main() {
     
     // 6. AltarOfAscension 驗證
     console.log('6️⃣ AltarOfAscension 連接驗證:');
-    const altarOfAscension = await hre.ethers.getContractAt('AltarOfAscensionVRF', V25_CONTRACTS.ALTAROFASCENSION);
+    const altarOfAscension = await hre.ethers.getContractAt('AltarOfAscension', V25_CONTRACTS.ALTAROFASCENSION);
     
     const altarConnections = [
       { name: 'DungeonCore', expected: V25_CONTRACTS.DUNGEONCORE, actual: await altarOfAscension.dungeonCore() }

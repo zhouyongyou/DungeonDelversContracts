@@ -8,7 +8,7 @@ const V25_CONTRACTS = {
   // 核心合約
   ORACLE: {
     address: "0xdbf49cd5708C56b8b0848233b754b418806D7018",
-    name: "Oracle_V22_Adaptive",
+    name: "Oracle",
     args: ["0x1e5Cd5F386Fb6F39cD8788675dd3A5ceB6521C82", "0x97B2C2a9A11C7b6A020b4bAEaAd349865eaD0bcF", "0x7C67Af4EBC6651c95dF78De11cfe325660d935FE"]
   },
   DUNGEONCORE: {
@@ -60,7 +60,7 @@ const V25_CONTRACTS = {
   },
   PARTY: {
     address: "0x382024850E08AB37E290315fc5f3692b8D6646EB",
-    name: "PartyV3",
+    name: "Party",
     args: ["0x10925A7138649C7E1794CE646182eeb5BF8ba647"]
   }
 };

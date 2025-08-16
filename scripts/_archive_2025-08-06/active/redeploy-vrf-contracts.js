@@ -27,8 +27,8 @@ async function deployContract(wallet, contractName, ...args) {
         contractJson = require(path.join(artifactPath, "nft", "Relic.sol", "Relic.json"));
     } else if (contractName === "DungeonMaster") {
         contractJson = require(path.join(artifactPath, "core", "DungeonMaster.sol", "DungeonMaster.json"));
-    } else if (contractName === "AltarOfAscensionVRF") {
-        contractJson = require(path.join(artifactPath, "core", "AltarOfAscension.sol", "AltarOfAscensionVRF.json"));
+    } else if (contractName === "AltarOfAscension") {
+        contractJson = require(path.join(artifactPath, "core", "AltarOfAscension.sol", "AltarOfAscension.json"));
     }
     
     const factory = new ethers.ContractFactory(
@@ -84,7 +84,7 @@ async function main() {
         console.log("\n========== 部署 AltarOfAscension ==========");
         deployedContracts.AltarOfAscension = await deployContract(
             wallet,
-            "AltarOfAscensionVRF",
+            "AltarOfAscension",
             wallet.address
         );
         

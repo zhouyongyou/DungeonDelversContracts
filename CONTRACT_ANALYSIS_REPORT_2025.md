@@ -15,7 +15,7 @@
 | **核心** | DungeonStorage.sol | 97 | 地城數據存儲 |
 | **核心** | AltarOfAscension.sol | 515 | 升星祭壇 |
 | **核心** | VRFConsumerV2Plus.sol | 489 | VRF 隨機數管理 |
-| **DeFi** | Oracle_V22_Adaptive.sol | 339 | 價格預言機 |
+| **DeFi** | Oracle.sol | 339 | 價格預言機 |
 | **DeFi** | PlayerVault.sol | 341 | 玩家金庫 |
 | **DeFi** | SoulShard.sol | 201 | 遊戲代幣 |
 | **NFT** | Hero.sol | 363 | 英雄 NFT |

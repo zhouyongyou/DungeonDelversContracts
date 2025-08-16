@@ -66,7 +66,7 @@ async function main() {
   console.log("\n📋 Party 合約連接:");
   try {
     const party = await ethers.getContractAt(
-      "contracts/current/nft/Party.sol:PartyV3", 
+      "contracts/current/nft/Party.sol:Party", 
       v22Config.contracts.PARTY.address
     );
 

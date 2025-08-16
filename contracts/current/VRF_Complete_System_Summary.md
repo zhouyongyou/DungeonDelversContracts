@@ -8,7 +8,7 @@
 
 1. **`/contracts/complete/HeroVRF.sol`** - 完整的英雄 VRF 合約
 2. **`/contracts/complete/RelicVRF.sol`** - 完整的聖物 VRF 合約  
-3. **`/contracts/complete/AltarOfAscensionVRF.sol`** - 完整的升星祭壇 VRF 合約
+3. **`/contracts/complete/AltarOfAscension.sol`** - 完整的升星祭壇 VRF 合約
 4. **`/contracts/complete/DungeonMasterVRF.sol`** - 完整的地城探索 VRF 合約
 
 ## 🚀 核心特性

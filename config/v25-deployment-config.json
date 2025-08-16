@@ -15,7 +15,7 @@
     "ORACLE": {
       "address": "0xdbf49cd5708C56b8b0848233b754b418806D7018",
       "deploymentBlock": 56291897,
-      "contractName": "Oracle_V22_Adaptive"
+      "contractName": "Oracle"
     },
     "DUNGEONCORE": {
       "address": "0x2953ed03825b40e9c1EBa1cAe5FBD47f20A4823d",
@@ -50,7 +50,7 @@
     "PARTY": {
       "address": "0x382024850E08AB37E290315fc5f3692b8D6646EB",
       "deploymentBlock": 56291967,
-      "contractName": "PartyV3"
+      "contractName": "Party"
     },
     "VIPSTAKING": {
       "address": "0xC0D8C84e28E5BcfC9cBD109551De53BA04e7328C",

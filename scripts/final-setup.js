@@ -11,7 +11,7 @@ async function deployAltar() {
   console.log("\n📦 部署 AltarOfAscension...");
   
   try {
-    const Factory = await hre.ethers.getContractFactory("AltarOfAscensionVRF");
+    const Factory = await hre.ethers.getContractFactory("AltarOfAscension");
     const [deployer] = await hre.ethers.getSigners();
     const contract = await Factory.deploy(deployer.address);
     await contract.waitForDeployment();

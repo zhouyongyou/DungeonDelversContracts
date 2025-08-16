@@ -68,7 +68,7 @@ async function main() {
     { name: 'DungeonStorage', address: addresses.DUNGEONSTORAGE_ADDRESS, args: [deployer.address] },
     { name: 'Hero', address: addresses.HERO_ADDRESS, args: [deployer.address] },
     { name: 'Relic', address: addresses.RELIC_ADDRESS, args: [deployer.address] },
-    { name: 'PartyV3', address: addresses.PARTY_ADDRESS, args: [deployer.address] },
+    { name: 'Party', address: addresses.PARTY_ADDRESS, args: [deployer.address] },
     { name: 'PlayerVault', address: addresses.PLAYERVAULT_ADDRESS, args: [deployer.address] },
     { name: 'PlayerProfile', address: addresses.PLAYERPROFILE_ADDRESS, args: [deployer.address] },
     { name: 'AltarOfAscension', address: addresses.ALTAROFASCENSION_ADDRESS, args: [deployer.address] },

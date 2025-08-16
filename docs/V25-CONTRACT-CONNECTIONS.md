@@ -122,7 +122,7 @@
 ---
 
 ### 5️⃣ Party NFT 合約
-> **合約文件**: `Party.sol` (PartyV3)  
+> **合約文件**: `Party.sol` (Party)  
 > **地址**: `0x28A85D14e0F87d6eD04e21c30992Df8B3e9434E3`
 
 #### 🔍 讀取函數
@@ -140,7 +140,7 @@
 ---
 
 ### 6️⃣ AltarOfAscension (升星祭壇)
-> **合約文件**: `AltarOfAscension.sol` (AltarOfAscensionVRF)  
+> **合約文件**: `AltarOfAscension.sol` (AltarOfAscension)  
 > **地址**: `0x095559778C0BAA2d8FA040Ab0f8752cF07779D33`
 
 #### 🔍 讀取函數

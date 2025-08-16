@@ -1,4 +1,4 @@
-// AltarOfAscensionVRF.sol - 完整的 VRF 整合版本
+// AltarOfAscension.sol - 完整的 VRF 整合版本
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 

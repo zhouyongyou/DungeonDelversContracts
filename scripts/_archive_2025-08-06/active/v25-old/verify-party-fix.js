@@ -8,7 +8,7 @@ require('dotenv').config();
 const v22Config = require('../../config/v22-config');
 const BSC_RPC = "https://bnb-mainnet.g.alchemy.com/v2/3lmTWjUVbFylAurhdU-rSUefTC-P4tKf";
 
-// PartyV3 ABI - 注意變量名是 dungeonCoreContract
+// Party ABI - 注意變量名是 dungeonCoreContract
 const PARTY_ABI = [
   'function dungeonCoreContract() public view returns (address)',
   'function heroContract() public view returns (address)',

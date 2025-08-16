@@ -201,7 +201,7 @@ function getContractPath(contractName) {
     ORACLE: 'defi/Oracle.sol:Oracle_Final',
     HERO: 'nft/Hero.sol:Hero',
     RELIC: 'nft/Relic.sol:Relic',
-    PARTY: 'nft/Party.sol:PartyV3',
+    PARTY: 'nft/Party.sol:Party',
     PLAYERVAULT: 'defi/PlayerVault.sol:PlayerVault',
     PLAYERPROFILE: 'nft/PlayerProfile.sol:PlayerProfile',
     VIPSTAKING: 'nft/VIPStaking.sol:VIPStaking',

@@ -172,16 +172,16 @@ async function main() {
     saveDeployment('Relic', addresses.RELIC_ADDRESS, network);
     log(`✅ Relic deployed at: ${addresses.RELIC_ADDRESS}`, 'green');
 
-    // 6. Deploy PartyV3
-    log('\n6️⃣  Deploying PartyV3...', 'magenta');
-    const PartyV3 = await ethers.getContractFactory("PartyV3");
-    const party = await PartyV3.deploy(deployerAddress);
+    // 6. Deploy Party
+    log('\n6️⃣  Deploying Party...', 'magenta');
+    const Party = await ethers.getContractFactory("Party");
+    const party = await Party.deploy(deployerAddress);
     await party.waitForDeployment();
     addresses.PARTY_ADDRESS = await party.getAddress();
     deployedContracts.party = party;
     
-    saveDeployment('PartyV3', addresses.PARTY_ADDRESS, network);
-    log(`✅ PartyV3 deployed at: ${addresses.PARTY_ADDRESS}`, 'green');
+    saveDeployment('Party', addresses.PARTY_ADDRESS, network);
+    log(`✅ Party deployed at: ${addresses.PARTY_ADDRESS}`, 'green');
 
     // 7. Deploy PlayerVault
     log('\n7️⃣  Deploying PlayerVault...', 'magenta');

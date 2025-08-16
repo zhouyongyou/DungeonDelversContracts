@@ -38,11 +38,11 @@ async function deployContract(wallet, contractName, ...args) {
   let artifactPath;
   
   switch(contractName) {
-    case 'PartyV3':
-      artifactPath = `${contractPath}/nft/Party.sol/PartyV3.json`;
+    case 'Party':
+      artifactPath = `${contractPath}/nft/Party.sol/Party.json`;
       break;
     case 'AltarOfAscension':
-      artifactPath = `${contractPath}/core/AltarOfAscension.sol/AltarOfAscensionVRF.json`;
+      artifactPath = `${contractPath}/core/AltarOfAscension.sol/AltarOfAscension.json`;
       break;
   }
   

@@ -48,8 +48,8 @@ async function deployContract(wallet, contractName, ...args) {
     case 'Relic':
       artifactPath = `${contractPath}/nft/Relic.sol/Relic.json`;
       break;
-    case 'PartyV3':
-      artifactPath = `${contractPath}/nft/Party.sol/PartyV3.json`;
+    case 'Party':
+      artifactPath = `${contractPath}/nft/Party.sol/Party.json`;
       break;
     case 'AltarOfAscension':
       artifactPath = `${contractPath}/core/AltarOfAscension.sol/AltarOfAscension.json`;
@@ -124,7 +124,7 @@ async function main() {
     deployedContracts.RELIC = relic.address;
     
     // 6. 部署 Party
-    const party = await deployContract(wallet, 'PartyV3', wallet.address);
+    const party = await deployContract(wallet, 'Party', wallet.address);
     deployedContracts.PARTY = party.address;
     
     // 7. 部署 AltarOfAscension

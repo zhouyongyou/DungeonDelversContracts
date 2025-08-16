@@ -69,11 +69,11 @@ const ABI_SYNC_CONFIG = [
   },
   {
     contractName: 'PARTY',
-    artifactName: 'PartyV3',
+    artifactName: 'Party',
     contractFile: 'Party',
     destinations: [
       { type: 'frontend', path: 'src/abis/Party.json' },
-      { type: 'subgraph', path: 'abis/PartyV3.json' }
+      { type: 'subgraph', path: 'abis/Party.json' }
     ]
   },
   {

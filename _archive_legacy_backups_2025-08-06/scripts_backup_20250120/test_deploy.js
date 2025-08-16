@@ -32,12 +32,12 @@ async function main() {
   await dungeonMasterV7.waitForDeployment();
   console.log("✅ DungeonMasterV7 deployed at:", await dungeonMasterV7.getAddress());
   
-  // 測試部署 PartyV3
-  console.log("\n📦 Deploying PartyV3...");
-  const PartyV3 = await ethers.getContractFactory("PartyV3");
-  const partyV3 = await PartyV3.deploy(deployer.address);
+  // 測試部署 Party
+  console.log("\n📦 Deploying Party...");
+  const Party = await ethers.getContractFactory("Party");
+  const partyV3 = await Party.deploy(deployer.address);
   await partyV3.waitForDeployment();
-  console.log("✅ PartyV3 deployed at:", await partyV3.getAddress());
+  console.log("✅ Party deployed at:", await partyV3.getAddress());
   
   console.log("\n🎉 Test deployment successful!");
 }

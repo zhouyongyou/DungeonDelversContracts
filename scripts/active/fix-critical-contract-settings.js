@@ -22,7 +22,7 @@ async function main() {
   console.log('   目標 DungeonCore:', CONTRACTS.DUNGEONCORE);
   
   try {
-    const altar = await hre.ethers.getContractAt('AltarOfAscensionVRF', CONTRACTS.ALTAROFASCENSION);
+    const altar = await hre.ethers.getContractAt('AltarOfAscension', CONTRACTS.ALTAROFASCENSION);
     
     // 檢查當前設定
     const currentDungeonCore = await altar.dungeonCore();
@@ -124,7 +124,7 @@ async function main() {
   console.log('============');
   
   try {
-    const altar = await hre.ethers.getContractAt('AltarOfAscensionVRF', CONTRACTS.ALTAROFASCENSION);
+    const altar = await hre.ethers.getContractAt('AltarOfAscension', CONTRACTS.ALTAROFASCENSION);
     const dungeonMaster = await hre.ethers.getContractAt('DungeonMaster', CONTRACTS.DUNGEONMASTER);
     
     console.log('AltarOfAscension DungeonCore:', await altar.dungeonCore());

@@ -35,8 +35,8 @@ subgraphContent = subgraphContent.replace(
 
 // 更新 Party
 subgraphContent = subgraphContent.replace(
-    /address: "0x[a-fA-F0-9]{40}"\n(\s*)abi: PartyV3/g,
-    `address: "${VRF_CONTRACTS.Party}"\n$1abi: PartyV3`
+    /address: "0x[a-fA-F0-9]{40}"\n(\s*)abi: Party/g,
+    `address: "${VRF_CONTRACTS.Party}"\n$1abi: Party`
 );
 
 // 更新 DungeonMaster

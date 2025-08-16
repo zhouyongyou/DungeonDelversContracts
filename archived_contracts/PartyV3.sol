@@ -8,7 +8,7 @@ import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 import "./interfaces.sol";
 
 /**
- * @title PartyV3 - 最終優化版本
+ * @title Party - 最終優化版本
  * @notice 從根本解決戰力讀取問題，提供清晰、高效的數據結構
  * @dev 核心改進：
  * 1. 使用獨立 mapping 儲存關鍵數據
@@ -16,7 +16,7 @@ import "./interfaces.sol";
  * 3. 實時更新機制
  * 4. 完整的事件記錄
  */
-contract PartyV3 is ERC721, ERC721Holder, Ownable, ReentrancyGuard {
+contract Party is ERC721, ERC721Holder, Ownable, ReentrancyGuard {
     // --- 核心狀態變數 ---
     uint256 private _nextTokenId = 1;
     IDungeonCore public dungeonCore;
@@ -81,10 +81,10 @@ contract PartyV3 is ERC721, ERC721Holder, Ownable, ReentrancyGuard {
         uint256[] calldata _heroIds,
         uint256[] calldata _relicIds
     ) external nonReentrant returns (uint256 partyId) {
-        require(address(dungeonCore) != address(0), "PartyV3: Core not set");
-        require(_heroIds.length > 0, "PartyV3: Need heroes");
-        require(_heroIds.length <= MAX_HEROES_PER_PARTY, "PartyV3: Too many heroes");
-        require(_relicIds.length <= MAX_RELICS_PER_PARTY, "PartyV3: Too many relics");
+        require(address(dungeonCore) != address(0), "Party: Core not set");
+        require(_heroIds.length > 0, "Party: Need heroes");
+        require(_heroIds.length <= MAX_HEROES_PER_PARTY, "Party: Too many heroes");
+        require(_relicIds.length <= MAX_RELICS_PER_PARTY, "Party: Too many relics");
         
         IHero heroContract = IHero(dungeonCore.heroContractAddress());
         IRelic relicContract = IRelic(dungeonCore.relicContractAddress());
@@ -96,8 +96,8 @@ contract PartyV3 is ERC721, ERC721Holder, Ownable, ReentrancyGuard {
         // 驗證並計算英雄數據
         for (uint256 i = 0; i < _heroIds.length; i++) {
             uint256 heroId = _heroIds[i];
-            require(heroContract.ownerOf(heroId) == msg.sender, "PartyV3: Not hero owner");
-            require(heroToParty[heroId] == 0, "PartyV3: Hero in another party");
+            require(heroContract.ownerOf(heroId) == msg.sender, "Party: Not hero owner");
+            require(heroToParty[heroId] == 0, "Party: Hero in another party");
             
             (uint8 rarity, uint256 power) = heroContract.getHeroProperties(heroId);
             totalPower += power;
@@ -107,9 +107,9 @@ contract PartyV3 is ERC721, ERC721Holder, Ownable, ReentrancyGuard {
         }
         
         // 驗證聖物
-        require(totalCapacity >= _relicIds.length, "PartyV3: Insufficient capacity");
+        require(totalCapacity >= _relicIds.length, "Party: Insufficient capacity");
         for (uint256 i = 0; i < _relicIds.length; i++) {
-            require(relicContract.ownerOf(_relicIds[i]) == msg.sender, "PartyV3: Not relic owner");
+            require(relicContract.ownerOf(_relicIds[i]) == msg.sender, "Party: Not relic owner");
         }
         
         // 鑄造 NFT
@@ -147,7 +147,7 @@ contract PartyV3 is ERC721, ERC721Holder, Ownable, ReentrancyGuard {
      * @dev 最簡單直接的戰力查詢 - DungeonMaster 主要使用這個
      */
     function getPower(uint256 _partyId) external view returns (uint256) {
-        require(_ownerOf(_partyId) != address(0), "PartyV3: Invalid party");
+        require(_ownerOf(_partyId) != address(0), "Party: Invalid party");
         return partyPower[_partyId];
     }
     
@@ -161,7 +161,7 @@ contract PartyV3 is ERC721, ERC721Holder, Ownable, ReentrancyGuard {
         uint256 memberCount,
         bool locked
     ) {
-        require(_ownerOf(_partyId) != address(0), "PartyV3: Invalid party");
+        require(_ownerOf(_partyId) != address(0), "Party: Invalid party");
         return (
             partyPower[_partyId],
             partyCapacity[_partyId],
@@ -188,7 +188,7 @@ contract PartyV3 is ERC721, ERC721Holder, Ownable, ReentrancyGuard {
         uint256[] memory heroes,
         uint256[] memory relics
     ) {
-        require(_ownerOf(_partyId) != address(0), "PartyV3: Invalid party");
+        require(_ownerOf(_partyId) != address(0), "Party: Invalid party");
         return (partyHeroes[_partyId], partyRelics[_partyId]);
     }
     
@@ -198,13 +198,13 @@ contract PartyV3 is ERC721, ERC721Holder, Ownable, ReentrancyGuard {
      * @dev 添加英雄到隊伍
      */
     function addHero(uint256 _partyId, uint256 _heroId) external nonReentrant {
-        require(ownerOf(_partyId) == msg.sender, "PartyV3: Not party owner");
-        require(!isLocked[_partyId], "PartyV3: Party locked");
-        require(partyMemberCount[_partyId] < MAX_HEROES_PER_PARTY, "PartyV3: Party full");
-        require(heroToParty[_heroId] == 0, "PartyV3: Hero in another party");
+        require(ownerOf(_partyId) == msg.sender, "Party: Not party owner");
+        require(!isLocked[_partyId], "Party: Party locked");
+        require(partyMemberCount[_partyId] < MAX_HEROES_PER_PARTY, "Party: Party full");
+        require(heroToParty[_heroId] == 0, "Party: Hero in another party");
         
         IHero heroContract = IHero(dungeonCore.heroContractAddress());
-        require(heroContract.ownerOf(_heroId) == msg.sender, "PartyV3: Not hero owner");
+        require(heroContract.ownerOf(_heroId) == msg.sender, "Party: Not hero owner");
         
         // 更新戰力
         (uint8 rarity, uint256 power) = heroContract.getHeroProperties(_heroId);
@@ -227,7 +227,7 @@ contract PartyV3 is ERC721, ERC721Holder, Ownable, ReentrancyGuard {
      * @dev 更新隊伍戰力（當英雄升級時調用）
      */
     function updatePartyPower(uint256 _partyId) external {
-        require(_ownerOf(_partyId) != address(0), "PartyV3: Invalid party");
+        require(_ownerOf(_partyId) != address(0), "Party: Invalid party");
         
         IHero heroContract = IHero(dungeonCore.heroContractAddress());
         uint256[] memory heroes = partyHeroes[_partyId];
@@ -257,8 +257,8 @@ contract PartyV3 is ERC721, ERC721Holder, Ownable, ReentrancyGuard {
      * @dev 鎖定隊伍（開始探險時）
      */
     function lockParty(uint256 _partyId, uint256 _duration) external {
-        require(msg.sender == dungeonCore.dungeonMasterAddress(), "PartyV3: Only DungeonMaster");
-        require(_ownerOf(_partyId) != address(0), "PartyV3: Invalid party");
+        require(msg.sender == dungeonCore.dungeonMasterAddress(), "Party: Only DungeonMaster");
+        require(_ownerOf(_partyId) != address(0), "Party: Invalid party");
         
         isLocked[_partyId] = true;
         lastActionTime[_partyId] = block.timestamp;
@@ -270,7 +270,7 @@ contract PartyV3 is ERC721, ERC721Holder, Ownable, ReentrancyGuard {
      * @dev 解鎖隊伍（探險結束時）
      */
     function unlockParty(uint256 _partyId) external {
-        require(msg.sender == dungeonCore.dungeonMasterAddress(), "PartyV3: Only DungeonMaster");
+        require(msg.sender == dungeonCore.dungeonMasterAddress(), "Party: Only DungeonMaster");
         
         isLocked[_partyId] = false;
         emit PartyUnlocked(_partyId);
@@ -294,7 +294,7 @@ contract PartyV3 is ERC721, ERC721Holder, Ownable, ReentrancyGuard {
     }
     
     function setDungeonCore(address _newAddress) external onlyOwner {
-        require(_newAddress != address(0), "PartyV3: Invalid address");
+        require(_newAddress != address(0), "Party: Invalid address");
         dungeonCore = IDungeonCore(_newAddress);
     }
     

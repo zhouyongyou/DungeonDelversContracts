@@ -33,7 +33,7 @@ async function main() {
     Hero: "0x671d937b171e2ba2c4dc23c133b07e4449f283ef",
     Relic: "0x42bf1bd8fc5a8dfdd0e97de131246ec0e3ec73da",
     DungeonMaster: "0xc0bbae55cf9245f76628d2c5299cd6fa35cd102a",
-    AltarOfAscensionVRF: "0xa86749237d4631ad92ba859d0b0df4770f6147ba"
+    AltarOfAscension: "0xa86749237d4631ad92ba859d0b0df4770f6147ba"
   };
   
   const DUNGEON_CORE = "0x8a2D2b1961135127228EdD71Ff98d6B097915a13";
@@ -59,8 +59,8 @@ async function main() {
   console.log("\nDungeonMaster:");
   await setupConnection("DungeonMaster", contracts.DungeonMaster, "setVRFManager", contracts.VRFConsumerV2Plus);
   
-  console.log("\nAltarOfAscensionVRF:");
-  await setupConnection("AltarOfAscensionVRF", contracts.AltarOfAscensionVRF, "setVRFManager", contracts.VRFConsumerV2Plus);
+  console.log("\nAltarOfAscension:");
+  await setupConnection("AltarOfAscension", contracts.AltarOfAscension, "setVRFManager", contracts.VRFConsumerV2Plus);
   
   // 2. 授權合約使用 VRF
   console.log("\n🔐 授權合約使用 VRF...");
@@ -74,8 +74,8 @@ async function main() {
   console.log("\n授權 DungeonMaster:");
   await setupConnection("VRFConsumerV2Plus", contracts.VRFConsumerV2Plus, "setAuthorizedContract", [contracts.DungeonMaster, true]);
   
-  console.log("\n授權 AltarOfAscensionVRF:");
-  await setupConnection("VRFConsumerV2Plus", contracts.VRFConsumerV2Plus, "setAuthorizedContract", [contracts.AltarOfAscensionVRF, true]);
+  console.log("\n授權 AltarOfAscension:");
+  await setupConnection("VRFConsumerV2Plus", contracts.VRFConsumerV2Plus, "setAuthorizedContract", [contracts.AltarOfAscension, true]);
   
   // 3. 設置 DungeonCore 和其他連接
   console.log("\n🏛️ 設置合約互連...");
@@ -89,18 +89,18 @@ async function main() {
   console.log("\nRelic 連接:");
   await setupConnection("Relic", contracts.Relic, "setDungeonCore", DUNGEON_CORE);
   await setupConnection("Relic", contracts.Relic, "setSoulShardToken", SOULSHARD);
-  await setupConnection("Relic", contracts.Relic, "setAscensionAltarAddress", contracts.AltarOfAscensionVRF);
+  await setupConnection("Relic", contracts.Relic, "setAscensionAltarAddress", contracts.AltarOfAscension);
   
   // DungeonMaster
   console.log("\nDungeonMaster 連接:");
   await setupConnection("DungeonMaster", contracts.DungeonMaster, "setDungeonCore", DUNGEON_CORE);
   await setupConnection("DungeonMaster", contracts.DungeonMaster, "setDungeonStorage", DUNGEON_STORAGE);
   
-  // AltarOfAscensionVRF
-  console.log("\nAltarOfAscensionVRF 連接:");
-  await setupConnection("AltarOfAscensionVRF", contracts.AltarOfAscensionVRF, "setDungeonCore", DUNGEON_CORE);
-  await setupConnection("AltarOfAscensionVRF", contracts.AltarOfAscensionVRF, "setHeroContract", contracts.Hero);
-  await setupConnection("AltarOfAscensionVRF", contracts.AltarOfAscensionVRF, "setRelicContract", contracts.Relic);
+  // AltarOfAscension
+  console.log("\nAltarOfAscension 連接:");
+  await setupConnection("AltarOfAscension", contracts.AltarOfAscension, "setDungeonCore", DUNGEON_CORE);
+  await setupConnection("AltarOfAscension", contracts.AltarOfAscension, "setHeroContract", contracts.Hero);
+  await setupConnection("AltarOfAscension", contracts.AltarOfAscension, "setRelicContract", contracts.Relic);
   
   console.log("\n=====================================");
   console.log("🎉 所有設置完成！");
@@ -113,7 +113,7 @@ async function main() {
   console.log("\n2. 確保訂閱有足夠的 LINK (建議 10+ LINK)");
   console.log("\n3. 驗證新部署的合約：");
   console.log(`   npx hardhat verify --network bsc ${contracts.DungeonMaster} ${deployer.address}`);
-  console.log(`   npx hardhat verify --network bsc ${contracts.AltarOfAscensionVRF} ${deployer.address}`);
+  console.log(`   npx hardhat verify --network bsc ${contracts.AltarOfAscension} ${deployer.address}`);
   console.log("\n4. 測試 VRF 鑄造功能");
   
   // 保存最終配置

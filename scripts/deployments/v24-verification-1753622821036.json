@@ -51,7 +51,7 @@
   },
   {
     "name": "PARTY",
-    "contractName": "PartyV3",
+    "contractName": "Party",
     "address": "0x6e6b6Cc4fd496bF655695b3Be670Da6dF26e3d1b",
     "constructorArgs": [
       "0x10925A7138649C7E1794CE646182eeb5BF8ba647"

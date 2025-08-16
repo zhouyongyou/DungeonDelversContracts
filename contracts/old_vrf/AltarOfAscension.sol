@@ -8,7 +8,7 @@ import "@openzeppelin/contracts/utils/Pausable.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import "../interfaces/interfaces.sol";
 
-contract AltarOfAscensionVRF is Ownable, ReentrancyGuard, Pausable, IVRFCallback {
+contract AltarOfAscension is Ownable, ReentrancyGuard, Pausable, IVRFCallback {
     IDungeonCore public dungeonCore;
     IHero public heroContract;
     IRelic public relicContract;

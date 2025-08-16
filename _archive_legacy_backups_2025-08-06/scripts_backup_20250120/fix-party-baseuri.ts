@@ -17,7 +17,7 @@ async function main() {
     
     try {
         // 使用 Party_V3 作為合約名稱（注意底線）
-        const party = await ethers.getContractAt("PartyV3", PARTY_ADDRESS);
+        const party = await ethers.getContractAt("Party", PARTY_ADDRESS);
         
         // 檢查當前 baseURI
         try {
@@ -56,7 +56,7 @@ async function main() {
         if (error.message.includes("Artifact")) {
             console.log("\n💡 請嘗試以下步驟:");
             console.log("1. 確保已編譯合約: npx hardhat compile");
-            console.log("2. 檢查合約名稱是否正確（可能是 Party_V3 而非 PartyV3）");
+            console.log("2. 檢查合約名稱是否正確（可能是 Party_V3 而非 Party）");
             console.log("3. 確認合約地址是否正確");
         }
     }

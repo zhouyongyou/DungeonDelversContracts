@@ -107,7 +107,7 @@ async function main() {
 
   // 3. 檢查和設置 Party 合約
   console.log("\n\n3️⃣ 檢查 Party 合約設置...");
-  const party = await ethers.getContractAt("contracts/current/nft/Party.sol:PartyV3", addresses.PARTY);
+  const party = await ethers.getContractAt("contracts/current/nft/Party.sol:Party", addresses.PARTY);
   
   try {
     const partyOwner = await party.owner();

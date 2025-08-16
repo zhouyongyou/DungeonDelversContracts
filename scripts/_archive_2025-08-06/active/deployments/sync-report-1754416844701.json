@@ -52,7 +52,7 @@
         {
           "contractName": "PARTY",
           "success": false,
-          "error": "ABI source not found for PARTY (PartyV3)"
+          "error": "ABI source not found for PARTY (Party)"
         },
         {
           "contractName": "VIPSTAKING",

@@ -5,7 +5,7 @@
     "Hero": "0x671d937b171e2ba2c4dc23c133b07e4449f283ef",
     "Relic": "0x42bf1bd8fc5a8dfdd0e97de131246ec0e3ec73da",
     "DungeonMaster": "0xc0bbae55cf9245f76628d2c5299cd6fa35cd102a",
-    "AltarOfAscensionVRF": "0xa86749237d4631ad92ba859d0b0df4770f6147ba",
+    "AltarOfAscension": "0xa86749237d4631ad92ba859d0b0df4770f6147ba",
     "DungeonCore": "0x8a2D2b1961135127228EdD71Ff98d6B097915a13",
     "DungeonStorage": "0x88EF98E7F9095610d7762C30165854f271525B97",
     "SoulShard": "0x97B2C2a9A11C7b6A020b4bAEaAd349865eaD0bcF",
@@ -20,7 +20,7 @@
       "DungeonCore.heroContract = Hero ✓",
       "DungeonCore.relicContract = Relic ✓",
       "DungeonCore.dungeonMaster = DungeonMaster ✓",
-      "DungeonCore.altarOfAscension = AltarOfAscensionVRF ✓",
+      "DungeonCore.altarOfAscension = AltarOfAscension ✓",
       "Hero.vrfManager = VRFConsumerV2Plus ✓",
       "Relic.vrfManager = VRFConsumerV2Plus ✓",
       "DungeonMaster.vrfManager = VRFConsumerV2Plus ✓",
@@ -30,7 +30,7 @@
       "DungeonMaster.dungeonStorage = DungeonStorage ✓",
       "Hero.soulShardToken = SoulShard ✓",
       "Relic.soulShardToken = SoulShard ✓",
-      "Relic.ascensionAltarAddress = AltarOfAscensionVRF ✓"
+      "Relic.ascensionAltarAddress = AltarOfAscension ✓"
     ],
     "incorrect": [],
     "errors": []

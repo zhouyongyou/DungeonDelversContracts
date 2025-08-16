@@ -24,7 +24,7 @@ async function main() {
   // 檢查 Party 合約狀態
   console.log(chalk.yellow('\n檢查 Party 合約...'));
   try {
-    const party = await ethers.getContractAt("PartyV3", ADDRESSES.PARTY);
+    const party = await ethers.getContractAt("Party", ADDRESSES.PARTY);
     
     // 檢查 platformFee
     try {

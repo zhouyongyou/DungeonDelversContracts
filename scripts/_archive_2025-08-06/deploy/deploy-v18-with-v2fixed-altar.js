@@ -36,7 +36,7 @@ async function deployContract(contractName, ...args) {
   } else if (contractName === "Oracle") {
     fullContractName = "contracts/defi/Oracle_VerificationFix.sol:Oracle";
   } else if (contractName === "Party") {
-    fullContractName = "contracts/nft/Party_V3.sol:PartyV3";
+    fullContractName = "contracts/nft/Party_V3.sol:Party";
   }
   
   const Factory = await ethers.getContractFactory(fullContractName);

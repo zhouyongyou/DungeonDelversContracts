@@ -112,7 +112,7 @@ async function main() {
       args: [deployerAddress]
     },
     {
-      name: "PartyV3",
+      name: "Party",
       address: contracts.PARTY_ADDRESS,
       args: [deployerAddress]
     },

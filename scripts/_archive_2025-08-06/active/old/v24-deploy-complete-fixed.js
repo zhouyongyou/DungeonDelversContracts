@@ -26,14 +26,14 @@ const colors = {
 // 合約部署順序（依賴關係）
 const DEPLOYMENT_ORDER = [
   // 'Test_SoulShard',      // 使用 V23 現有的 SoulShard
-  // 'Oracle_V22_Adaptive', // 使用 V23 現有的 Oracle
+  // 'Oracle', // 使用 V23 現有的 Oracle
   'PlayerVault',
   'DungeonCore',
   'DungeonStorage',
   'DungeonMasterV2_Fixed',
   'Hero',
   'Relic',
-  'PartyV3',
+  'Party',
   'VIPStaking',
   'PlayerProfile',
   'AltarOfAscensionV2Fixed'
@@ -41,7 +41,7 @@ const DEPLOYMENT_ORDER = [
 
 // 合約名稱映射
 const CONTRACT_NAME_MAP = {
-  'Oracle_V22_Adaptive': 'ORACLE',
+  'Oracle': 'ORACLE',
   'Test_SoulShard': 'SOULSHARD',
   'PlayerVault': 'PLAYERVAULT',
   'DungeonCore': 'DUNGEONCORE',
@@ -49,7 +49,7 @@ const CONTRACT_NAME_MAP = {
   'DungeonMasterV2_Fixed': 'DUNGEONMASTER',
   'Hero': 'HERO',
   'Relic': 'RELIC',
-  'PartyV3': 'PARTY',
+  'Party': 'PARTY',
   'VIPStaking': 'VIPSTAKING',
   'PlayerProfile': 'PLAYERPROFILE',
   'AltarOfAscensionV2Fixed': 'ALTAROFASCENSION'
@@ -146,7 +146,7 @@ ${colors.reset}`);
     };
     this.contracts.ORACLE = {
       address: '0xde3bA7f6F75AC667416a07b624b7eFA4E8892BA8', // V23 Oracle 地址
-      contractName: 'Oracle_V22_Adaptive'
+      contractName: 'Oracle'
     };
     this.log('✅ 使用 V23 現有 SoulShard: ' + this.contracts.SOULSHARD.address, 'success');
     this.log('✅ 使用 V23 現有 Oracle: ' + this.contracts.ORACLE.address, 'success');
@@ -165,7 +165,7 @@ ${colors.reset}`);
       
       // 根據合約類型設置構造函數參數
       let constructorArgs;
-      if (contractName === 'Oracle_V22_Adaptive') {
+      if (contractName === 'Oracle') {
         // Oracle 需要特殊參數
         if (!this.contracts.SOULSHARD) {
           throw new Error('SoulShard must be deployed before Oracle');

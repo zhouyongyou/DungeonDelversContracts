@@ -43,7 +43,7 @@ const V25_ADDRESSES = {
 const CONTRACT_FILES = {
   HERO: 'Hero',
   RELIC: 'Relic',
-  PARTY: 'PartyV3',
+  PARTY: 'Party',
   DUNGEONCORE: 'DungeonCore',
   DUNGEONMASTER: 'DungeonMasterV2_Fixed',
   PLAYERVAULT: 'PlayerVault',

@@ -73,7 +73,7 @@
     "ORACLE": {
       "address": "0x67989939163bCFC57302767722E1988FFac46d64",
       "deploymentBlock": 56184733,
-      "contractName": "Oracle_V22_Adaptive"
+      "contractName": "Oracle"
     },
     "PLAYERVAULT": {
       "address": "0x39523e8eeB6c54fCe65D62ec696cA5ad888eF25c",
@@ -108,7 +108,7 @@
     "PARTY": {
       "address": "0x6B32c2EEaB24C04bF97A022B1e55943FE1E772a5",
       "deploymentBlock": 56184733,
-      "contractName": "PartyV3"
+      "contractName": "Party"
     },
     "VIPSTAKING": {
       "address": "0x186a89e5418645459ed0a469FF97C9d4B2ca5355",

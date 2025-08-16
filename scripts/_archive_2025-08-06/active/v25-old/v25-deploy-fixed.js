@@ -49,7 +49,7 @@ async function main() {
   try {
     // 1. 部署 Oracle
     console.log("=== 階段 1: 部署 Oracle ===");
-    const oracle = await deployContract("Oracle_V22_Adaptive", [
+    const oracle = await deployContract("Oracle", [
       UNISWAP_POOL,
       SOULSHARD_ADDRESS,
       USDT_ADDRESS

@@ -154,7 +154,7 @@ class PreDeploymentChecker {
     const requiredArtifacts = [
       'artifacts/contracts/current/nft/Hero.sol/Hero.json',
       'artifacts/contracts/current/nft/Relic.sol/Relic.json',
-      'artifacts/contracts/current/nft/Party.sol/PartyV3.json',
+      'artifacts/contracts/current/nft/Party.sol/Party.json',
       'artifacts/contracts/current/core/DungeonCore.sol/DungeonCore.json'
     ];
     

@@ -40,7 +40,7 @@ async function main() {
         await hre.run("verify:verify", {
             address: ALTAR_ADDRESS,
             constructorArguments: [DEPLOYER_ADDRESS],
-            contract: "contracts/current/core/AltarOfAscension.sol:AltarOfAscensionVRF"
+            contract: "contracts/current/core/AltarOfAscension.sol:AltarOfAscension"
         });
         console.log("✅ AltarOfAscension 合約驗證完成");
     } catch (error) {

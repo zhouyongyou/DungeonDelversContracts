@@ -26,7 +26,7 @@ async function main() {
 
   // 連接到 Party 合約
   const party = await ethers.getContractAt(
-    "contracts/current/nft/Party.sol:PartyV3",
+    "contracts/current/nft/Party.sol:Party",
     partyAddress
   );
 

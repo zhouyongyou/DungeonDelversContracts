@@ -667,7 +667,7 @@
             "type": "uint8"
           }
         ],
-        "internalType": "struct PartyV3.PartyComposition",
+        "internalType": "struct Party.PartyComposition",
         "name": "",
         "type": "tuple"
       }

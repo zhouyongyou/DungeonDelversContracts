@@ -39,7 +39,7 @@ class PartyVerificationFixer {
       
       // 載入 Party 合約
       if (config.contracts.PARTY) {
-        const PartyFactory = await hre.ethers.getContractFactory("PartyV3");
+        const PartyFactory = await hre.ethers.getContractFactory("Party");
         this.contracts.PARTY = {
           address: config.contracts.PARTY.address,
           contract: PartyFactory.attach(config.contracts.PARTY.address)

@@ -112,7 +112,7 @@ ${colors.reset}`);
       ALTAROFASCENSION: { artifact: 'AltarOfAscensionV2Fixed', targets: ['frontend', 'subgraph'] },
       DUNGEONMASTER: { artifact: 'DungeonMasterV2_Fixed', targets: ['subgraph'] },
       DUNGEONCORE: { artifact: 'DungeonCore', targets: ['frontend'] },
-      ORACLE: { artifact: 'Oracle_V22_Adaptive', targets: ['frontend'] },
+      ORACLE: { artifact: 'Oracle', targets: ['frontend'] },
       SOULSHARD: { artifact: 'SoulShard', targets: ['frontend'] }
     };
     
@@ -285,7 +285,7 @@ module.exports = {
           address: this.config.contracts.RELIC.address,
           startBlock: this.config.startBlock
         },
-        PartyV3: {
+        Party: {
           address: this.config.contracts.PARTY.address,
           startBlock: this.config.startBlock
         },
@@ -328,7 +328,7 @@ module.exports = {
     const addressMap = {
       'Hero': this.config.contracts.HERO.address,
       'Relic': this.config.contracts.RELIC.address,
-      'PartyV3': this.config.contracts.PARTY.address,
+      'Party': this.config.contracts.PARTY.address,
       'VIPStaking': this.config.contracts.VIPSTAKING.address,
       'PlayerProfile': this.config.contracts.PLAYERPROFILE.address,
       'AltarOfAscension': this.config.contracts.ALTAROFASCENSION.address

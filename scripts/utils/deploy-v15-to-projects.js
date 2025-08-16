@@ -264,7 +264,7 @@ function updateSubgraphABIs() {
   const abiFiles = [
     { source: 'nft/Hero.sol/Hero.json', target: 'Hero.json' },
     { source: 'nft/Relic.sol/Relic.json', target: 'Relic.json' },
-    { source: 'nft/PartyV3.sol/PartyV3.json', target: 'PartyV3.json' },
+    { source: 'nft/Party.sol/Party.json', target: 'Party.json' },
     { source: 'staking/VIPStaking.sol/VIPStaking.json', target: 'VIPStaking.json' },
     { source: 'player/PlayerProfile.sol/PlayerProfile.json', target: 'PlayerProfile.json' }
   ];

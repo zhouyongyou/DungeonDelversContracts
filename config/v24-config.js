@@ -16,7 +16,7 @@ module.exports = {
     "ORACLE": {
       "address": "0xde3bA7f6F75AC667416a07b624b7eFA4E8892BA8",
       "deploymentBlock": 55499653,
-      "contractName": "Oracle_V22_Adaptive"
+      "contractName": "Oracle"
     },
     "PLAYERVAULT": {
       "address": "0x7273A8368aBAbfF7E9297Dd9eA720D43ffe2634c",
@@ -51,7 +51,7 @@ module.exports = {
     "PARTY": {
       "address": "0x6e6b6Cc4fd496bF655695b3Be670Da6dF26e3d1b",
       "deploymentBlock": 55499653,
-      "contractName": "PartyV3"
+      "contractName": "Party"
     },
     "VIPSTAKING": {
       "address": "0x78E30b5d5708db41b815D7556c333A2ea73718c4",

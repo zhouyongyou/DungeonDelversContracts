@@ -324,7 +324,7 @@ interface IVIPStaking {
 - 支援稅率計算、佣金系統等業務邏輯
 
 ### 2. 版本一致性 ✅
-- **反映了最新的合約版本**：PartyV3、DungeonMasterV8
+- **反映了最新的合約版本**：Party、DungeonMasterV8
 - 包含所有版本升級後的新功能
 - 移除了過時的方法簽名
 

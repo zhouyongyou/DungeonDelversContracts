@@ -12,7 +12,7 @@
     },
     "core": {
       "Oracle": {
-        "artifact": "Oracle_V22_Adaptive",
+        "artifact": "Oracle",
         "args": [],
         "verify": true
       },
@@ -57,7 +57,7 @@
         "dependencies": []
       },
       "Party": {
-        "artifact": "PartyV3",
+        "artifact": "Party",
         "args": [],
         "verify": true,
         "dependencies": []

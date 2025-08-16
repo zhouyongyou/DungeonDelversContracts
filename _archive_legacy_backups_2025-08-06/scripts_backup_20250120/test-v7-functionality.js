@@ -13,7 +13,7 @@ async function main() {
   };
 
   // 獲取合約實例
-  const partyV3 = await ethers.getContractAt("PartyV3", addresses.partyV3);
+  const partyV3 = await ethers.getContractAt("Party", addresses.partyV3);
   const dungeonMasterV7 = await ethers.getContractAt("DungeonMasterV7", addresses.dungeonMasterV7);
 
   console.log("=== 測試 1: Party 戰力查詢 ===");
@@ -67,8 +67,8 @@ async function main() {
   console.log("\n=== 測試 3: 合約連接狀態 ===");
   
   try {
-    // 檢查 PartyV3 的設定
-    console.log("\nPartyV3 設定:");
+    // 檢查 Party 的設定
+    console.log("\nParty 設定:");
     console.log("  - Hero 合約:", await partyV3.heroContract());
     console.log("  - Relic 合約:", await partyV3.relicContract());
     console.log("  - DungeonCore:", await partyV3.dungeonCoreContract());

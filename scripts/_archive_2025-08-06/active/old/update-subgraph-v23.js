@@ -27,7 +27,7 @@ async function updateSubgraphV23() {
     const addressMap = {
       'Hero': v23Config.contracts.HERO.address,
       'Relic': v23Config.contracts.RELIC.address,
-      'PartyV3': v23Config.contracts.PARTY.address,
+      'Party': v23Config.contracts.PARTY.address,
       'VIPStaking': v23Config.contracts.VIPSTAKING.address,
       'PlayerProfile': v23Config.contracts.PLAYERPROFILE.address,
       'AltarOfAscension': v23Config.contracts.ALTAROFASCENSION.address,

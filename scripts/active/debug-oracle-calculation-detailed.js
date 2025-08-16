@@ -74,7 +74,7 @@ async function main() {
     console.log('Oracle 地址:', oracleAddress);
     
     if (oracleAddress !== '0x0000000000000000000000000000000000000000') {
-      const oracle = await hre.ethers.getContractAt('Oracle_V22_Adaptive', oracleAddress);
+      const oracle = await hre.ethers.getContractAt('Oracle', oracleAddress);
       
       try {
         const soulPriceUSD = await oracle.getSoulShardPriceUSD();

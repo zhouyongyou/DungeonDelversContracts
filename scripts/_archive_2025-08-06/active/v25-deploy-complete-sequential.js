@@ -58,7 +58,7 @@ const DEPLOYMENT_CONFIG = {
 const DEPLOYMENT_ORDER = [
   // 代幣合約
   ...(DEPLOYMENT_CONFIG.deployNewTokens ? ['Test_SoulShard'] : []),
-  'Oracle_V22_Adaptive', // Oracle 現在總是重新部署
+  'Oracle', // Oracle 現在總是重新部署
   
   // 核心合約
   'PlayerVault',
@@ -69,7 +69,7 @@ const DEPLOYMENT_ORDER = [
   // NFT 合約
   'Hero',
   'Relic',
-  'PartyV3',
+  'Party',
   
   // 功能合約
   'VIPStaking',
@@ -79,7 +79,7 @@ const DEPLOYMENT_ORDER = [
 
 // 合約名稱映射
 const CONTRACT_NAME_MAP = {
-  'Oracle_V22_Adaptive': 'ORACLE',
+  'Oracle': 'ORACLE',
   'Test_SoulShard': 'SOULSHARD',
   'PlayerVault': 'PLAYERVAULT',
   'DungeonCore': 'DUNGEONCORE',
@@ -87,7 +87,7 @@ const CONTRACT_NAME_MAP = {
   'DungeonMasterV2_Fixed': 'DUNGEONMASTER',
   'Hero': 'HERO',
   'Relic': 'RELIC',
-  'PartyV3': 'PARTY',
+  'Party': 'PARTY',
   'VIPStaking': 'VIPSTAKING',
   'PlayerProfile': 'PLAYERPROFILE',
   'AltarOfAscensionV2Fixed': 'ALTAROFASCENSION'
@@ -353,7 +353,7 @@ ${colors.reset}`);
 
   getConstructorArgs(contractName) {
     switch (contractName) {
-      case 'Oracle_V22_Adaptive':
+      case 'Oracle':
         const soulShardAddress = this.contracts.SOULSHARD?.address || 
           DEPLOYMENT_CONFIG.existingContracts.SOULSHARD;
         

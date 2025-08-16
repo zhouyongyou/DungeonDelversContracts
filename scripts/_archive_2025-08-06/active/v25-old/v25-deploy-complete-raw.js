@@ -100,8 +100,8 @@ async function main() {
     
     const party = await deployContract(
       wallet,
-      "PartyV3",
-      "nft/Party.sol/PartyV3.json",
+      "Party",
+      "nft/Party.sol/Party.json",
       [wallet.address]
     );
     contracts.PARTY = party;

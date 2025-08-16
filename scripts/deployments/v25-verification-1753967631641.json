@@ -5,7 +5,7 @@
   "verificationData": [
     {
       "name": "ORACLE",
-      "contractName": "Oracle_V22_Adaptive",
+      "contractName": "Oracle",
       "address": "0xf21548F8836d0ddB87293C4bCe2B020D17fF11c1",
       "constructorArgs": [
         "0x1e5Cd5F386Fb6F39cD8788675dd3A5ceB6521C82",
@@ -65,7 +65,7 @@
     },
     {
       "name": "PARTY",
-      "contractName": "PartyV3",
+      "contractName": "Party",
       "address": "0x2890F2bFe5ff4655d3096eC5521be58Eba6fAE50",
       "constructorArgs": [
         "0x10925A7138649C7E1794CE646182eeb5BF8ba647"

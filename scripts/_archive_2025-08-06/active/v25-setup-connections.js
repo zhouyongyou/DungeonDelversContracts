@@ -39,8 +39,8 @@ async function main() {
   const dungeonStorage = await hre.ethers.getContractAt('DungeonStorage', V25_CONTRACTS.DUNGEONSTORAGE);
   const hero = await hre.ethers.getContractAt('Hero', V25_CONTRACTS.HERO);
   const relic = await hre.ethers.getContractAt('Relic', V25_CONTRACTS.RELIC);
-  const party = await hre.ethers.getContractAt('PartyV3', V25_CONTRACTS.PARTY);
-  const altarOfAscension = await hre.ethers.getContractAt('AltarOfAscensionVRF', V25_CONTRACTS.ALTAROFASCENSION);
+  const party = await hre.ethers.getContractAt('Party', V25_CONTRACTS.PARTY);
+  const altarOfAscension = await hre.ethers.getContractAt('AltarOfAscension', V25_CONTRACTS.ALTAROFASCENSION);
   const playerProfile = await hre.ethers.getContractAt('PlayerProfile', V25_CONTRACTS.PLAYERPROFILE);
   
   console.log('📝 設定合約相互連接...\n');

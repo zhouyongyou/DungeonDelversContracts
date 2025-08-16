@@ -107,7 +107,7 @@ class V25SetupOnly {
     
     // ABI 路徑映射
     const abiPathMap = {
-      ORACLE: 'defi/Oracle_V22_Adaptive.sol/Oracle_V22_Adaptive.json',
+      ORACLE: 'defi/Oracle.sol/Oracle.json',
       SOULSHARD: 'defi/SoulShard.sol/Test_SoulShard.json',
       PLAYERVAULT: 'defi/PlayerVault.sol/PlayerVault.json',
       DUNGEONCORE: 'core/DungeonCore.sol/DungeonCore.json',
@@ -115,7 +115,7 @@ class V25SetupOnly {
       DUNGEONMASTER: 'core/DungeonMaster.sol/DungeonMasterV2_Fixed.json',
       HERO: 'nft/Hero.sol/Hero.json',
       RELIC: 'nft/Relic.sol/Relic.json',
-      PARTY: 'nft/Party.sol/PartyV3.json',
+      PARTY: 'nft/Party.sol/Party.json',
       VIPSTAKING: 'nft/VIPStaking.sol/VIPStaking.json',
       PLAYERPROFILE: 'nft/PlayerProfile.sol/PlayerProfile.json',
       ALTAROFASCENSION: 'core/AltarOfAscension.sol/AltarOfAscensionV2Fixed.json'

@@ -15,7 +15,7 @@ async function fixPartySetup() {
   console.log(`操作者: ${signer.address}\n`);
 
   // 獲取 Party V3 合約
-  const PartyV3 = await ethers.getContractAt([
+  const Party = await ethers.getContractAt([
     "function dungeonCoreContract() external view returns (address)",
     "function heroContract() external view returns (address)", 
     "function relicContract() external view returns (address)",
@@ -32,7 +32,7 @@ async function fixPartySetup() {
   console.log("📍 檢查當前設置:");
   
   try {
-    const owner = await PartyV3.owner();
+    const owner = await Party.owner();
     console.log(`  擁有者: ${owner}`);
     
     if (owner.toLowerCase() !== signer.address.toLowerCase()) {
@@ -45,12 +45,12 @@ async function fixPartySetup() {
 
   // 檢查並設置 DungeonCore
   try {
-    const currentDungeonCore = await PartyV3.dungeonCoreContract();
+    const currentDungeonCore = await Party.dungeonCoreContract();
     console.log(`  當前 DungeonCore: ${currentDungeonCore}`);
     
     if (currentDungeonCore === ethers.ZeroAddress) {
       console.log("  ⚠️  需要設置 DungeonCore");
-      const tx1 = await PartyV3.setDungeonCore(DUNGEONCORE_ADDRESS);
+      const tx1 = await Party.setDungeonCore(DUNGEONCORE_ADDRESS);
       await tx1.wait();
       console.log("  ✅ DungeonCore 已設置");
     }
@@ -60,12 +60,12 @@ async function fixPartySetup() {
 
   // 檢查並設置 Hero 合約
   try {
-    const currentHero = await PartyV3.heroContract();
+    const currentHero = await Party.heroContract();
     console.log(`  當前 Hero 合約: ${currentHero}`);
     
     if (currentHero === ethers.ZeroAddress) {
       console.log("  ⚠️  需要設置 Hero 合約");
-      const tx2 = await PartyV3.setHeroContract(HERO_ADDRESS);
+      const tx2 = await Party.setHeroContract(HERO_ADDRESS);
       await tx2.wait();
       console.log("  ✅ Hero 合約已設置");
     }
@@ -75,12 +75,12 @@ async function fixPartySetup() {
 
   // 檢查並設置 Relic 合約
   try {
-    const currentRelic = await PartyV3.relicContract();
+    const currentRelic = await Party.relicContract();
     console.log(`  當前 Relic 合約: ${currentRelic}`);
     
     if (currentRelic === ethers.ZeroAddress) {
       console.log("  ⚠️  需要設置 Relic 合約");
-      const tx3 = await PartyV3.setRelicContract(RELIC_ADDRESS);
+      const tx3 = await Party.setRelicContract(RELIC_ADDRESS);
       await tx3.wait();
       console.log("  ✅ Relic 合約已設置");
     }
@@ -90,12 +90,12 @@ async function fixPartySetup() {
 
   // 檢查並設置 BaseURI
   try {
-    const currentBaseURI = await PartyV3.baseURI();
+    const currentBaseURI = await Party.baseURI();
     console.log(`  當前 BaseURI: ${currentBaseURI || "未設置"}`);
     
     if (!currentBaseURI) {
       console.log("  ⚠️  需要設置 BaseURI");
-      const tx4 = await PartyV3.setBaseURI(METADATA_URL);
+      const tx4 = await Party.setBaseURI(METADATA_URL);
       await tx4.wait();
       console.log("  ✅ BaseURI 已設置");
     }
@@ -105,7 +105,7 @@ async function fixPartySetup() {
 
   // 檢查平台費用
   try {
-    const platformFee = await PartyV3.platformFee();
+    const platformFee = await Party.platformFee();
     console.log(`  平台費用: ${ethers.formatEther(platformFee)} BNB`);
   } catch (error) {
     console.log("  ⚠️  無法讀取平台費用");

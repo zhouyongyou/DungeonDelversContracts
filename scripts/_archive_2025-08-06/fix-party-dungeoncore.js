@@ -46,7 +46,7 @@ ${colors.reset}`);
   console.log(`${colors.blue}[INFO]${colors.reset} 使用錢包: ${deployer.address}`);
 
   // 獲取 Party 合約實例
-  const PartyArtifact = await hre.artifacts.readArtifact("PartyV3");
+  const PartyArtifact = await hre.artifacts.readArtifact("Party");
   const party = new ethers.Contract(
     CONTRACTS.PARTY,
     PartyArtifact.abi,

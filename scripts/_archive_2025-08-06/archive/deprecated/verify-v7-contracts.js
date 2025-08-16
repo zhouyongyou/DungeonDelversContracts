@@ -8,7 +8,7 @@ async function main() {
   
   const contracts = [
     {
-      name: "PartyV3",
+      name: "Party",
       address: "0xe4A55375f7Aba70785f958E2661E08F9FD5f7ab1",
       constructorArgs: [deployer.address]
     },

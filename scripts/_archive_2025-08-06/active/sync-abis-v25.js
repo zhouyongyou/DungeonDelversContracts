@@ -14,16 +14,16 @@ const ABI_MAPPINGS = [
         target: 'Relic.json'
     },
     {
-        source: 'contracts/current/nft/Party.sol/PartyV3.json',
-        target: 'PartyV3.json'
+        source: 'contracts/current/nft/Party.sol/Party.json',
+        target: 'Party.json'
     },
     {
         source: 'contracts/current/core/DungeonMaster.sol/DungeonMaster.json',
         target: 'DungeonMaster.json'
     },
     {
-        source: 'contracts/current/core/AltarOfAscension.sol/AltarOfAscensionVRF.json',
-        target: 'AltarOfAscensionVRF.json'
+        source: 'contracts/current/core/AltarOfAscension.sol/AltarOfAscension.json',
+        target: 'AltarOfAscension.json'
     },
     {
         source: 'contracts/current/player/PlayerVault.sol/PlayerVault.json',

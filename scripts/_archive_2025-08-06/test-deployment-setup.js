@@ -51,7 +51,7 @@ async function main() {
         const fs = require('fs');
         const path = require('path');
         
-        const contractsToCheck = ['PlayerVault', 'DungeonCore', 'Oracle_V22_Adaptive'];
+        const contractsToCheck = ['PlayerVault', 'DungeonCore', 'Oracle'];
         
         for (const contractName of contractsToCheck) {
             const artifactPath = path.join(__dirname, '..', 'artifacts', 'contracts', 'current', '**', `${contractName}.sol`, `${contractName}.json`);

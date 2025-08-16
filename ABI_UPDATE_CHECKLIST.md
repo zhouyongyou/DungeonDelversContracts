@@ -80,7 +80,7 @@
 /Users/sotadic/Documents/GitHub/DungeonDelvers/src/contracts/abi/
 ├── Hero.json
 ├── Relic.json
-├── AltarOfAscensionVRF.json
+├── AltarOfAscension.json
 ├── DungeonMaster.json
 └── ...
 ```

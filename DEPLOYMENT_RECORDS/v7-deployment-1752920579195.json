@@ -4,11 +4,11 @@
   "deployer": "0x10925A7138649C7E1794CE646182eeb5BF8ba647",
   "blockNumber": 54563557,
   "contracts": {
-    "PartyV3": "0xe4A55375f7Aba70785f958E2661E08F9FD5f7ab1",
+    "Party": "0xe4A55375f7Aba70785f958E2661E08F9FD5f7ab1",
     "DungeonMasterV7": "0x108ed6B38D30099E1d2D141Ef0813938E279C0Fe"
   },
   "gasUsed": {
-    "PartyV3": "2477161",
+    "Party": "2477161",
     "DungeonMasterV7": "2330271"
   }
 }

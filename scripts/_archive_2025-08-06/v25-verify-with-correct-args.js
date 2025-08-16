@@ -34,7 +34,7 @@ const contractsToVerify = [
   {
     name: 'ALTAROFASCENSION',
     address: '0x095559778C0BAA2d8FA040Ab0f8752cF07779D33',
-    contractPath: 'contracts/current/core/AltarOfAscension.sol:AltarOfAscensionVRF',
+    contractPath: 'contracts/current/core/AltarOfAscension.sol:AltarOfAscension',
     constructorArgs: DEPLOYER_ADDRESS
   },
   {

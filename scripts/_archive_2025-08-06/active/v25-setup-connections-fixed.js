@@ -241,7 +241,7 @@ async function main() {
     console.log('5️⃣ AltarOfAscension 設定:');
     console.log('   地址:', V25_CONTRACTS.ALTAROFASCENSION);
     
-    const altarOfAscension = await hre.ethers.getContractAt('AltarOfAscensionVRF', V25_CONTRACTS.ALTAROFASCENSION);
+    const altarOfAscension = await hre.ethers.getContractAt('AltarOfAscension', V25_CONTRACTS.ALTAROFASCENSION);
     
     // 設定 DungeonCore
     try {
@@ -291,7 +291,7 @@ async function main() {
     console.log('7️⃣ Party NFT 設定:');
     console.log('   地址:', V25_CONTRACTS.PARTY);
     
-    const party = await hre.ethers.getContractAt('PartyV3', V25_CONTRACTS.PARTY);
+    const party = await hre.ethers.getContractAt('Party', V25_CONTRACTS.PARTY);
     
     // 設定 DungeonCore
     try {

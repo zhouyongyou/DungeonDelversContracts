@@ -89,7 +89,7 @@ class V25HybridDeployer extends V25Deployer {
   // 合約路徑映射
   getContractPath(contractName) {
     const pathMap = {
-      'Oracle_V22_Adaptive': 'defi/Oracle_V22_Adaptive.sol/Oracle_V22_Adaptive.json',
+      'Oracle': 'defi/Oracle.sol/Oracle.json',
       'Test_SoulShard': 'defi/SoulShard.sol/Test_SoulShard.json',
       'PlayerVault': 'defi/PlayerVault.sol/PlayerVault.json',
       'DungeonCore': 'core/DungeonCore.sol/DungeonCore.json',
@@ -97,7 +97,7 @@ class V25HybridDeployer extends V25Deployer {
       'DungeonMasterV2_Fixed': 'core/DungeonMaster.sol/DungeonMasterV2_Fixed.json',
       'Hero': 'nft/Hero.sol/Hero.json',
       'Relic': 'nft/Relic.sol/Relic.json',
-      'PartyV3': 'nft/Party.sol/PartyV3.json',
+      'Party': 'nft/Party.sol/Party.json',
       'VIPStaking': 'nft/VIPStaking.sol/VIPStaking.json',
       'PlayerProfile': 'nft/PlayerProfile.sol/PlayerProfile.json',
       'AltarOfAscensionV2Fixed': 'core/AltarOfAscension.sol/AltarOfAscensionV2Fixed.json'

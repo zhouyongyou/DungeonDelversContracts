@@ -74,7 +74,7 @@ async function main() {
         
         // 3. 部署 Oracle（總是重新部署）
         console.log("\n3️⃣ 部署 Oracle...");
-        const Oracle = await hre.ethers.getContractFactory("Oracle_V22_Adaptive");
+        const Oracle = await hre.ethers.getContractFactory("Oracle");
         const oracle = await Oracle.deploy();
         await oracle.waitForDeployment();
         deployments.ORACLE = await oracle.getAddress();
@@ -108,7 +108,7 @@ async function main() {
         console.log("\n7️⃣ 部署其他核心合約...");
         
         // Party
-        const Party = await hre.ethers.getContractFactory("PartyV3");
+        const Party = await hre.ethers.getContractFactory("Party");
         const party = await Party.deploy("DungeonDelversParty", "PARTY");
         await party.waitForDeployment();
         deployments.PARTY = await party.getAddress();
@@ -150,7 +150,7 @@ async function main() {
         console.log("✅ PlayerProfile 部署於:", deployments.PLAYERPROFILE);
         
         // AltarOfAscension
-        const AltarOfAscension = await hre.ethers.getContractFactory("AltarOfAscensionVRF");
+        const AltarOfAscension = await hre.ethers.getContractFactory("AltarOfAscension");
         const altarOfAscension = await AltarOfAscension.deploy(deployer.address);
         await altarOfAscension.waitForDeployment();
         deployments.ALTAROFASCENSION = await altarOfAscension.getAddress();
@@ -183,7 +183,7 @@ async function main() {
         await relicContract.setVRFManager(deployments.VRFMANAGER);
         console.log("✅ Relic 設置 VRF Manager");
         
-        const altarContract = await hre.ethers.getContractAt("AltarOfAscensionVRF", deployments.ALTAROFASCENSION);
+        const altarContract = await hre.ethers.getContractAt("AltarOfAscension", deployments.ALTAROFASCENSION);
         await altarContract.setVRFManager(deployments.VRFMANAGER);
         console.log("✅ AltarOfAscension 設置 VRF Manager");
         

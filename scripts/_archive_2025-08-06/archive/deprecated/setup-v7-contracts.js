@@ -21,7 +21,7 @@ async function main() {
   console.log("📋 獲取合約實例...");
   const dungeonCore = await ethers.getContractAt("DungeonCore", addresses.dungeonCore);
   const dungeonMasterV7 = await ethers.getContractAt("DungeonMasterV7", addresses.dungeonMasterV7);
-  const partyV3 = await ethers.getContractAt("PartyV3", addresses.partyV3);
+  const partyV3 = await ethers.getContractAt("Party", addresses.partyV3);
 
   console.log("✅ 合約實例已載入\n");
 
@@ -56,8 +56,8 @@ async function main() {
     console.log("✅ Party 合約已是最新");
   }
 
-  // 2. PartyV3 設定
-  console.log("\n=== 2. PartyV3 設定 ===");
+  // 2. Party 設定
+  console.log("\n=== 2. Party 設定 ===");
   
   try {
     const currentHero = await partyV3.heroContract();
@@ -95,7 +95,7 @@ async function main() {
       console.log("✅ DungeonCore 已設定");
     }
   } catch (error) {
-    console.log("⚠️ PartyV3 可能需要手動設定:", error.message);
+    console.log("⚠️ Party 可能需要手動設定:", error.message);
   }
 
   // 3. DungeonMasterV7 設定

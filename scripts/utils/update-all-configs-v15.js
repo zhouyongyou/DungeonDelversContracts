@@ -265,11 +265,11 @@ dataSources:
 
   // Party NFT
   subgraphContent += `  - kind: ethereum/contract
-    name: PartyV3
+    name: Party
     network: bsc
     source:
       address: "${V15_ADDRESSES.PARTY_ADDRESS}"
-      abi: PartyV3
+      abi: Party
       startBlock: ${V15_START_BLOCK}
     mapping:
       kind: ethereum/events
@@ -279,8 +279,8 @@ dataSources:
         - Party
         - Transfer
       abis:
-        - name: PartyV3
-          file: ./abis/PartyV3.json
+        - name: Party
+          file: ./abis/Party.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handlePartyTransfer

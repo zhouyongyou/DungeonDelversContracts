@@ -85,14 +85,14 @@ class ModuleSetupFixer {
 
   getContractName(name) {
     const contractNameMap = {
-      ORACLE: "Oracle_V22_Adaptive",
+      ORACLE: "Oracle",
       PLAYERVAULT: "PlayerVault",
       DUNGEONCORE: "DungeonCore",
       DUNGEONSTORAGE: "DungeonStorage",
       DUNGEONMASTER: "DungeonMasterV2_Fixed",
       HERO: "Hero",
       RELIC: "Relic",
-      PARTY: "PartyV3",
+      PARTY: "Party",
       VIPSTAKING: "VIPStaking",
       PLAYERPROFILE: "PlayerProfile",
       ALTAROFASCENSION: "AltarOfAscensionV2Fixed"

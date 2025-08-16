@@ -77,7 +77,7 @@ const DEPLOYMENT_CONFIG = {
 const VRF_DEPLOYMENT_ORDER = [
   // 代幣合約
   ...(DEPLOYMENT_CONFIG.deployNewTokens ? ['Test_SoulShard'] : []),
-  'Oracle_V22_Adaptive', // Oracle 現在總是重新部署
+  'Oracle', // Oracle 現在總是重新部署
   
   // 核心合約
   'PlayerVault',
@@ -87,7 +87,7 @@ const VRF_DEPLOYMENT_ORDER = [
   // VRF NFT 合約
   'Hero_UnifiedVRF',
   'Relic_UnifiedVRF',
-  'PartyV3',
+  'Party',
   
   // VRF 功能合約
   'VIPStaking',
@@ -98,14 +98,14 @@ const VRF_DEPLOYMENT_ORDER = [
 
 // VRF 合約名稱映射
 const VRF_CONTRACT_NAME_MAP = {
-  'Oracle_V22_Adaptive': 'ORACLE',
+  'Oracle': 'ORACLE',
   'Test_SoulShard': 'SOULSHARD',
   'PlayerVault': 'PLAYERVAULT',
   'DungeonCore': 'DUNGEONCORE',
   'DungeonStorage': 'DUNGEONSTORAGE',
   'Hero_UnifiedVRF': 'HERO',
   'Relic_UnifiedVRF': 'RELIC',
-  'PartyV3': 'PARTY',
+  'Party': 'PARTY',
   'VIPStaking': 'VIPSTAKING',
   'PlayerProfile': 'PLAYERPROFILE',
   'DungeonMaster_UnifiedVRF': 'DUNGEONMASTER',
@@ -394,7 +394,7 @@ ${colors.reset}`);
 
   getVRFConstructorArgs(contractName) {
     switch (contractName) {
-      case 'Oracle_V22_Adaptive':
+      case 'Oracle':
         const soulShardAddress = this.contracts.SOULSHARD?.address || 
           DEPLOYMENT_CONFIG.existingContracts.SOULSHARD;
         

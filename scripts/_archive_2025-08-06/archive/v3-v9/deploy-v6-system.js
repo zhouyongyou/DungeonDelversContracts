@@ -21,18 +21,18 @@ async function main() {
   };
 
   try {
-    // 1. 部署 PartyV3
-    console.log("📦 部署 PartyV3...");
-    const PartyV3 = await hre.ethers.getContractFactory("PartyV3");
+    // 1. 部署 Party
+    console.log("📦 部署 Party...");
+    const Party = await hre.ethers.getContractFactory("Party");
     const baseURI = process.env.VITE_METADATA_SERVER_URL || "https://dungeon-delvers-metadata-server.onrender.com";
-    const partyV3 = await PartyV3.deploy(
+    const partyV3 = await Party.deploy(
       deployer.address,
       `${baseURI}/api/party/`
     );
     await partyV3.waitForDeployment();
     const partyV3Address = await partyV3.getAddress();
-    console.log("✅ PartyV3 部署至:", partyV3Address);
-    deployment.contracts.PartyV3 = partyV3Address;
+    console.log("✅ Party 部署至:", partyV3Address);
+    deployment.contracts.Party = partyV3Address;
 
     // 2. 部署 DungeonMasterV6
     console.log("\n📦 部署 DungeonMasterV6...");
@@ -48,9 +48,9 @@ async function main() {
     if (dungeonCoreAddress) {
       console.log("\n🔧 設定 DungeonCore 連接...");
       
-      // PartyV3 設定
+      // Party 設定
       await partyV3.setDungeonCore(dungeonCoreAddress);
-      console.log("✅ PartyV3 已連接 DungeonCore");
+      console.log("✅ Party 已連接 DungeonCore");
       
       // DungeonMasterV6 設定
       await dungeonMasterV6.setDungeonCore(dungeonCoreAddress);
@@ -119,15 +119,15 @@ async function main() {
     console.log("\n📁 生成 ABI 文件...");
     const contractsDir = path.join(__dirname, "../artifacts/contracts");
     
-    // PartyV3 ABI
+    // Party ABI
     const partyV3Artifact = JSON.parse(
       fs.readFileSync(
-        path.join(contractsDir, "PartyV3.sol/PartyV3.json"),
+        path.join(contractsDir, "Party.sol/Party.json"),
         "utf8"
       )
     );
     fs.writeFileSync(
-      path.join(__dirname, "../abis/PartyV3.json"),
+      path.join(__dirname, "../abis/Party.json"),
       JSON.stringify(partyV3Artifact.abi, null, 2)
     );
     

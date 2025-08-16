@@ -108,7 +108,7 @@ async function main() {
   console.log("\n3️⃣ 更新 Party 合約設置");
   console.log("-------------------------------------");
   try {
-    const party = await hre.ethers.getContractAt("PartyV3", V25_ADDRESSES.PARTY);
+    const party = await hre.ethers.getContractAt("Party", V25_ADDRESSES.PARTY);
     
     await updateSetting(party, "setHeroContract", V25_ADDRESSES.HERO, "設置 Hero");
     await updateSetting(party, "setRelicContract", V25_ADDRESSES.RELIC, "設置 Relic");
