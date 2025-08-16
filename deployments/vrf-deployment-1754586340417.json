@@ -1,0 +1,21 @@
+{
+  "network": "BSC Mainnet",
+  "timestamp": "2025-08-07T17:05:40.074Z",
+  "vrfConsumerV2Plus": "0x84B1fFc7b0839906BA1EcF510ED3a74481b8438e",
+  "vrfCoordinator": "0xd691f04bc0C9a24Edb78af9E005Cf85768F694C9",
+  "subscriptionId": "114131353280130458891383141995968474440293173552039681622016393393251650814328",
+  "keyHash": "0x130dba50ad435d4ecc214aad0d5820474137bd68e7e77724144f27c3c377d3d4",
+  "callbackGasLimit": "2500000",
+  "authorizedContracts": {
+    "DungeonMaster": "0xc0bbae55cf9245f76628d2c5299cd6fa35cd102a",
+    "Hero": "0x671d937b171e2ba2c4dc23c133b07e4449f283ef",
+    "Relic": "0x42bf1bd8fc5a8dfdd0e97de131246ec0e3ec73da",
+    "AltarOfAscension": "0xa86749237d4631ad92ba859d0b0df4770f6147ba"
+  },
+  "configuration": {
+    "maxBatchSize": 25,
+    "gasPerNFT": "~97,000",
+    "totalGasLimit": "2,500,000",
+    "estimatedCostPerBatch": "0.015 LINK"
+  }
+}

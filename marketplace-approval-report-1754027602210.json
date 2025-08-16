@@ -1,0 +1,26 @@
+{
+  "timestamp": "2025-08-01T05:53:21.089Z",
+  "executor": "0x10925A7138649C7E1794CE646182eeb5BF8ba647",
+  "network": "BSC Mainnet",
+  "contracts": {
+    "marketplace": "0xCd2Dc43ddB5f628f98CDAA273bd74605cBDF21F8",
+    "offerSystem": "0xE072DC1Ea6243aEaD9c794aFe2585A8b6A5350EF"
+  },
+  "nftAddresses": {
+    "HERO": "0x785a8b7d7b2E64c5971D8f548a45B7db3CcA5797",
+    "RELIC": "0xaa7434e77343cd4AaE7dDea2f19Cb86232727D0d",
+    "PARTY": "0x2890F2bFe5ff4655d3096eC5521be58Eba6fAE50"
+  },
+  "approvalResults": {
+    "marketplace": {
+      "HERO": true,
+      "RELIC": true,
+      "PARTY": true
+    },
+    "offerSystem": {
+      "HERO": true,
+      "RELIC": true,
+      "PARTY": true
+    }
+  }
+}

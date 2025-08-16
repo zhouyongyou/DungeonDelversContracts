@@ -1,0 +1,232 @@
+# DungeonDelvers Marketplace Schema
+# 獨立的市場子圖 Schema
+
+# =================================================================
+# 市場掛單
+# =================================================================
+
+type MarketListing @entity(immutable: false) {
+  " 掛單 ID "
+  id: String!
+  " 賣家地址 "
+  seller: Bytes!
+  " NFT 類型 (0=Hero, 1=Relic, 2=Party) "
+  nftType: Int!
+  " NFT 合約地址 "
+  nftContract: Bytes!
+  " NFT Token ID "
+  tokenId: BigInt!
+  " 價格 (SOUL tokens) "
+  price: BigInt!
+  " 掛單狀態 (0=Active, 1=Sold, 2=Cancelled) "
+  status: Int!
+  " 創建時間戳 "
+  createdAt: BigInt!
+  " 更新時間戳 "
+  updatedAt: BigInt!
+  " 價格歷史 "
+  priceHistory: [ListingPriceUpdate!] @derivedFrom(field: "listing")
+  " 相關出價 "
+  offers: [Offer!] @derivedFrom(field: "listing")
+  " 相關交易 "
+  transactions: [MarketTransaction!] @derivedFrom(field: "listing")
+}
+
+type ListingPriceUpdate @entity(immutable: true) {
+  " 使用 `listingId-timestamp` 作為 ID "
+  id: String!
+  " 關聯的掛單 "
+  listing: MarketListing!
+  " 舊價格 "
+  oldPrice: BigInt!
+  " 新價格 "
+  newPrice: BigInt!
+  " 更新時間戳 "
+  timestamp: BigInt!
+  " 交易哈希 "
+  transactionHash: Bytes!
+}
+
+type MarketTransaction @entity(immutable: true) {
+  " 使用 `txHash-logIndex` 作為 ID "
+  id: String!
+  " 交易類型 (ListingSold, ListingCancelled) "
+  type: String!
+  " 關聯的掛單 "
+  listing: MarketListing!
+  " 賣家 "
+  seller: Bytes!
+  " 買家 (如果是銷售) "
+  buyer: Bytes
+  " 成交價格 "
+  price: BigInt!
+  " 平台手續費 "
+  platformFee: BigInt!
+  " 交易時間戳 "
+  timestamp: BigInt!
+  " 交易哈希 "
+  transactionHash: Bytes!
+  " 區塊號 "
+  blockNumber: BigInt!
+}
+
+# =================================================================
+# 出價系統
+# =================================================================
+
+type Offer @entity(immutable: false) {
+  " 出價 ID "
+  id: String!
+  " 出價者 "
+  buyer: Bytes!
+  " NFT 擁有者 "
+  seller: Bytes!
+  " 關聯的掛單 (可選) "
+  listing: MarketListing
+  " NFT 類型 (0=Hero, 1=Relic, 2=Party) "
+  nftType: Int!
+  " NFT 合約地址 "
+  nftContract: Bytes!
+  " NFT Token ID "
+  tokenId: BigInt!
+  " 出價金額 (SOUL tokens) "
+  amount: BigInt!
+  " 到期時間戳 "
+  expiresAt: BigInt!
+  " 出價狀態 (0=Active, 1=Accepted, 2=Declined, 3=Expired, 4=Cancelled) "
+  status: Int!
+  " 出價信息 "
+  message: String!
+  " 創建時間戳 "
+  createdAt: BigInt!
+  " 相關交易 "
+  transactions: [OfferTransaction!] @derivedFrom(field: "offer")
+}
+
+type OfferTransaction @entity(immutable: true) {
+  " 使用 `txHash-logIndex` 作為 ID "
+  id: String!
+  " 交易類型 (OfferAccepted, OfferDeclined, OfferCancelled, OfferExpired) "
+  type: String!
+  " 關聯的出價 "
+  offer: Offer!
+  " 出價者 "
+  buyer: Bytes!
+  " NFT 擁有者 "
+  seller: Bytes!
+  " 出價金額 "
+  amount: BigInt!
+  " 平台手續費 (如果接受) "
+  platformFee: BigInt!
+  " 交易時間戳 "
+  timestamp: BigInt!
+  " 交易哈希 "
+  transactionHash: Bytes!
+  " 區塊號 "
+  blockNumber: BigInt!
+}
+
+# =================================================================
+# 市場統計
+# =================================================================
+
+type MarketStats @entity(immutable: false) {
+  " 固定 ID = 'market' "
+  id: String!
+  " 總掛單數 "
+  totalListings: Int!
+  " 活躍掛單數 "
+  activeListings: Int!
+  " 總成交數 "
+  totalSales: Int!
+  " 總成交額 "
+  totalVolume: BigInt!
+  " 總出價數 "
+  totalOffers: Int!
+  " 活躍出價數 "
+  activeOffers: Int!
+  " 已接受出價數 "
+  acceptedOffers: Int!
+  " 最後更新時間戳 "
+  lastUpdatedAt: BigInt!
+}
+
+type DailyMarketStats @entity(immutable: false) {
+  " 使用日期作為 ID (YYYY-MM-DD) "
+  id: String!
+  " 日期時間戳 "
+  date: BigInt!
+  " 新增掛單數 "
+  newListings: Int!
+  " 成交數 "
+  sales: Int!
+  " 成交額 "
+  volume: BigInt!
+  " 新增出價數 "
+  newOffers: Int!
+  " 接受出價數 "
+  acceptedOffers: Int!
+  " 平均成交價 "
+  averagePrice: BigInt!
+  " 最高成交價 "
+  highestPrice: BigInt!
+  " 最低成交價 "
+  lowestPrice: BigInt!
+}
+
+# =================================================================
+# 用戶統計
+# =================================================================
+
+type UserMarketStats @entity(immutable: false) {
+  " 用戶地址 "
+  id: Bytes!
+  " 總掛單數 "
+  totalListings: Int!
+  " 活躍掛單數 "
+  activeListings: Int!
+  " 總銷售數 "
+  totalSales: Int!
+  " 總銷售額 "
+  totalSalesVolume: BigInt!
+  " 總購買數 "
+  totalPurchases: Int!
+  " 總購買額 "
+  totalPurchaseVolume: BigInt!
+  " 總出價數 "
+  totalOffersMade: Int!
+  " 收到的出價數 "
+  totalOffersReceived: Int!
+  " 接受的出價數 "
+  totalOffersAccepted: Int!
+  " 最後活動時間戳 "
+  lastActivityAt: BigInt!
+}
+
+# =================================================================
+# 系統配置
+# =================================================================
+
+type MarketConfig @entity(immutable: false) {
+  " 固定 ID = 'config' "
+  id: String!
+  " 平台費用 (基點) "
+  platformFee: Int!
+  " 費用接收方 "
+  feeRecipient: Bytes!
+  " 最後更新時間戳 "
+  lastUpdatedAt: BigInt!
+  " 更新者 "
+  updatedBy: Bytes!
+}
+
+type ApprovedNFTContract @entity(immutable: false) {
+  " NFT 合約地址 "
+  id: Bytes!
+  " 是否批准 "
+  approved: Boolean!
+  " 批准時間戳 "
+  approvedAt: BigInt!
+  " 批准者 "
+  approvedBy: Bytes!
+}

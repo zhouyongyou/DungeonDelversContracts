@@ -1,0 +1,9 @@
+{
+  "version": "V20",
+  "timestamp": "2025-07-25T05:39:40.292Z",
+  "deployer": "0x10925A7138649C7E1794CE646182eeb5BF8ba647",
+  "contracts": {
+    "Oracle_Final": "0x570ab1b068FB8ca51c995e78d2D62189B6201284"
+  },
+  "oldOracle": "0x54Ff2524C996d7608CaE9F3D9dd2075A023472E9"
+}

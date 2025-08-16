@@ -1,0 +1,58 @@
+# 修復 v25-deploy-complete-sequential.js 中的重複設置問題
+
+## 問題總結
+1. PlayerProfile.setDungeonCore 被調用兩次（第 442 行和第 595 行）
+2. 第二次調用可能覆蓋第一次的正確設置
+3. 錯誤處理使用 warning 級別，隱藏了關鍵錯誤
+
+## 修復步驟
+
+### 1. 移除重複設置
+在 setupSpecialConnections() 函數中，刪除第 591-601 行：
+
+```javascript
+// 刪除這段代碼：
+// 6. PlayerProfile 設置 DungeonCore
+try {
+  const playerProfile = this.contracts.PLAYERPROFILE?.contract;
+  if (playerProfile && playerProfile.setDungeonCore) {
+    const tx = await playerProfile.setDungeonCore(this.contracts.DUNGEONCORE.address);
+    await tx.wait();
+    this.log('✅ PlayerProfile.setDungeonCore 成功', 'success');
+  }
+} catch (error) {
+  this.log(`⚠️ PlayerProfile.setDungeonCore 失敗: ${error.message}`, 'warning');
+}
+```
+
+### 2. 改進錯誤處理
+在 setupModules() 函數中，將關鍵模組的錯誤改為 error 級別：
+
+```javascript
+// 在 setupModules() 中添加關鍵模組檢查
+const criticalModules = ['PLAYERPROFILE', 'DUNGEONMASTER', 'PLAYERVAULT'];
+
+// 在錯誤處理中添加：
+if (criticalModules.includes(moduleName)) {
+  throw new Error(`關鍵模組 ${moduleName} 設置失敗: ${error.message}`);
+}
+```
+
+### 3. 添加部署後驗證
+在 deploy() 主函數最後添加：
+
+```javascript
+// 13. 驗證關鍵連接
+await this.verifyAllConnections();
+```
+
+## 驗證修復效果
+執行修復後的腳本應該：
+1. ✅ 不再有重複設置
+2. ✅ 關鍵錯誤會停止部署
+3. ✅ 部署後自動驗證連接正確性
+
+## 預防措施
+- 在每次部署後運行連接驗證腳本
+- 監控部署日誌中的 warning 信息
+- 定期檢查合約配置一致性

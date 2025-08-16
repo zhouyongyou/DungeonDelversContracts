@@ -1,0 +1,20 @@
+{
+  "contracts": {
+    "Hero": "0x575e7407C06ADeb47067AD19663af50DdAe460CF",
+    "Relic": "0x36cC82c8fb1c71c4B37eC5E6454960e09a5DC739",
+    "VRFManager": "0xE1D1c53e2e467BFF3d6e4EffB7b89C0C10711ad1"
+  },
+  "fees": {
+    "vrfFeePerNFT": "0.0001",
+    "vrfFeePerNFTWei": "100000000000000",
+    "nftPriceUSD": 2,
+    "estimatedNFTPriceBNB": "0.004"
+  },
+  "example50NFTs": {
+    "nftCost": "100 USD",
+    "vrfCost": "0.005 BNB",
+    "totalBNBNeeded": "0.205 BNB"
+  },
+  "network": "BSC Mainnet",
+  "lastUpdated": "2025-08-06"
+}

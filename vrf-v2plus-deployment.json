@@ -1,0 +1,21 @@
+{
+  "VRFConsumerV2Plus": "0xE1D1c53e2e467BFF3d6e4EffB7b89C0C10711ad1",
+  "coordinator": "0xd691f04bc0C9a24Edb78af9E005Cf85768F694C9",
+  "subscriptionId": "114131353280130458891383141995968474440293173552039681622016393393251650814328",
+  "deployedAt": "2025-08-06T20:30:06.051Z",
+  "network": "BSC Mainnet",
+  "authorizedContracts": [
+    "0x575e7407C06ADeb47067AD19663af50DdAe460CF",
+    "0x36cC82c8fb1c71c4B37eC5E6454960e09a5DC739",
+    "0xE391261741Fad5FCC2D298d00e8c684767021253",
+    "0x095559778C0BAA2d8FA040Ab0f8752cF07779D33",
+    "0x10925A7138649C7E1794CE646182eeb5BF8ba647"
+  ],
+  "fee": "0.0001 BNB",
+  "nextSteps": {
+    "1": "Add consumer at https://vrf.chain.link/bsc/114131353280130458891383141995968474440293173552039681622016393393251650814328",
+    "2": "Consumer address: 0xE1D1c53e2e467BFF3d6e4EffB7b89C0C10711ad1",
+    "3": "Test with: node scripts/test-vrf-v2plus.js",
+    "4": "Update NFT contracts VRF Manager address"
+  }
+}

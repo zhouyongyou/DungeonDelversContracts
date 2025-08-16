@@ -1,0 +1,20 @@
+{
+  "network": "BSC Mainnet",
+  "timestamp": "2025-08-07T10:25:25.243Z",
+  "deployer": "0x10925A7138649C7E1794CE646182eeb5BF8ba647",
+  "contracts": {
+    "VRFConsumerV2Plus": "0x980d224ec4d198d94f34a8af76a19c00dabe2436",
+    "Hero": "0x671d937b171e2ba2c4dc23c133b07e4449f283ef",
+    "Relic": "0x42bf1bd8fc5a8dfdd0e97de131246ec0e3ec73da",
+    "DungeonMaster": "0xc0bbae55cf9245f76628d2c5299cd6fa35cd102a",
+    "AltarOfAscensionVRF": "0xa86749237d4631ad92ba859d0b0df4770f6147ba"
+  },
+  "configuration": {
+    "DUNGEON_CORE": "0x8a2D2b1961135127228EdD71Ff98d6B097915a13",
+    "DUNGEON_STORAGE": "0x88EF98E7F9095610d7762C30165854f271525B97",
+    "SOULSHARD": "0x97B2C2a9A11C7b6A020b4bAEaAd349865eaD0bcF",
+    "VRF_COORDINATOR": "0xd691f04bc0C9a24Edb78af9E005Cf85768F694C9",
+    "SUBSCRIPTION_ID": 29062,
+    "KEY_HASH": "0x130dba50ad435d4ecc214aad0d5820474137bd68e7e77724144f27c3c377d3d4"
+  }
+}

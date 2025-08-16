@@ -1,0 +1,216 @@
+{
+  "timestamp": "2025-08-05T17:51:07.248Z",
+  "totalFiles": 7,
+  "totalFixes": 38,
+  "fixesByType": {
+    "replace-with-abi": 10,
+    "use-address-only": 28,
+    "replace-direct-address": 0
+  },
+  "files": {
+    "src/pages/AdminPageFixed.tsx": [
+      {
+        "type": "use-address-only",
+        "original": "getContract('DUNGEONMASTER')",
+        "contractName": "DUNGEONMASTER"
+      }
+    ],
+    "src/pages/DungeonPage.tsx": [
+      {
+        "type": "replace-with-abi",
+        "original": "getContract('PARTY')",
+        "contractName": "PARTY"
+      },
+      {
+        "type": "replace-with-abi",
+        "original": "getContract('DUNGEONMASTER')",
+        "contractName": "DUNGEONMASTER"
+      },
+      {
+        "type": "replace-with-abi",
+        "original": "getContract('DUNGEONSTORAGE')",
+        "contractName": "DUNGEONSTORAGE"
+      },
+      {
+        "type": "replace-with-abi",
+        "original": "getContract('DUNGEONCORE')",
+        "contractName": "DUNGEONCORE"
+      },
+      {
+        "type": "replace-with-abi",
+        "original": "getContract('PLAYERPROFILE')",
+        "contractName": "PLAYERPROFILE"
+      },
+      {
+        "type": "replace-with-abi",
+        "original": "getContract('DUNGEONMASTER')",
+        "contractName": "DUNGEONMASTER"
+      },
+      {
+        "type": "replace-with-abi",
+        "original": "getContract('DUNGEONCORE')",
+        "contractName": "DUNGEONCORE"
+      },
+      {
+        "type": "replace-with-abi",
+        "original": "getContract('DUNGEONSTORAGE')",
+        "contractName": "DUNGEONSTORAGE"
+      },
+      {
+        "type": "replace-with-abi",
+        "original": "getContract('DUNGEONSTORAGE')",
+        "contractName": "DUNGEONSTORAGE"
+      }
+    ],
+    "src/pages/archived/replaced-pages/DashboardPage.tsx": [
+      {
+        "type": "use-address-only",
+        "original": "getContract('DUNGEONCORE')",
+        "contractName": "DUNGEONCORE"
+      },
+      {
+        "type": "use-address-only",
+        "original": "getContract('PLAYERVAULT')",
+        "contractName": "PLAYERVAULT"
+      },
+      {
+        "type": "use-address-only",
+        "original": "getContract('VIPSTAKING')",
+        "contractName": "VIPSTAKING"
+      },
+      {
+        "type": "use-address-only",
+        "original": "getContract('PLAYERPROFILE')",
+        "contractName": "PLAYERPROFILE"
+      },
+      {
+        "type": "use-address-only",
+        "original": "getContract('HERO')",
+        "contractName": "HERO"
+      },
+      {
+        "type": "use-address-only",
+        "original": "getContract('RELIC')",
+        "contractName": "RELIC"
+      },
+      {
+        "type": "use-address-only",
+        "original": "getContract('PARTY')",
+        "contractName": "PARTY"
+      },
+      {
+        "type": "use-address-only",
+        "original": "getContract('PLAYERVAULT')",
+        "contractName": "PLAYERVAULT"
+      }
+    ],
+    "src/pages/archived/replaced-pages/ExplorerPage.tsx": [
+      {
+        "type": "use-address-only",
+        "original": "getContract('DUNGEONCORE')",
+        "contractName": "DUNGEONCORE"
+      },
+      {
+        "type": "use-address-only",
+        "original": "getContract('ORACLE')",
+        "contractName": "ORACLE"
+      },
+      {
+        "type": "use-address-only",
+        "original": "getContract('HERO')",
+        "contractName": "HERO"
+      },
+      {
+        "type": "use-address-only",
+        "original": "getContract('RELIC')",
+        "contractName": "RELIC"
+      },
+      {
+        "type": "use-address-only",
+        "original": "getContract('PARTY')",
+        "contractName": "PARTY"
+      },
+      {
+        "type": "use-address-only",
+        "original": "getContract('DUNGEONMASTER')",
+        "contractName": "DUNGEONMASTER"
+      },
+      {
+        "type": "use-address-only",
+        "original": "getContract('DUNGEONSTORAGE')",
+        "contractName": "DUNGEONSTORAGE"
+      },
+      {
+        "type": "use-address-only",
+        "original": "getContract('ALTAROFASCENSION')",
+        "contractName": "ALTAROFASCENSION"
+      },
+      {
+        "type": "use-address-only",
+        "original": "getContract('PLAYERVAULT')",
+        "contractName": "PLAYERVAULT"
+      },
+      {
+        "type": "use-address-only",
+        "original": "getContract('VIPSTAKING')",
+        "contractName": "VIPSTAKING"
+      },
+      {
+        "type": "use-address-only",
+        "original": "getContract('PLAYERPROFILE')",
+        "contractName": "PLAYERPROFILE"
+      },
+      {
+        "type": "use-address-only",
+        "original": "getContract('SOULSHARD')",
+        "contractName": "SOULSHARD"
+      },
+      {
+        "type": "use-address-only",
+        "original": "getContract('USD')",
+        "contractName": "USD"
+      },
+      {
+        "type": "use-address-only",
+        "original": "getContract('UNISWAP_POOL')",
+        "contractName": "UNISWAP_POOL"
+      },
+      {
+        "type": "use-address-only",
+        "original": "getContract('DUNGEONMASTERWALLET')",
+        "contractName": "DUNGEONMASTERWALLET"
+      }
+    ],
+    "src/pages/archived/replaced-pages/MyAssetsPage.tsx": [
+      {
+        "type": "use-address-only",
+        "original": "getContract('HERO')",
+        "contractName": "HERO"
+      },
+      {
+        "type": "use-address-only",
+        "original": "getContract('RELIC')",
+        "contractName": "RELIC"
+      },
+      {
+        "type": "use-address-only",
+        "original": "getContract('PARTY')",
+        "contractName": "PARTY"
+      }
+    ],
+    "src/pages/archived/replaced-pages/ProfilePage.tsx": [
+      {
+        "type": "use-address-only",
+        "original": "getContract('PLAYERPROFILE')",
+        "contractName": "PLAYERPROFILE"
+      }
+    ],
+    "src/pages/archived/test-pages/TestBatchRead.tsx": [
+      {
+        "type": "replace-with-abi",
+        "original": "getContract('DUNGEONMASTER')",
+        "contractName": "DUNGEONMASTER"
+      }
+    ]
+  }
+}

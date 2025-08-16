@@ -1,0 +1,20 @@
+{
+  "timestamp": "2025-08-06T20:37:52.597Z",
+  "newVRFManager": "0xE1D1c53e2e467BFF3d6e4EffB7b89C0C10711ad1",
+  "previousVRFManager": "0xb772e15dF8aB4B38c1D4Ba1F4b0451B3e2B7B0C6",
+  "results": [
+    {
+      "name": "Hero",
+      "status": "Updated successfully"
+    },
+    {
+      "name": "Relic",
+      "status": "Updated successfully"
+    },
+    {
+      "name": "DungeonMaster",
+      "status": "Updated successfully"
+    }
+  ],
+  "network": "BSC Mainnet"
+}

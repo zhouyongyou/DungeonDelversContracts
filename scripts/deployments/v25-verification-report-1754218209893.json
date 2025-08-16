@@ -1,0 +1,129 @@
+{
+  "version": "V25",
+  "timestamp": "2025-08-03T10:50:09.893Z",
+  "results": {
+    "success": [],
+    "failed": [
+      {
+        "name": "SOULSHARD",
+        "error": "驗證結果不明確"
+      },
+      {
+        "name": "UNISWAP_POOL",
+        "error": "驗證結果不明確"
+      },
+      {
+        "name": "ORACLE",
+        "error": "驗證結果不明確"
+      },
+      {
+        "name": "PLAYERVAULT",
+        "error": "驗證結果不明確"
+      },
+      {
+        "name": "DUNGEONCORE",
+        "error": "驗證結果不明確"
+      },
+      {
+        "name": "DUNGEONSTORAGE",
+        "error": "驗證結果不明確"
+      },
+      {
+        "name": "DUNGEONMASTER",
+        "error": "驗證結果不明確"
+      },
+      {
+        "name": "HERO",
+        "error": "驗證結果不明確"
+      },
+      {
+        "name": "RELIC",
+        "error": "驗證結果不明確"
+      },
+      {
+        "name": "PARTY",
+        "error": "驗證結果不明確"
+      },
+      {
+        "name": "VIPSTAKING",
+        "error": "驗證結果不明確"
+      },
+      {
+        "name": "PLAYERPROFILE",
+        "error": "驗證結果不明確"
+      },
+      {
+        "name": "ALTAROFASCENSION",
+        "error": "驗證結果不明確"
+      }
+    ],
+    "skipped": []
+  },
+  "contracts": {
+    "SOULSHARD": {
+      "address": "0x97B2C2a9A11C7b6A020b4bAEaAd349865eaD0bcF",
+      "deploymentBlock": 56184733,
+      "contractName": "SOULSHARD"
+    },
+    "UNISWAP_POOL": {
+      "address": "0x1e5Cd5F386Fb6F39cD8788675dd3A5ceB6521C82",
+      "deploymentBlock": 56184733,
+      "contractName": "UNISWAP_POOL"
+    },
+    "ORACLE": {
+      "address": "0x67989939163bCFC57302767722E1988FFac46d64",
+      "deploymentBlock": 56184733,
+      "contractName": "Oracle_V22_Adaptive"
+    },
+    "PLAYERVAULT": {
+      "address": "0x39523e8eeB6c54fCe65D62ec696cA5ad888eF25c",
+      "deploymentBlock": 56184733,
+      "contractName": "PlayerVault"
+    },
+    "DUNGEONCORE": {
+      "address": "0x8a2D2b1961135127228EdD71Ff98d6B097915a13",
+      "deploymentBlock": 56184733,
+      "contractName": "DungeonCore"
+    },
+    "DUNGEONSTORAGE": {
+      "address": "0x88EF98E7F9095610d7762C30165854f271525B97",
+      "deploymentBlock": 56184733,
+      "contractName": "DungeonStorage"
+    },
+    "DUNGEONMASTER": {
+      "address": "0x446f80c6562a9b0A33b48F74F7Dbf10b53Fe2703",
+      "deploymentBlock": 56184733,
+      "contractName": "DungeonMasterV2_Fixed"
+    },
+    "HERO": {
+      "address": "0x5d71d62fAFd07C92ec677C3Ae57984576f5955f0",
+      "deploymentBlock": 56184733,
+      "contractName": "Hero"
+    },
+    "RELIC": {
+      "address": "0x5f93fCdb2ecd1A0eB758E554bfeB3A2B95581366",
+      "deploymentBlock": 56184733,
+      "contractName": "Relic"
+    },
+    "PARTY": {
+      "address": "0x6B32c2EEaB24C04bF97A022B1e55943FE1E772a5",
+      "deploymentBlock": 56184733,
+      "contractName": "PartyV3"
+    },
+    "VIPSTAKING": {
+      "address": "0x186a89e5418645459ed0a469FF97C9d4B2ca5355",
+      "deploymentBlock": 56184733,
+      "contractName": "VIPStaking"
+    },
+    "PLAYERPROFILE": {
+      "address": "0xCf352E394fD2Ff27D65bB525C032a2c03Bd79AC7",
+      "deploymentBlock": 56184733,
+      "contractName": "PlayerProfile"
+    },
+    "ALTAROFASCENSION": {
+      "address": "0xaA4f3D3ed21599F501773F83a1A2B4d65b1d0AE3",
+      "deploymentBlock": 56184733,
+      "contractName": "AltarOfAscensionV2Fixed"
+    }
+  }
+}

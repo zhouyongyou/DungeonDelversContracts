@@ -1,0 +1,20 @@
+{
+  "VRFSubscriptionManager": "0xb772e15dF8aB4B38c1D4Ba1F4b0451B3e2B7B0C6",
+  "coordinator": "0xd691f04bc0C9a24Edb78af9E005Cf85768F694C9",
+  "subscriptionId": "114131353280130458891383141995968474440293173552039681622016393393251650814328",
+  "deployedAt": "2025-08-06T20:17:01.416Z",
+  "network": "BSC Mainnet",
+  "authorizedContracts": [
+    "0x5d71d62fAFd07C92ec677C3Ae57984576f5955f0",
+    "0x5f93fCdb2ecd1A0eB758E554bfeB3A2B95581366",
+    "0x446f80c6562a9b0A33b48F74F7Dbf10b53Fe2703",
+    "0xaA4f3D3ed21599F501773F83a1A2B4d65b1d0AE3",
+    "0x10925A7138649C7E1794CE646182eeb5BF8ba647"
+  ],
+  "fee": "0.0001 BNB",
+  "nextSteps": {
+    "1": "Add consumer at https://vrf.chain.link/bsc/114131353280130458891383141995968474440293173552039681622016393393251650814328",
+    "2": "Consumer address: 0xb772e15dF8aB4B38c1D4Ba1F4b0451B3e2B7B0C6",
+    "3": "Test with: node scripts/test-vrf-subscription.js"
+  }
+}

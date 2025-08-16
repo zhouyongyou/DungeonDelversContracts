@@ -1,0 +1,9 @@
+{
+  "network": "bsc-mainnet",
+  "deployedAt": "2025-07-26T18:00:10.745Z",
+  "oldAddress": "0xd13250E0F0766006816d7AfE95EaEEc5e215d082",
+  "newAddress": "0x9ccF46E49DdA7D2DF7cE8064FB879D786D8b12D0",
+  "deployer": "0x10925A7138649C7E1794CE646182eeb5BF8ba647",
+  "version": "V2_Fixed",
+  "description": "修復 PartyStatus 結構不匹配問題"
+}

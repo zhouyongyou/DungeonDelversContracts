@@ -1,0 +1,32 @@
+{
+  "timestamp": "2025-08-03T15:57:58.382Z",
+  "mode": "check-only",
+  "differences": [
+    {
+      "nftType": "HERO",
+      "master": "0x6DEb5Ade2F6BEe8294A4b7f37cE372152109E2db",
+      "marketplace": "0x5d71d62fAFd07C92ec677C3Ae57984576f5955f0",
+      "status": "❌ 不匹配"
+    },
+    {
+      "nftType": "RELIC",
+      "master": "0xcfB83d8545D68b796a236290b3C1bc7e4A140B11",
+      "marketplace": "0x5f93fCdb2ecd1A0eB758E554bfeB3A2B95581366",
+      "status": "❌ 不匹配"
+    },
+    {
+      "nftType": "PARTY",
+      "master": "0xabCD5DDa5bd9D73CD70D4F316827383e92f7b551",
+      "marketplace": "0x6B32c2EEaB24C04bF97A022B1e55943FE1E772a5",
+      "status": "❌ 不匹配"
+    }
+  ],
+  "errors": [],
+  "recommendations": [
+    "需要更新 Marketplace V2 合約的 NFT 白名單",
+    "建議執行 marketplace-sync.js 同步配置",
+    "在 DungeonMarketplaceV2 合約上執行: approveNFTContract(\"0x6DEb5Ade2F6BEe8294A4b7f37cE372152109E2db\")",
+    "在 DungeonMarketplaceV2 合約上執行: approveNFTContract(\"0xcfB83d8545D68b796a236290b3C1bc7e4A140B11\")",
+    "在 DungeonMarketplaceV2 合約上執行: approveNFTContract(\"0xabCD5DDa5bd9D73CD70D4F316827383e92f7b551\")"
+  ]
+}

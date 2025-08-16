@@ -1,0 +1,18 @@
+{
+  "error": "HH701: There are multiple artifacts for contract \"DungeonCore\", please use a fully qualified name.\n\nPlease replace DungeonCore for one of these options wherever you are trying to read its artifact:\n\ncontracts/core/DungeonCore.sol:DungeonCore\ncontracts/test/MinimalDungeonCore.sol:DungeonCore\n",
+  "stack": "HardhatError: HH701: There are multiple artifacts for contract \"DungeonCore\", please use a fully qualified name.\n\nPlease replace DungeonCore for one of these options wherever you are trying to read its artifact:\n\ncontracts/core/DungeonCore.sol:DungeonCore\ncontracts/test/MinimalDungeonCore.sol:DungeonCore\n\n    at Artifacts._getArtifactPathFromFiles (/Users/sotadic/Documents/DungeonDelversContracts/node_modules/hardhat/src/internal/artifacts.ts:860:13)\n    at Artifacts._getArtifactPath (/Users/sotadic/Documents/DungeonDelversContracts/node_modules/hardhat/src/internal/artifacts.ts:516:21)\n    at processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async Artifacts.readArtifact (/Users/sotadic/Documents/DungeonDelversContracts/node_modules/hardhat/src/internal/artifacts.ts:71:26)\n    at async getContractFactory (/Users/sotadic/Documents/DungeonDelversContracts/node_modules/@nomicfoundation/hardhat-ethers/src/internal/helpers.ts:120:22)\n    at async main (/Users/sotadic/Documents/DungeonDelversContracts/scripts/deploy/deploy-complete-v12.js:334:25)",
+  "addresses": {
+    "SOULSHARD_ADDRESS": "0xc88dAD283Ac209D77Bfe452807d378615AB8B94a",
+    "ORACLE_ADDRESS": "0xBd3379309b841903e19621179C2FBaD51Aa819fC",
+    "DUNGEONSTORAGE_ADDRESS": "0x511C1226E5f25495ca55068827431c4bd825e202",
+    "HERO_ADDRESS": "0x3A06f4d5EA0667923635C8F559406e2f805D69A7",
+    "RELIC_ADDRESS": "0xBea676CE4f591c008195aB803124B897eF4cd612",
+    "PARTY_ADDRESS": "0x7e12415b4b37FBfF236b122208116125FB763Ab2",
+    "PLAYERVAULT_ADDRESS": "0x58ce919834D79F41ce4ee28813A668477aB455C4",
+    "PLAYERPROFILE_ADDRESS": "0xa2c29d4aa82160cdde00b4202fcC424C26D0EbEB",
+    "ALTAROFASCENSION_ADDRESS": "0xBE5cc86F8C14b3C9e612084ff115302a432aa3b9",
+    "VIPSTAKING_ADDRESS": "0x96763884C879257d0f2d832d01bc08e3f0640996"
+  },
+  "timestamp": "2025-07-23T09:10:53.345Z",
+  "blockNumber": 55018520
+}

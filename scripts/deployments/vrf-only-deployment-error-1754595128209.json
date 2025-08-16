@@ -1,0 +1,11 @@
+{
+  "timestamp": 1754595128209,
+  "error": "HH700: Artifact for contract \"AltarOfAscension\" not found. We found some that were similar:\n\n  * contracts/current/interfaces/interfaces-minimal.sol:IAltarOfAscension\n  * contracts/current/interfaces/interfaces.sol:IAltarOfAscension\n\nPlease replace \"AltarOfAscension\" for the correct contract name wherever you are trying to read its artifact.\n",
+  "stack": "HardhatError: HH700: Artifact for contract \"AltarOfAscension\" not found. We found some that were similar:\n\n  * contracts/current/interfaces/interfaces-minimal.sol:IAltarOfAscension\n  * contracts/current/interfaces/interfaces.sol:IAltarOfAscension\n\nPlease replace \"AltarOfAscension\" for the correct contract name wherever you are trying to read its artifact.\n\n    at Artifacts._handleWrongArtifactForContractName (/Users/sotadic/Documents/DungeonDelversContracts/node_modules/hardhat/src/internal/artifacts.ts:721:11)\n    at Artifacts._getArtifactPathFromFiles (/Users/sotadic/Documents/DungeonDelversContracts/node_modules/hardhat/src/internal/artifacts.ts:852:19)\n    at Artifacts._getArtifactPath (/Users/sotadic/Documents/DungeonDelversContracts/node_modules/hardhat/src/internal/artifacts.ts:516:21)\n    at processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async Artifacts.readArtifact (/Users/sotadic/Documents/DungeonDelversContracts/node_modules/hardhat/src/internal/artifacts.ts:71:26)\n    at async main (/Users/sotadic/Documents/DungeonDelversContracts/scripts/deploy-vrf-only-contracts.js:147:27)",
+  "deployedContracts": {
+    "HERO": "0x96Df76BfbB0C9832482Ec9231d8ff8951637f1C2",
+    "RELIC": "0xC7E24bF50d6E7623866ebABfE0dC97fB585e363E",
+    "DUNGEON_STORAGE": "0x5D5D75a0bEF0Ce708d59749c0D9ba1a59fC24Cbb",
+    "DUNGEON_MASTER": "0x395358733F69572C5744b561Ba61F0e16F32A571"
+  }
+}

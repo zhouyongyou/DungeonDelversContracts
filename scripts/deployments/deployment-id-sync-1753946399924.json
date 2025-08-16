@@ -1,0 +1,31 @@
+{
+  "timestamp": "2025-07-31T07:19:59.924Z",
+  "oldDeploymentId": "Hmwr7XYgzVzsUb9dw95gSGJ1Vof6qYypuvCxynzinCjs",
+  "newDeploymentId": "QmXuCVekeneija9jZqtFuT7i7zj4oZQEQHmkqzed9CTNGZ",
+  "updatedFiles": [
+    {
+      "name": "masterConfig",
+      "path": "/Users/sotadic/Documents/DungeonDelversContracts/config/master-config.json"
+    },
+    {
+      "name": "frontendEnv",
+      "path": "/Users/sotadic/Documents/GitHub/DungeonDelvers/.env"
+    },
+    {
+      "name": "frontendEnvLocal",
+      "path": "/Users/sotadic/Documents/GitHub/DungeonDelvers/.env.local"
+    },
+    {
+      "name": "frontendConfig",
+      "path": "/Users/sotadic/Documents/GitHub/DungeonDelvers/shared-config.json"
+    },
+    {
+      "name": "frontendCDNConfig",
+      "path": "/Users/sotadic/Documents/GitHub/DungeonDelvers/public/config/v25.json"
+    },
+    {
+      "name": "backendEnv",
+      "path": "/Users/sotadic/Documents/dungeon-delvers-metadata-server/.env"
+    }
+  ]
+}

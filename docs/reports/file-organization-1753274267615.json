@@ -1,0 +1,42 @@
+{
+  "timestamp": "2025-07-23T12:37:47.614Z",
+  "summary": {
+    "filesOrganized": 11,
+    "filesRemoved": 0,
+    "directoriesCreated": 3
+  },
+  "details": {
+    "createdDirectories": [
+      "deployments/v15",
+      "deployments/legacy",
+      "config/legacy"
+    ],
+    "organizationRules": [
+      {
+        "pattern": "/^bsc-v\\d+.*\\.json$/",
+        "targetDir": "deployments/v15",
+        "description": "V15 部署記錄"
+      },
+      {
+        "pattern": "/^deployment-v\\d+-.*\\.json$/",
+        "targetDir": "deployments/legacy",
+        "description": "舊版部署記錄"
+      },
+      {
+        "pattern": "/^ERROR_.*\\.json$/",
+        "targetDir": "deployments/errors",
+        "description": "錯誤記錄"
+      },
+      {
+        "pattern": "/^(functional-test|config-sync-test|test-report).*\\.json$/",
+        "targetDir": "test-reports",
+        "description": "測試報告"
+      },
+      {
+        "pattern": "/^(backend-config|contract-config|shared-config).*\\.json$/",
+        "targetDir": "config/legacy",
+        "description": "舊配置文件"
+      }
+    ]
+  }
+}

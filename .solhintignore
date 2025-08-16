@@ -1,0 +1,14 @@
+# 排除 old 資料夾
+contracts/current/old/**/*.sol
+contracts/current/archive/**/*.sol
+contracts/current/deprecated/**/*.sol
+contracts/current/test/**/*.sol
+
+# 排除特定檔案
+contracts/current/**/*_old.sol
+contracts/current/**/*_deprecated.sol
+contracts/current/**/*_test.sol
+
+# 排除備份檔案
+contracts/current/**/*.bak
+contracts/current/**/*~

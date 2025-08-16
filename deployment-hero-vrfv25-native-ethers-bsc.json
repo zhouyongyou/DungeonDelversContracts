@@ -1,0 +1,19 @@
+{
+  "contractName": "HeroWithChainlinkVRFV25_Simple",
+  "contractAddress": "0xF19aaf72fc221eC0288F859f8A14f77b1d308E91",
+  "deployer": "0x10925A7138649C7E1794CE646182eeb5BF8ba647",
+  "network": "BSC Mainnet (Chain ID: 56)",
+  "rpc": "Alchemy",
+  "vrfConfig": {
+    "wrapperAddress": "0x471506e6ADED0b9811D05B8cAc8Db25eE839Ac94",
+    "linkToken": "0x404460C6A5EdE2D891e8297795264fDe62ADBB75",
+    "coordinatorAddress": "0xd691f04bc0C9a24Edb78af9E005Cf85768F694C9",
+    "gasLimit": 100000
+  },
+  "deploymentTime": "2025-07-31T19:34:12.480Z",
+  "constructorArgs": [
+    "0x10925A7138649C7E1794CE646182eeb5BF8ba647",
+    "0x471506e6ADED0b9811D05B8cAc8Db25eE839Ac94",
+    "0x404460C6A5EdE2D891e8297795264fDe62ADBB75"
+  ]
+}

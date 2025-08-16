@@ -1,0 +1,14 @@
+{
+  "timestamp": "2025-07-19T08:58:08.537Z",
+  "contract": "DungeonMasterV5",
+  "updates": {
+    "frontend": "/Users/sotadic/Documents/GitHub/DungeonDelvers/src/config/abis/dungeonMasterV5.json",
+    "subgraph": "/Users/sotadic/Documents/GitHub/DungeonDelvers/DDgraphql/abis/DungeonMasterV5.json",
+    "backend": "/Users/sotadic/Documents/dungeon-delvers-metadata-server/src/abis/DungeonMasterV5.json"
+  },
+  "nextSteps": [
+    "前端: 更新 contracts.ts 中的 ABI import",
+    "子圖: 執行 graph codegen && graph build",
+    "後端: 重啟服務以載入新 ABI"
+  ]
+}

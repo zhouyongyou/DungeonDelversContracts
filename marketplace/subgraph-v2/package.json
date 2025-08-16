@@ -1,0 +1,35 @@
+{
+  "name": "dungeon-delvers-marketplace-v2-subgraph",
+  "version": "1.0.0",
+  "description": "DungeonDelvers Marketplace V2 Subgraph with Multi-Currency Support",
+  "scripts": {
+    "codegen": "graph codegen",
+    "build": "graph build",
+    "build:fix": "./fix-build.sh",
+    "deploy-local": "graph deploy dungeon-delvers-marketplace-v2 --node http://localhost:8020/ --ipfs http://localhost:5001",
+    "deploy-hosted": "graph deploy --product hosted-service dungeondelvers/marketplace-v2",
+    "create-local": "graph create dungeon-delvers-marketplace-v2 --node http://localhost:8020/",
+    "remove-local": "graph remove dungeon-delvers-marketplace-v2 --node http://localhost:8020/",
+    "test": "graph test",
+    "prepare:mainnet": "mustache config/mainnet.json subgraph.template.yaml > subgraph.yaml",
+    "prepare:testnet": "mustache config/testnet.json subgraph.template.yaml > subgraph.yaml"
+  },
+  "devDependencies": {
+    "@graphprotocol/graph-cli": "^0.90.0",
+    "@graphprotocol/graph-ts": "^0.35.0",
+    "mustache": "^4.2.0"
+  },
+  "keywords": [
+    "graphql",
+    "web3",
+    "nft",
+    "marketplace",
+    "multicurrency",
+    "bsc"
+  ],
+  "author": "DungeonDelvers Team",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^1.11.0"
+  }
+}

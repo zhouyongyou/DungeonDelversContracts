@@ -1,0 +1,404 @@
+{
+  "version": "V25",
+  "timestamp": "2025-07-27T16:26:11.839Z",
+  "errors": [
+    {}
+  ],
+  "deploymentLog": [
+    {
+      "timestamp": "2025-07-27T16:24:09.668Z",
+      "type": "info",
+      "message": "執行部署前檢查..."
+    },
+    {
+      "timestamp": "2025-07-27T16:24:10.464Z",
+      "type": "info",
+      "message": "部署錢包: 0x10925A7138649C7E1794CE646182eeb5BF8ba647"
+    },
+    {
+      "timestamp": "2025-07-27T16:24:10.464Z",
+      "type": "info",
+      "message": "錢包餘額: 0.768738213554241475 BNB"
+    },
+    {
+      "timestamp": "2025-07-27T16:24:10.465Z",
+      "type": "info",
+      "message": "\n載入現有合約地址..."
+    },
+    {
+      "timestamp": "2025-07-27T16:24:10.465Z",
+      "type": "success",
+      "message": "✅ 使用現有 SOULSHARD: 0x97B2C2a9A11C7b6A020b4bAEaAd349865eaD0bcF"
+    },
+    {
+      "timestamp": "2025-07-27T16:24:10.465Z",
+      "type": "success",
+      "message": "✅ 使用現有 UNISWAP_POOL: 0x1e5Cd5F386Fb6F39cD8788675dd3A5ceB6521C82"
+    },
+    {
+      "timestamp": "2025-07-27T16:24:10.612Z",
+      "type": "info",
+      "message": "起始區塊: 55513969"
+    },
+    {
+      "timestamp": "2025-07-27T16:24:10.613Z",
+      "type": "info",
+      "message": "\n開始部署合約..."
+    },
+    {
+      "timestamp": "2025-07-27T16:24:10.613Z",
+      "type": "info",
+      "message": "\n部署 ORACLE (Oracle_V22_Adaptive)..."
+    },
+    {
+      "timestamp": "2025-07-27T16:24:13.594Z",
+      "type": "success",
+      "message": "✅ ORACLE 部署成功: 0x950C4B71556AC27527BA209b542C6B4D74E44659"
+    },
+    {
+      "timestamp": "2025-07-27T16:24:13.594Z",
+      "type": "info",
+      "message": "\n部署 PLAYERVAULT (PlayerVault)..."
+    },
+    {
+      "timestamp": "2025-07-27T16:24:15.851Z",
+      "type": "success",
+      "message": "✅ PLAYERVAULT 部署成功: 0x2d28BeBDbdBf14E18AD82e23ba8ee98C0d6D1B09"
+    },
+    {
+      "timestamp": "2025-07-27T16:24:15.852Z",
+      "type": "info",
+      "message": "\n部署 DUNGEONCORE (DungeonCore)..."
+    },
+    {
+      "timestamp": "2025-07-27T16:24:18.071Z",
+      "type": "success",
+      "message": "✅ DUNGEONCORE 部署成功: 0x40F29B3B47324AB763d677FeF2641bD1a97b369b"
+    },
+    {
+      "timestamp": "2025-07-27T16:24:18.071Z",
+      "type": "info",
+      "message": "\n部署 DUNGEONSTORAGE (DungeonStorage)..."
+    },
+    {
+      "timestamp": "2025-07-27T16:24:20.292Z",
+      "type": "success",
+      "message": "✅ DUNGEONSTORAGE 部署成功: 0xA55e55CC026e28d0339d7CDCa803862EA2DF8734"
+    },
+    {
+      "timestamp": "2025-07-27T16:24:20.292Z",
+      "type": "info",
+      "message": "\n部署 DUNGEONMASTER (DungeonMasterV2_Fixed)..."
+    },
+    {
+      "timestamp": "2025-07-27T16:24:22.792Z",
+      "type": "success",
+      "message": "✅ DUNGEONMASTER 部署成功: 0x7898828306a935CE5C8E63903441010478595220"
+    },
+    {
+      "timestamp": "2025-07-27T16:24:22.793Z",
+      "type": "info",
+      "message": "\n部署 HERO (Hero)..."
+    },
+    {
+      "timestamp": "2025-07-27T16:24:25.101Z",
+      "type": "success",
+      "message": "✅ HERO 部署成功: 0x7B06C20Da66A94D5447a1eE8D596702A3d756352"
+    },
+    {
+      "timestamp": "2025-07-27T16:24:25.101Z",
+      "type": "info",
+      "message": "\n部署 RELIC (Relic)..."
+    },
+    {
+      "timestamp": "2025-07-27T16:24:27.421Z",
+      "type": "success",
+      "message": "✅ RELIC 部署成功: 0xfCf5357A743b7953aD0525cBa2fbD08317Dfac93"
+    },
+    {
+      "timestamp": "2025-07-27T16:24:27.422Z",
+      "type": "info",
+      "message": "\n部署 PARTY (PartyV3)..."
+    },
+    {
+      "timestamp": "2025-07-27T16:24:29.711Z",
+      "type": "success",
+      "message": "✅ PARTY 部署成功: 0xC14Af742e74f0aB34CADDdB9989b5D4FD78Ec06C"
+    },
+    {
+      "timestamp": "2025-07-27T16:24:29.711Z",
+      "type": "info",
+      "message": "\n部署 VIPSTAKING (VIPStaking)..."
+    },
+    {
+      "timestamp": "2025-07-27T16:24:32.711Z",
+      "type": "success",
+      "message": "✅ VIPSTAKING 部署成功: 0x28b4af818542f0Bccb9F9B06Ae9476Ac796Ab061"
+    },
+    {
+      "timestamp": "2025-07-27T16:24:32.711Z",
+      "type": "info",
+      "message": "\n部署 PLAYERPROFILE (PlayerProfile)..."
+    },
+    {
+      "timestamp": "2025-07-27T16:24:35.670Z",
+      "type": "success",
+      "message": "✅ PLAYERPROFILE 部署成功: 0x2908702C25686Ae378ef9D9dd4F92fF28C5d9D1F"
+    },
+    {
+      "timestamp": "2025-07-27T16:24:35.670Z",
+      "type": "info",
+      "message": "\n部署 ALTAROFASCENSION (AltarOfAscensionV2Fixed)..."
+    },
+    {
+      "timestamp": "2025-07-27T16:24:37.932Z",
+      "type": "success",
+      "message": "✅ ALTAROFASCENSION 部署成功: 0xde56403eb6107856AAbC514940B2564132A615BC"
+    },
+    {
+      "timestamp": "2025-07-27T16:24:37.933Z",
+      "type": "info",
+      "message": "\n設置合約連接..."
+    },
+    {
+      "timestamp": "2025-07-27T16:24:37.933Z",
+      "type": "info",
+      "message": "\n配置 DungeonCore..."
+    },
+    {
+      "timestamp": "2025-07-27T16:24:40.163Z",
+      "type": "success",
+      "message": "✅ DungeonCore.setOracle 成功"
+    },
+    {
+      "timestamp": "2025-07-27T16:24:42.360Z",
+      "type": "success",
+      "message": "✅ DungeonCore.setHeroContract 成功"
+    },
+    {
+      "timestamp": "2025-07-27T16:24:44.562Z",
+      "type": "success",
+      "message": "✅ DungeonCore.setRelicContract 成功"
+    },
+    {
+      "timestamp": "2025-07-27T16:24:46.840Z",
+      "type": "success",
+      "message": "✅ DungeonCore.setPartyContract 成功"
+    },
+    {
+      "timestamp": "2025-07-27T16:24:49.121Z",
+      "type": "success",
+      "message": "✅ DungeonCore.setDungeonMaster 成功"
+    },
+    {
+      "timestamp": "2025-07-27T16:24:52.522Z",
+      "type": "success",
+      "message": "✅ DungeonCore.setPlayerVault 成功"
+    },
+    {
+      "timestamp": "2025-07-27T16:24:54.711Z",
+      "type": "success",
+      "message": "✅ DungeonCore.setPlayerProfile 成功"
+    },
+    {
+      "timestamp": "2025-07-27T16:24:56.980Z",
+      "type": "success",
+      "message": "✅ DungeonCore.setVipStaking 成功"
+    },
+    {
+      "timestamp": "2025-07-27T16:24:58.532Z",
+      "type": "success",
+      "message": "✅ DungeonCore.setAltarOfAscension 成功"
+    },
+    {
+      "timestamp": "2025-07-27T16:24:58.533Z",
+      "type": "info",
+      "message": "\n設置特殊連接..."
+    },
+    {
+      "timestamp": "2025-07-27T16:25:01.420Z",
+      "type": "success",
+      "message": "✅ HERO.setSoulShardToken 成功"
+    },
+    {
+      "timestamp": "2025-07-27T16:25:04.170Z",
+      "type": "success",
+      "message": "✅ RELIC.setSoulShardToken 成功"
+    },
+    {
+      "timestamp": "2025-07-27T16:25:06.369Z",
+      "type": "success",
+      "message": "✅ VIPSTAKING.setSoulShardToken 成功"
+    },
+    {
+      "timestamp": "2025-07-27T16:25:08.560Z",
+      "type": "success",
+      "message": "✅ PLAYERVAULT.setSoulShardToken 成功"
+    },
+    {
+      "timestamp": "2025-07-27T16:25:10.761Z",
+      "type": "success",
+      "message": "✅ DUNGEONMASTER.setSoulShardToken 成功"
+    },
+    {
+      "timestamp": "2025-07-27T16:25:13.170Z",
+      "type": "success",
+      "message": "✅ DungeonMaster.setDungeonStorage 成功"
+    },
+    {
+      "timestamp": "2025-07-27T16:25:15.351Z",
+      "type": "success",
+      "message": "✅ DungeonStorage.setLogicContract 成功"
+    },
+    {
+      "timestamp": "2025-07-27T16:25:17.540Z",
+      "type": "success",
+      "message": "✅ AltarOfAscension.setContracts 成功"
+    },
+    {
+      "timestamp": "2025-07-27T16:25:19.720Z",
+      "type": "success",
+      "message": "✅ HERO.setAscensionAltarAddress 成功"
+    },
+    {
+      "timestamp": "2025-07-27T16:25:21.899Z",
+      "type": "success",
+      "message": "✅ RELIC.setAscensionAltarAddress 成功"
+    },
+    {
+      "timestamp": "2025-07-27T16:25:24.181Z",
+      "type": "success",
+      "message": "✅ Party.setHeroContract 成功"
+    },
+    {
+      "timestamp": "2025-07-27T16:25:26.348Z",
+      "type": "success",
+      "message": "✅ Party.setRelicContract 成功"
+    },
+    {
+      "timestamp": "2025-07-27T16:25:28.530Z",
+      "type": "success",
+      "message": "✅ PlayerProfile.setDungeonCore 成功"
+    },
+    {
+      "timestamp": "2025-07-27T16:25:30.751Z",
+      "type": "success",
+      "message": "✅ VIPStaking.setDungeonCore 成功"
+    },
+    {
+      "timestamp": "2025-07-27T16:25:32.929Z",
+      "type": "success",
+      "message": "✅ Party.setDungeonCore 成功"
+    },
+    {
+      "timestamp": "2025-07-27T16:25:32.929Z",
+      "type": "info",
+      "message": "\n配置各模組..."
+    },
+    {
+      "timestamp": "2025-07-27T16:25:35.089Z",
+      "type": "success",
+      "message": "✅ HERO.setDungeonCore 成功"
+    },
+    {
+      "timestamp": "2025-07-27T16:25:37.540Z",
+      "type": "success",
+      "message": "✅ RELIC.setDungeonCore 成功"
+    },
+    {
+      "timestamp": "2025-07-27T16:25:40.409Z",
+      "type": "success",
+      "message": "✅ PARTY.setDungeonCore 成功"
+    },
+    {
+      "timestamp": "2025-07-27T16:25:42.569Z",
+      "type": "success",
+      "message": "✅ VIPSTAKING.setDungeonCore 成功"
+    },
+    {
+      "timestamp": "2025-07-27T16:25:44.758Z",
+      "type": "success",
+      "message": "✅ PLAYERPROFILE.setDungeonCore 成功"
+    },
+    {
+      "timestamp": "2025-07-27T16:25:46.941Z",
+      "type": "success",
+      "message": "✅ PLAYERVAULT.setDungeonCore 成功"
+    },
+    {
+      "timestamp": "2025-07-27T16:25:49.101Z",
+      "type": "success",
+      "message": "✅ DUNGEONMASTER.setDungeonCore 成功"
+    },
+    {
+      "timestamp": "2025-07-27T16:25:49.102Z",
+      "type": "info",
+      "message": "\n初始化參數..."
+    },
+    {
+      "timestamp": "2025-07-27T16:25:49.103Z",
+      "type": "info",
+      "message": "\n設置 BaseURI..."
+    },
+    {
+      "timestamp": "2025-07-27T16:25:51.300Z",
+      "type": "success",
+      "message": "✅ HERO BaseURI 設置成功"
+    },
+    {
+      "timestamp": "2025-07-27T16:25:53.469Z",
+      "type": "success",
+      "message": "✅ RELIC BaseURI 設置成功"
+    },
+    {
+      "timestamp": "2025-07-27T16:25:55.890Z",
+      "type": "success",
+      "message": "✅ PARTY BaseURI 設置成功"
+    },
+    {
+      "timestamp": "2025-07-27T16:25:58.070Z",
+      "type": "success",
+      "message": "✅ VIPSTAKING BaseURI 設置成功"
+    },
+    {
+      "timestamp": "2025-07-27T16:26:00.248Z",
+      "type": "success",
+      "message": "✅ PLAYERPROFILE BaseURI 設置成功"
+    },
+    {
+      "timestamp": "2025-07-27T16:26:00.248Z",
+      "type": "info",
+      "message": "\n設置 ContractURI（OpenSea 集合元數據）..."
+    },
+    {
+      "timestamp": "2025-07-27T16:26:02.419Z",
+      "type": "success",
+      "message": "✅ HERO ContractURI 設置成功"
+    },
+    {
+      "timestamp": "2025-07-27T16:26:04.609Z",
+      "type": "success",
+      "message": "✅ RELIC ContractURI 設置成功"
+    },
+    {
+      "timestamp": "2025-07-27T16:26:06.788Z",
+      "type": "success",
+      "message": "✅ PARTY ContractURI 設置成功"
+    },
+    {
+      "timestamp": "2025-07-27T16:26:08.989Z",
+      "type": "success",
+      "message": "✅ VIPSTAKING ContractURI 設置成功"
+    },
+    {
+      "timestamp": "2025-07-27T16:26:11.838Z",
+      "type": "success",
+      "message": "✅ PLAYERPROFILE ContractURI 設置成功"
+    },
+    {
+      "timestamp": "2025-07-27T16:26:11.838Z",
+      "type": "error",
+      "message": "部署失敗: this.setPrices is not a function"
+    }
+  ]
+}

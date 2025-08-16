@@ -1,0 +1,9 @@
+{
+  "error": "HH701: There are multiple artifacts for contract \"Oracle\", please use a fully qualified name.\n\nPlease replace Oracle for one of these options wherever you are trying to read its artifact:\n\ncontracts/defi/Oracle.sol:Oracle\ncontracts/test/MinimalOracle.sol:Oracle\n",
+  "stack": "HardhatError: HH701: There are multiple artifacts for contract \"Oracle\", please use a fully qualified name.\n\nPlease replace Oracle for one of these options wherever you are trying to read its artifact:\n\ncontracts/defi/Oracle.sol:Oracle\ncontracts/test/MinimalOracle.sol:Oracle\n\n    at Artifacts._getArtifactPathFromFiles (/Users/sotadic/Documents/DungeonDelversContracts/node_modules/hardhat/src/internal/artifacts.ts:860:13)\n    at Artifacts._getArtifactPath (/Users/sotadic/Documents/DungeonDelversContracts/node_modules/hardhat/src/internal/artifacts.ts:516:21)\n    at async Artifacts.readArtifact (/Users/sotadic/Documents/DungeonDelversContracts/node_modules/hardhat/src/internal/artifacts.ts:71:26)\n    at async getContractFactory (/Users/sotadic/Documents/DungeonDelversContracts/node_modules/@nomicfoundation/hardhat-ethers/src/internal/helpers.ts:120:22)\n    at async main (/Users/sotadic/Documents/DungeonDelversContracts/scripts/deploy/deploy-complete-v12.js:207:20)",
+  "addresses": {
+    "SOULSHARD_ADDRESS": "0xc88dAD283Ac209D77Bfe452807d378615AB8B94a"
+  },
+  "timestamp": "2025-07-23T09:09:59.393Z",
+  "blockNumber": 55018480
+}

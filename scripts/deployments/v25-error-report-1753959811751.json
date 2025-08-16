@@ -1,0 +1,18 @@
+{
+  "version": "V25",
+  "timestamp": "2025-07-31T11:03:31.752Z",
+  "errors": [
+    {
+      "errno": -54,
+      "code": "ECONNRESET",
+      "syscall": "read"
+    }
+  ],
+  "deploymentLog": [
+    {
+      "timestamp": "2025-07-31T11:03:31.751Z",
+      "type": "error",
+      "message": "部署失敗: read ECONNRESET"
+    }
+  ]
+}

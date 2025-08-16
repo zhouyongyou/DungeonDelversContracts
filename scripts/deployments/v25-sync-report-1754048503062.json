@@ -1,0 +1,218 @@
+{
+  "version": "V25",
+  "timestamp": "2025-08-01T11:41:43.062Z",
+  "synced": {
+    "frontend": true,
+    "backend": true,
+    "subgraph": true
+  },
+  "backups": [
+    {
+      "original": "/Users/sotadic/Documents/DungeonDelversContracts/config/master-config.json",
+      "backup": "/Users/sotadic/Documents/DungeonDelversContracts/config/master-config.json.backup-1754048501821"
+    },
+    {
+      "original": "/Users/sotadic/Documents/DungeonDelversContracts/config/config-reader.js",
+      "backup": "/Users/sotadic/Documents/DungeonDelversContracts/config/config-reader.js.backup-1754048501822"
+    },
+    {
+      "original": "/Users/sotadic/Documents/GitHub/DungeonDelvers/src/abis/Hero.json",
+      "backup": "/Users/sotadic/Documents/GitHub/DungeonDelvers/src/abis/Hero.json.backup-1754048503038"
+    },
+    {
+      "original": "/Users/sotadic/Documents/GitHub/DungeonDelvers/DDgraphql/dungeon-delvers/abis/Hero.json",
+      "backup": "/Users/sotadic/Documents/GitHub/DungeonDelvers/DDgraphql/dungeon-delvers/abis/Hero.json.backup-1754048503039"
+    },
+    {
+      "original": "/Users/sotadic/Documents/GitHub/DungeonDelvers/src/abis/Relic.json",
+      "backup": "/Users/sotadic/Documents/GitHub/DungeonDelvers/src/abis/Relic.json.backup-1754048503040"
+    },
+    {
+      "original": "/Users/sotadic/Documents/GitHub/DungeonDelvers/DDgraphql/dungeon-delvers/abis/Relic.json",
+      "backup": "/Users/sotadic/Documents/GitHub/DungeonDelvers/DDgraphql/dungeon-delvers/abis/Relic.json.backup-1754048503041"
+    },
+    {
+      "original": "/Users/sotadic/Documents/GitHub/DungeonDelvers/src/abis/Party.json",
+      "backup": "/Users/sotadic/Documents/GitHub/DungeonDelvers/src/abis/Party.json.backup-1754048503042"
+    },
+    {
+      "original": "/Users/sotadic/Documents/GitHub/DungeonDelvers/DDgraphql/dungeon-delvers/abis/PartyV3.json",
+      "backup": "/Users/sotadic/Documents/GitHub/DungeonDelvers/DDgraphql/dungeon-delvers/abis/PartyV3.json.backup-1754048503042"
+    },
+    {
+      "original": "/Users/sotadic/Documents/GitHub/DungeonDelvers/src/abis/VIPStaking.json",
+      "backup": "/Users/sotadic/Documents/GitHub/DungeonDelvers/src/abis/VIPStaking.json.backup-1754048503043"
+    },
+    {
+      "original": "/Users/sotadic/Documents/GitHub/DungeonDelvers/DDgraphql/dungeon-delvers/abis/VIPStaking.json",
+      "backup": "/Users/sotadic/Documents/GitHub/DungeonDelvers/DDgraphql/dungeon-delvers/abis/VIPStaking.json.backup-1754048503044"
+    },
+    {
+      "original": "/Users/sotadic/Documents/GitHub/DungeonDelvers/src/abis/PlayerProfile.json",
+      "backup": "/Users/sotadic/Documents/GitHub/DungeonDelvers/src/abis/PlayerProfile.json.backup-1754048503045"
+    },
+    {
+      "original": "/Users/sotadic/Documents/GitHub/DungeonDelvers/DDgraphql/dungeon-delvers/abis/PlayerProfile.json",
+      "backup": "/Users/sotadic/Documents/GitHub/DungeonDelvers/DDgraphql/dungeon-delvers/abis/PlayerProfile.json.backup-1754048503045"
+    },
+    {
+      "original": "/Users/sotadic/Documents/GitHub/DungeonDelvers/src/abis/AltarOfAscension.json",
+      "backup": "/Users/sotadic/Documents/GitHub/DungeonDelvers/src/abis/AltarOfAscension.json.backup-1754048503047"
+    },
+    {
+      "original": "/Users/sotadic/Documents/GitHub/DungeonDelvers/DDgraphql/dungeon-delvers/abis/AltarOfAscensionV2Fixed.json",
+      "backup": "/Users/sotadic/Documents/GitHub/DungeonDelvers/DDgraphql/dungeon-delvers/abis/AltarOfAscensionV2Fixed.json.backup-1754048503047"
+    },
+    {
+      "original": "/Users/sotadic/Documents/GitHub/DungeonDelvers/src/abis/DungeonMaster.json",
+      "backup": "/Users/sotadic/Documents/GitHub/DungeonDelvers/src/abis/DungeonMaster.json.backup-1754048503048"
+    },
+    {
+      "original": "/Users/sotadic/Documents/GitHub/DungeonDelvers/DDgraphql/dungeon-delvers/abis/DungeonMaster.json",
+      "backup": "/Users/sotadic/Documents/GitHub/DungeonDelvers/DDgraphql/dungeon-delvers/abis/DungeonMaster.json.backup-1754048503049"
+    },
+    {
+      "original": "/Users/sotadic/Documents/GitHub/DungeonDelvers/src/abis/DungeonCore.json",
+      "backup": "/Users/sotadic/Documents/GitHub/DungeonDelvers/src/abis/DungeonCore.json.backup-1754048503049"
+    },
+    {
+      "original": "/Users/sotadic/Documents/GitHub/DungeonDelvers/src/abis/Oracle.json",
+      "backup": "/Users/sotadic/Documents/GitHub/DungeonDelvers/src/abis/Oracle.json.backup-1754048503050"
+    },
+    {
+      "original": "/Users/sotadic/Documents/GitHub/DungeonDelvers/src/abis/PlayerVault.json",
+      "backup": "/Users/sotadic/Documents/GitHub/DungeonDelvers/src/abis/PlayerVault.json.backup-1754048503051"
+    },
+    {
+      "original": "/Users/sotadic/Documents/GitHub/DungeonDelvers/DDgraphql/dungeon-delvers/abis/PlayerVault.json",
+      "backup": "/Users/sotadic/Documents/GitHub/DungeonDelvers/DDgraphql/dungeon-delvers/abis/PlayerVault.json.backup-1754048503052"
+    },
+    {
+      "original": "/Users/sotadic/Documents/GitHub/DungeonDelvers/src/abis/DungeonStorage.json",
+      "backup": "/Users/sotadic/Documents/GitHub/DungeonDelvers/src/abis/DungeonStorage.json.backup-1754048503053"
+    },
+    {
+      "original": "/Users/sotadic/Documents/GitHub/DungeonDelvers/src/abis/SoulShardToken.json",
+      "backup": "/Users/sotadic/Documents/GitHub/DungeonDelvers/src/abis/SoulShardToken.json.backup-1754048503054"
+    },
+    {
+      "original": "/Users/sotadic/Documents/GitHub/DungeonDelvers/src/config/contracts.ts",
+      "backup": "/Users/sotadic/Documents/GitHub/DungeonDelvers/src/config/contracts.ts.backup-1754048503055"
+    },
+    {
+      "original": "/Users/sotadic/Documents/GitHub/DungeonDelvers/src/config/contractsWithABI.ts",
+      "backup": "/Users/sotadic/Documents/GitHub/DungeonDelvers/src/config/contractsWithABI.ts.backup-1754048503055"
+    },
+    {
+      "original": "/Users/sotadic/Documents/GitHub/DungeonDelvers/src/config/env.ts",
+      "backup": "/Users/sotadic/Documents/GitHub/DungeonDelvers/src/config/env.ts.backup-1754048503056"
+    },
+    {
+      "original": "/Users/sotadic/Documents/GitHub/DungeonDelvers/src/config/subgraph.ts",
+      "backup": "/Users/sotadic/Documents/GitHub/DungeonDelvers/src/config/subgraph.ts.backup-1754048503057"
+    },
+    {
+      "original": "/Users/sotadic/Documents/GitHub/DungeonDelvers/src/config/configLoader.ts",
+      "backup": "/Users/sotadic/Documents/GitHub/DungeonDelvers/src/config/configLoader.ts.backup-1754048503057"
+    },
+    {
+      "original": "/Users/sotadic/Documents/GitHub/DungeonDelvers/src/config/graphql.ts",
+      "backup": "/Users/sotadic/Documents/GitHub/DungeonDelvers/src/config/graphql.ts.backup-1754048503058"
+    },
+    {
+      "original": "/Users/sotadic/Documents/GitHub/DungeonDelvers/.env",
+      "backup": "/Users/sotadic/Documents/GitHub/DungeonDelvers/.env.backup-1754048503058"
+    },
+    {
+      "original": "/Users/sotadic/Documents/GitHub/DungeonDelvers/.env.local",
+      "backup": "/Users/sotadic/Documents/GitHub/DungeonDelvers/.env.local.backup-1754048503059"
+    },
+    {
+      "original": "/Users/sotadic/Documents/dungeon-delvers-metadata-server/config/contracts.js",
+      "backup": "/Users/sotadic/Documents/dungeon-delvers-metadata-server/config/contracts.js.backup-1754048503059"
+    },
+    {
+      "original": "/Users/sotadic/Documents/GitHub/DungeonDelvers/shared-config.json",
+      "backup": "/Users/sotadic/Documents/GitHub/DungeonDelvers/shared-config.json.backup-1754048503060"
+    },
+    {
+      "original": "/Users/sotadic/Documents/GitHub/DungeonDelvers/DDgraphql/dungeon-delvers/networks.json",
+      "backup": "/Users/sotadic/Documents/GitHub/DungeonDelvers/DDgraphql/dungeon-delvers/networks.json.backup-1754048503060"
+    },
+    {
+      "original": "/Users/sotadic/Documents/GitHub/DungeonDelvers/DDgraphql/dungeon-delvers/subgraph.yaml",
+      "backup": "/Users/sotadic/Documents/GitHub/DungeonDelvers/DDgraphql/dungeon-delvers/subgraph.yaml.backup-1754048503061"
+    },
+    {
+      "original": "/Users/sotadic/Documents/GitHub/DungeonDelvers/DDgraphql/dungeon-delvers/src/config.ts",
+      "backup": "/Users/sotadic/Documents/GitHub/DungeonDelvers/DDgraphql/dungeon-delvers/src/config.ts.backup-1754048503061"
+    },
+    {
+      "original": "/Users/sotadic/Documents/GitHub/DungeonDelvers/DDgraphql/dungeon-delvers/package.json",
+      "backup": "/Users/sotadic/Documents/GitHub/DungeonDelvers/DDgraphql/dungeon-delvers/package.json.backup-1754048503062"
+    }
+  ],
+  "errors": [],
+  "contracts": {
+    "SOULSHARD": {
+      "address": "0x97B2C2a9A11C7b6A020b4bAEaAd349865eaD0bcF",
+      "deploymentBlock": 55808316,
+      "contractName": "SOULSHARD"
+    },
+    "ORACLE": {
+      "address": "0x1d13750861ABE5aec2b4166F8a41edE084693f51",
+      "deploymentBlock": 55808316,
+      "contractName": "Oracle_V22_Adaptive"
+    },
+    "DUNGEONCORE": {
+      "address": "0x398F362ec79064159FFbb1079C9cA683896B758b",
+      "deploymentBlock": 55808316,
+      "contractName": "DungeonCore"
+    },
+    "PLAYERVAULT": {
+      "address": "0x8c3A73E27C518f082150330e5666e765B52297AF",
+      "deploymentBlock": 55808316,
+      "contractName": "PlayerVault"
+    },
+    "DUNGEONSTORAGE": {
+      "address": "0xB5eFB972f67cA8488EDdd19bDf4e86D30dE779c1",
+      "deploymentBlock": 55808316,
+      "contractName": "DungeonStorage"
+    },
+    "DUNGEONMASTER": {
+      "address": "0x913E5c5c6d844630fd01CbDed82F029f356f1809",
+      "deploymentBlock": 55808316,
+      "contractName": "DungeonMasterV2_Fixed"
+    },
+    "HERO": {
+      "address": "0x20E0db8EFCC7608fCFFBbF2f95A86824b034D1e7",
+      "deploymentBlock": 55808316,
+      "contractName": "Hero"
+    },
+    "RELIC": {
+      "address": "0x3c8F1b4172a076D31f0F8fa981E166aDA92C2B79",
+      "deploymentBlock": 55808316,
+      "contractName": "Relic"
+    },
+    "PARTY": {
+      "address": "0x1f21fE51c039321246b219B9F659eaCA9a53176F",
+      "deploymentBlock": 55808316,
+      "contractName": "PartyV3"
+    },
+    "VIPSTAKING": {
+      "address": "0xa55fee3ba652e6Ff42ac12C8598C5fDfC26EE4Bf",
+      "deploymentBlock": 55808316,
+      "contractName": "VIPStaking"
+    },
+    "PLAYERPROFILE": {
+      "address": "0xB203a1e73500E40A1eeb1D6A51cDDbf2fEb227a2",
+      "deploymentBlock": 55808316,
+      "contractName": "PlayerProfile"
+    },
+    "ALTAROFASCENSION": {
+      "address": "0x167F42bcC21a5ab5319b787F8C2e045f9Aeaa4dD",
+      "deploymentBlock": 55808316,
+      "contractName": "AltarOfAscensionV2Fixed"
+    }
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "version": "V23",
+  "timestamp": "2025-07-27T10:25:22.837Z",
+  "error": "關鍵合約 PLAYERVAULT 部署失敗",
+  "deployedContracts": {
+    "ORACLE": "0x6D2f28E5e4B72BCC9b5457e504eb8Aa9B04C2539"
+  },
+  "gasUsed": "1608314"
+}

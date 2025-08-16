@@ -1,0 +1,21 @@
+{
+  "network": "bsc",
+  "deployer": "0x10925A7138649C7E1794CE646182eeb5BF8ba647",
+  "timestamp": "2025-08-06T09:03:47.404Z",
+  "blockNumber": 56630610,
+  "contracts": {
+    "VRFMANAGER": "0xD062785C376560A392e1a5F1b25ffb35dB5b67bD"
+  },
+  "vrfConfig": {
+    "coordinator": "0xd691f04bc0C9a24Edb78af9E005Cf85768F694C9",
+    "keyHash": "0xeb0f72532fed5c94b4caf7b49caf454b35a729608a441101b9269efb7efe2c6c",
+    "callbackGasLimit": 500000,
+    "requestConfirmations": 3,
+    "vrfRequestPrice": "0.005"
+  },
+  "transactionHashes": {
+    "deployment": "0xaa7c02110ab3b07da066ede5751229fba15d5528096b1ca621ec9446029551b6",
+    "configuration": "0x883f9b17ce2c7580cf4171af28a8d4d3a88062239a34f2244c642f57fcc92528",
+    "funding": "0x6d1e93dc5f506221874bd5151d70b5716a0b6f89b04c7faaa3b79f374bac2303"
+  }
+}

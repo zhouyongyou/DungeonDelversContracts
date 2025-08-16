@@ -1,0 +1,53 @@
+{
+  "timestamp": "2025-07-28T05:11:38.023Z",
+  "versions": [
+    "V25"
+  ],
+  "heroAddresses": [
+    "0x162b0b673f38c11732b0bc0b4b026304e563e8e2"
+  ],
+  "details": [
+    {
+      "name": "Frontend contracts.ts",
+      "status": "ok",
+      "version": "V25",
+      "address": "0x162b0b673f38C11732b0bc0B4B026304e563e8e2"
+    },
+    {
+      "name": "Frontend shared-config.json",
+      "status": "ok",
+      "version": null,
+      "address": "0x162b0b673f38C11732b0bc0B4B026304e563e8e2"
+    },
+    {
+      "name": "CDN v25.json",
+      "status": "ok",
+      "version": "V25",
+      "address": "0x162b0b673f38C11732b0bc0B4B026304e563e8e2"
+    },
+    {
+      "name": "CDN latest.json",
+      "status": "ok",
+      "version": "V25",
+      "address": "0x162b0b673f38C11732b0bc0B4B026304e563e8e2"
+    },
+    {
+      "name": "Subgraph networks.json",
+      "status": "ok",
+      "version": null,
+      "address": "0x162b0b673f38C11732b0bc0B4B026304e563e8e2"
+    },
+    {
+      "name": "Backend contracts.js",
+      "status": "ok",
+      "version": "V25",
+      "address": "0x162b0b673f38C11732b0bc0B4B026304e563e8e2"
+    },
+    {
+      "name": "Master config",
+      "status": "ok",
+      "version": "V25"
+    }
+  ],
+  "isConsistent": true
+}

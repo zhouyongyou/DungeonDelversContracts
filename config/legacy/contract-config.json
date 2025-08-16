@@ -1,0 +1,69 @@
+{
+  "version": "V3",
+  "deploymentDate": "2025-07-18",
+  "network": "bsc",
+  "chainId": 56,
+  "deploymentRecord": "/Users/sotadic/Documents/DungeonDelversContracts/DEPLOYMENT_RECORDS/DEPLOYMENT_RECORD_2025-07-18_V3.md",
+  "contracts": {
+    "core": {
+      "dungeonCore": {
+        "address": "0xd3E55D5EdCF5255F933F5a82b10Ad4b8e4E351b7",
+        "abi": "./abis/DungeonCore.json"
+      },
+      "oracle": {
+        "address": "0x5badDb15e1C91b601E4AFbDb51c57eB4e221C3b5",
+        "abi": "./abis/Oracle.json"
+      }
+    },
+    "nft": {
+      "hero": {
+        "address": "0x33d94b7F5E32aAdEf1BD40C529c8552f0bB6d1CB",
+        "abi": "./abis/Hero.json"
+      },
+      "relic": {
+        "address": "0xf1A26Cbf115f62aD2a78378288b3b84f840B99ce",
+        "abi": "./abis/Relic.json"
+      },
+      "party": {
+        "address": "0xcB580B4F444D72853800e6e4A3e01BD919271179",
+        "abi": "./abis/Party.json"
+      },
+      "playerProfile": {
+        "address": "0xD8905614a826DBBF42601380d6f467AeDCB74e07",
+        "abi": "./abis/PlayerProfile.json"
+      }
+    },
+    "game": {
+      "dungeonMaster": {
+        "address": "0x9868D71D6f28185aA2dc949973dfe3833829e93F",
+        "abi": "./abis/DungeonMaster.json"
+      },
+      "dungeonStorage": {
+        "address": "0xf24571268d9CECfE27825D0257F09559Ed3a0710",
+        "abi": "./abis/DungeonStorage.json"
+      },
+      "playerVault": {
+        "address": "0x2a5798D63e715F2B8b91000664f2556E794D00F2",
+        "abi": "./abis/PlayerVault.json"
+      },
+      "altarOfAscension": {
+        "address": "0x1E20794D71FE5d3ce89D00b3a5F4663C814a9cdd",
+        "abi": "./abis/AltarOfAscension.json"
+      },
+      "vipStaking": {
+        "address": "0x31c94D459aAdc27F69465b83cb306DFB778D46b2",
+        "abi": "./abis/VIPStaking.json"
+      }
+    },
+    "tokens": {
+      "soulShard": {
+        "address": "0xc88dAD283Ac209D77Bfe452807d378615AB8B94a",
+        "abi": "./abis/SoulShard.json"
+      },
+      "usdToken": {
+        "address": "0x7C67Af4EBC6651c95dF78De11cfe325660d935FE",
+        "abi": "./abis/IERC20.json"
+      }
+    }
+  }
+}

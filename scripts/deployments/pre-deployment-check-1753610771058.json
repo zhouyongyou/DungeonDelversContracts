@@ -1,0 +1,51 @@
+{
+  "timestamp": "2025-07-27T10:06:11.059Z",
+  "version": "V23",
+  "checks": 29,
+  "warnings": 6,
+  "errors": 1,
+  "details": {
+    "checks": [
+      "✅ 私鑰格式正確，地址: 0x10925A7138649C7E1794CE646182eeb5BF8ba647",
+      "✅ BSCSCAN_API_KEY 已設置",
+      "✅ 目錄存在: contracts/current",
+      "✅ 目錄存在: scripts/active",
+      "✅ 目錄存在: scripts/deployments",
+      "✅ 目錄存在: artifacts",
+      "✅ 腳本存在: deploy-v23-complete.js",
+      "✅ 腳本存在: v23-copy-abis.js",
+      "✅ 腳本存在: setup-v23-complete.js",
+      "✅ 腳本存在: v23-sync-config.js",
+      "✅ 腳本存在: verify-v23-setup.js",
+      "✅ 所有合約已編譯",
+      "✅ 合約編譯時間: 2025/7/27 上午1:59:23",
+      "✅ 已連接到 BSC 主網",
+      "✅ 當前區塊高度: 55483730",
+      "✅ 部署者地址: 0x10925A7138649C7E1794CE646182eeb5BF8ba647",
+      "✅ BNB 餘額: 0.802367379104942601 BNB",
+      "✅ BNB 餘額充足",
+      "✅ 當前 Gas Price: 0.1 Gwei",
+      "✅ V22 配置包含所有必要的固定地址",
+      "✅ V22 版本: V22",
+      "✅ USD 是有效合約: 0x7C67Af4EBC6651c95dF78De11cfe325660d935FE",
+      "✅ SOULSHARD 是有效合約: 0x97B2C2a9A11C7b6A020b4bAEaAd349865eaD0bcF",
+      "✅ UNISWAP_POOL 是有效合約: 0x1e5Cd5F386Fb6F39cD8788675dd3A5ceB6521C82",
+      "✅ DungeonMasterWallet: 0x10925A7138649C7E1794CE646182eeb5BF8ba647",
+      "   餘額: 0.802367379104942601 BNB",
+      "✅ 前端專案存在: ../GitHub/DungeonDelvers",
+      "✅ 後端專案存在: ../dungeon-delvers-metadata-server",
+      "✅ 子圖專案存在: ../GitHub/DungeonDelvers/DDgraphql/dungeon-delvers"
+    ],
+    "warnings": [
+      "⚠️  發現現有 V23 配置文件",
+      "   版本: V23",
+      "   部署時間: 2025-07-26",
+      "   如果要重新部署，部署腳本會覆蓋此配置",
+      "⚠️  Hero 前端 ABI 不存在",
+      "⚠️  Relic 前端 ABI 不存在"
+    ],
+    "errors": [
+      "❌ 缺少必要目錄: scripts/config"
+    ]
+  }
+}
