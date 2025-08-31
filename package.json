@@ -58,7 +58,16 @@
     "marketplace:deploy:v2:testnet": "hardhat run marketplace/deploy-v2-standalone.js --network bscTestnet",
     "marketplace:verify": "hardhat run marketplace/verify-contracts.js --network bsc",
     "validate:config": "node scripts/unified-config-system.js validate",
-    "extract:abi": "node scripts/unified-config-system.js abi"
+    "extract:abi": "node scripts/unified-config-system.js abi",
+    "sync:config:all": "node scripts/sync-config-all.js",
+    "verify:config": "node scripts/verify-config-consistency.js",
+    "check:hardcoded": "node scripts/check-hardcoded-addresses.js",
+    "config:report": "node scripts/generate-config-report.js",
+    "redeploy:nft": "hardhat run scripts/complete-nft-redeploy.js --network bsc",
+    "deploy:nft": "hardhat run scripts/redeploy-nft-contracts.js --network bsc",
+    "verify:nft": "BSCSCAN_API_KEY=${BSCSCAN_API_KEY:-$npm_config_bscscan_key} hardhat run scripts/verify-nft-contracts.js --network bsc",
+    "setup:nft": "hardhat run scripts/setup-nft-connections.js --network bsc",
+    "sync:all": "node scripts/ultimate-config-system.js sync"
   },
   "keywords": [],
   "author": "",
