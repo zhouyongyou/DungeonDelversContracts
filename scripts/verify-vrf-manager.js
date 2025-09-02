@@ -1,111 +1,49 @@
-const { exec } = require('child_process');
-const util = require('util');
-const execPromise = util.promisify(exec);
+// 驗證 VRF Manager 合約
+
+const hre = require("hardhat");
 
 async function main() {
-  console.log('=== 驗證 VRFManagerV2PlusFixed 合約 ===\n');
-  
-  // 新部署的合約地址
-  const vrfManagerAddress = '0x7a75fB89e3E95B6810F435Fca36Ef52aA9Ec6dB1';
-  const wrapperAddress = '0x471506e6ADED0b9811D05B8cAc8Db25eE839Ac94';
-  
-  console.log('合約地址:', vrfManagerAddress);
-  console.log('構造參數:', wrapperAddress);
-  
-  // 1. 驗證 VRFManagerV2PlusFixed
-  console.log('\n1. 驗證 VRFManagerV2PlusFixed...');
-  
-  const verifyCommand = `npx hardhat verify --network bsc ${vrfManagerAddress} "${wrapperAddress}"`;
-  
-  console.log('執行命令:', verifyCommand);
-  
-  try {
-    const { stdout, stderr } = await execPromise(verifyCommand);
+    console.log("\n🔧 開始驗證 VRF Manager 合約...");
+    console.log("=====================================");
     
-    if (stdout) {
-      console.log('輸出:', stdout);
-    }
+    const vrfManagerAddress = "0x0735fb572f1edc26d86f8bb9fd37d015a572544d";
+    const vrfSubscriptionId = "88422796721004450630713121079263696788635490871993157345476848872165866246915";
+    const vrfCoordinator = "0xd691f04bc0C9a24Edb78af9E005Cf85768F694C9";
     
-    if (stderr && !stderr.includes('Already Verified')) {
-      console.log('錯誤:', stderr);
-    }
+    console.log("\n📋 合約信息：");
+    console.log("  地址:", vrfManagerAddress);
+    console.log("  訂閱ID:", vrfSubscriptionId);
+    console.log("  協調器:", vrfCoordinator);
     
-    if (stdout.includes('Successfully verified') || stderr.includes('Already Verified')) {
-      console.log('✅ VRFManagerV2PlusFixed 驗證成功！');
-    }
-  } catch (error) {
-    if (error.message.includes('Already Verified')) {
-      console.log('✅ 合約已經驗證過了');
-    } else {
-      console.log('❌ 驗證失敗:', error.message);
-      
-      // 嘗試使用 flatten 方式
-      console.log('\n2. 嘗試使用 flatten 方式驗證...');
-      
-      try {
-        // 先生成 flatten 文件
-        console.log('生成 flatten 文件...');
-        const flattenCommand = `npx hardhat flatten contracts/current/core/VRFManagerV2PlusFixed.sol > VRFManagerV2PlusFixed_flat.sol`;
-        await execPromise(flattenCommand);
-        console.log('✅ Flatten 文件生成成功');
+    try {
+        console.log("\n⏳ 提交驗證請求到 BSCScan...");
         
-        // 使用 flatten 文件驗證
-        const verifyFlatCommand = `npx hardhat verify --network bsc --contract contracts/current/core/VRFManagerV2PlusFixed.sol:VRFManagerV2PlusFixed ${vrfManagerAddress} "${wrapperAddress}"`;
+        await hre.run("verify:verify", {
+            address: vrfManagerAddress,
+            constructorArguments: [
+                vrfSubscriptionId,
+                vrfCoordinator
+            ],
+            contract: "contracts/current/core/VRFConsumerV2Plus.sol:VRFConsumerV2Plus"
+        });
         
-        console.log('執行驗證命令:', verifyFlatCommand);
-        const { stdout: flatStdout, stderr: flatStderr } = await execPromise(verifyFlatCommand);
+        console.log("\n✅ 驗證請求已提交！");
+        console.log("📍 查看驗證狀態：");
+        console.log(`   https://bscscan.com/address/${vrfManagerAddress}#code`);
         
-        if (flatStdout) {
-          console.log('輸出:', flatStdout);
+    } catch (error) {
+        if (error.message.includes("Already Verified")) {
+            console.log("\n✅ 合約已經驗證過了！");
+            console.log(`📍 查看：https://bscscan.com/address/${vrfManagerAddress}#code`);
+        } else {
+            console.error("\n❌ 驗證失敗：", error.message);
         }
-        
-        if (flatStderr && !flatStderr.includes('Already Verified')) {
-          console.log('錯誤:', flatStderr);
-        }
-      } catch (flatError) {
-        console.log('Flatten 驗證也失敗:', flatError.message);
-      }
     }
-  }
-  
-  // 3. 檢查 BSCScan
-  console.log('\n3. 檢查 BSCScan:');
-  console.log(`   查看合約: https://bscscan.com/address/${vrfManagerAddress}#code`);
-  console.log('   如果自動驗證失敗，可以手動驗證：');
-  console.log('   1. 打開上面的連結');
-  console.log('   2. 點擊 "Verify and Publish"');
-  console.log('   3. 選擇 Solidity (Single file)');
-  console.log('   4. 編譯器版本: v0.8.20+commit.a1b79de6');
-  console.log('   5. 優化: 是，200 runs');
-  console.log('   6. 上傳 VRFManagerV2PlusFixed_flat.sol');
-  console.log('   7. 構造參數 (ABI-encoded):', wrapperAddress);
-  
-  // 4. 生成構造參數的 ABI 編碼
-  const ethers = require('ethers');
-  const abiCoder = new ethers.AbiCoder();
-  const encodedParams = abiCoder.encode(['address'], [wrapperAddress]);
-  
-  console.log('\n4. 構造參數 ABI 編碼（去掉 0x）:');
-  console.log(encodedParams.slice(2));
-  
-  // 5. 驗證其他相關合約
-  console.log('\n5. 檢查其他合約驗證狀態:');
-  
-  const contracts = [
-    { name: 'Hero', address: '0x575e7407C06ADeb47067AD19663af50DdAe460CF' },
-    { name: 'Relic', address: '0x36cC82c8fb1c71c4B37eC5E6454960e09a5DC739' }
-  ];
-  
-  for (const contract of contracts) {
-    console.log(`   ${contract.name}: https://bscscan.com/address/${contract.address}#code`);
-  }
-  
-  console.log('\n=== 驗證流程完成 ===');
 }
 
 main()
-  .then(() => process.exit(0))
-  .catch((error) => {
-    console.error(error);
-    process.exit(1);
-  });
+    .then(() => process.exit(0))
+    .catch((error) => {
+        console.error(error);
+        process.exit(1);
+    });

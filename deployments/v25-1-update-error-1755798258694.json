@@ -1,0 +1,21 @@
+{
+  "error": "invalid overrides parameter (argument=\"overrides\", value=\"0xEbCF4A36Ad1485A9737025e9d72186b604487274\", code=INVALID_ARGUMENT, version=6.15.0)",
+  "stack": "TypeError: invalid overrides parameter (argument=\"overrides\", value=\"0xEbCF4A36Ad1485A9737025e9d72186b604487274\", code=INVALID_ARGUMENT, version=6.15.0)\n    at makeError (/Users/sotadic/Documents/DungeonDelversContracts/node_modules/ethers/src.ts/utils/errors.ts:691:21)\n    at assert (/Users/sotadic/Documents/DungeonDelversContracts/node_modules/ethers/src.ts/utils/errors.ts:719:25)\n    at assertArgument (/Users/sotadic/Documents/DungeonDelversContracts/node_modules/ethers/src.ts/utils/errors.ts:731:5)\n    at copyOverrides (/Users/sotadic/Documents/DungeonDelversContracts/node_modules/ethers/src.ts/contract/contract.ts:146:19)\n    at ContractFactory.getDeployTransaction (/Users/sotadic/Documents/DungeonDelversContracts/node_modules/ethers/src.ts/contract/factory.ts:83:44)\n    at ContractFactory.deploy (/Users/sotadic/Documents/DungeonDelversContracts/node_modules/ethers/src.ts/contract/factory.ts:105:31)\n    at main (/Users/sotadic/Documents/DungeonDelversContracts/scripts/update-hero-relic-vrf.js:112:33)",
+  "partiallyDeployed": {
+    "VRFManager": "0x6550Edc55Fe52DD200462E13C4bF0b723591cb68"
+  },
+  "existingContracts": {
+    "DungeonCore": "0x5B64A5939735Ff762493D9B9666b3e13118c5722",
+    "Oracle": "0xEE322Eff70320759487f67875113C062AC1F4cfB",
+    "SoulShard": "0xB73FE158689EAB3396B64794b573D4BEc7113412",
+    "USD": "0x9DC0b768533222fddbe6A9Bd71eAD96a7c612C61",
+    "Party": "0x495bcE2D9561E0f7623fF244e4BA28DCFfEe71d9",
+    "DungeonMaster": "0xAAdE1919B2EA95cBBFcDEa41CBf9D48ae0d44cdF",
+    "DungeonStorage": "0xCE75345A01dB5c40E443624F86BDC45BabF7B6ec",
+    "AltarOfAscension": "0x56B62168734827b9b3D750ac1aB9F249e0a0EEd3",
+    "PlayerVault": "0x446a82f2003484Bdc83f29e094fcb66D01094db0",
+    "PlayerProfile": "0x3509d0f0cD6f7b518860f945128205ac4F426090",
+    "VIPStaking": "0x18d13f4FdE3245ABa6D0fb91597291e1F46b0661"
+  },
+  "timestamp": "2025-08-21T17:44:18.694Z"
+}

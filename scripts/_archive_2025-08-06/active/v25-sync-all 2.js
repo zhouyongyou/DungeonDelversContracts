@@ -272,7 +272,7 @@ ${colors.reset}`);
         version: masterConfig.version,
         lastUpdated: masterConfig.lastUpdated,
         network: masterConfig.network?.name || 'BSC Mainnet',
-        deployer: masterConfig.contracts?.mainnet?.DUNGEONMASTERWALLET_ADDRESS || '0x10925A7138649C7E1794CE646182eeb5BF8ba647',
+        deployer: masterConfig.contracts?.mainnet?.DUNGEONMASTERWALLET_ADDRESS || '0xEbCF4A36Ad1485A9737025e9d72186b604487274',
         startBlock: 56184733, // V25 正確部署區塊 (8/2)
         contracts: {
           SOULSHARD: {
@@ -902,7 +902,7 @@ export const CONTRACTS_WITH_ABI = {
       abi: [] // Uniswap V3 Pool ABI if needed
     },
     DUNGEONMASTERWALLET: {
-      address: '${masterConfig?.contracts?.mainnet?.DUNGEONMASTERWALLET_ADDRESS || config.deployer || '0x10925A7138649C7E1794CE646182eeb5BF8ba647'}',
+      address: '${masterConfig?.contracts?.mainnet?.DUNGEONMASTERWALLET_ADDRESS || config.deployer || '0xEbCF4A36Ad1485A9737025e9d72186b604487274'}',
       abi: [] // This is a wallet address, not a contract
     }
   }

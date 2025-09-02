@@ -26,7 +26,7 @@ async function main() {
   console.log("VRF Manager:", vrfManagerAddress);
   const owner = await vrfManager.owner();
   console.log("VRF Manager Owner:", owner);
-  console.log("環境變數錢包:", process.env.PRIVATE_KEY ? "0x10925A7138649C7E1794CE646182eeb5BF8ba647" : "未設置");
+  console.log("環境變數錢包:", process.env.PRIVATE_KEY ? "0xEbCF4A36Ad1485A9737025e9d72186b604487274" : "未設置");
   console.log("\n授權狀態檢查：");
   console.log("─".repeat(60));
   

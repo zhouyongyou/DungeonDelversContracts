@@ -5,7 +5,7 @@ const hre = require("hardhat");
 
 async function main() {
   const HERO_ADDRESS = "0x671d937b171e2ba2c4dc23c133b07e4449f283ef";
-  const USER_ADDRESS = "0x10925A7138649C7E1794CE646182eeb5BF8ba647"; // Your address
+  const USER_ADDRESS = "0xEbCF4A36Ad1485A9737025e9d72186b604487274"; // Your address
   
   console.log("🚨 Emergency Commitment Clear Script");
   console.log("=====================================");

@@ -1,4 +1,4 @@
-// contracts/defi/Oracle.sol
+// Oracle.sol
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
@@ -6,7 +6,7 @@ import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 import {Pausable} from "@openzeppelin/contracts/utils/Pausable.sol";
 import "../interfaces/interfaces.sol";
 
-// MulDiv 函式庫
+// MulDiv library for overflow-safe multiplication and division
 library MulDiv {
     function mulDiv(
         uint256 a,
@@ -64,7 +64,7 @@ library MulDiv {
     }
 }
 
-// Uniswap V3 Tick 數學函式庫
+// Uniswap V3 Tick Mathematics library
 library TickMath {
     function getSqrtRatioAtTick(int24 tick) internal pure returns (uint160 sqrtPriceX96) {
         uint256 absTick = tick < 0 ? uint256(int256(tick) * -1) : uint256(int256(tick));
@@ -96,30 +96,27 @@ library TickMath {
 
 /**
  * @title Oracle
- * @notice DungeonDelvers Oracle V22 - 自適應 TWAP 版本
- * @dev 自動降級 TWAP 週期，確保始終能提供價格
+ * @notice DungeonDelvers Oracle V22 - Adaptive TWAP version
+ * @dev Automatically falls back through TWAP periods to ensure price availability
  */
 contract Oracle is Ownable, Pausable {
     using MulDiv for uint256;
 
-    // ========== 狀態變數 ==========
     IUniswapV3Pool public immutable pool;
-    address public immutable poolAddress;      
-    address public immutable soulShardToken;   
-    address public immutable usdToken;         
-    address public immutable token0;           
-    address public immutable token1;           
-    bool private immutable isSoulShardToken0;  
+    address public immutable poolAddress;
+    address public immutable soulShardToken;
+    address public immutable usdToken;
+    address public immutable token0;
+    address public immutable token1;
+    bool private immutable isSoulShardToken0;
     
-    uint32 public twapPeriod;                  // 預設 TWAP 週期（向後兼容）
-    uint32[] public adaptivePeriods;           // 自適應週期列表
+    uint32 public twapPeriod;                  // Default TWAP period (backward compatibility)
+    uint32[] public adaptivePeriods;           // Adaptive period list
     
-    // ========== 事件 ==========
     event TwapPeriodUpdated(uint32 newTwapPeriod);
     event AdaptivePeriodsUpdated(uint32[] periods);
     event PriceQueried(uint32 usedPeriod, uint256 price);
 
-    // ========== 構造函數 ==========
     constructor(
         address _poolAddress,
         address _soulShardTokenAddress,
@@ -137,13 +134,13 @@ contract Oracle is Ownable, Pausable {
         soulShardToken = _soulShardTokenAddress;
         usdToken = _usdTokenAddress;
 
-        // 獲取並儲存 pool tokens
+        // Get and store pool tokens
         address _token0 = pool.token0();
         address _token1 = pool.token1();
         token0 = _token0;
         token1 = _token1;
         
-        // 驗證 pool tokens 匹配
+        // Verify pool tokens match
         require(
             (_token0 == soulShardToken || _token0 == usdToken) &&
             (_token1 == soulShardToken || _token1 == usdToken),
@@ -151,23 +148,22 @@ contract Oracle is Ownable, Pausable {
         );
         
         isSoulShardToken0 = (soulShardToken == _token0);
-        twapPeriod = 1800; // 預設 30 分鐘
+        twapPeriod = 1800; // Default 30 minutes
         
-        // 初始化自適應週期：30分鐘、15分鐘、10分鐘、5分鐘
+        // Initialize adaptive periods: 30min, 15min, 10min, 5min
         adaptivePeriods = new uint32[](4);
-        adaptivePeriods[0] = 1800;  // 30 分鐘
-        adaptivePeriods[1] = 900;   // 15 分鐘
-        adaptivePeriods[2] = 600;   // 10 分鐘
-        adaptivePeriods[3] = 300;   // 5 分鐘
+        adaptivePeriods[0] = 1800;  // 30 minutes
+        adaptivePeriods[1] = 900;   // 15 minutes
+        adaptivePeriods[2] = 600;   // 10 minutes
+        adaptivePeriods[3] = 300;   // 5 minutes
     }
 
-    // ========== 核心價格函數（自適應版本）==========
     
     /**
-     * @notice 使用自適應 TWAP 獲取價格
-     * @dev 從最長週期開始嘗試，直到找到可用的週期
-     * @return price 價格（18位小數）
-     * @return usedPeriod 實際使用的週期
+     * @notice Get price using adaptive TWAP
+     * @dev Try from longest period until finding an available one
+     * @return price Price with 18 decimals
+     * @return usedPeriod Actually used period
      */
     function getPriceAdaptive() public view returns (uint256 price, uint32 usedPeriod) {
         for (uint i = 0; i < adaptivePeriods.length; i++) {
@@ -180,10 +176,10 @@ contract Oracle is Ownable, Pausable {
     }
     
     /**
-     * @notice 嘗試使用特定週期獲取價格
-     * @param period TWAP 週期
-     * @return success 是否成功
-     * @return price 價格（如果成功）
+     * @notice Try to get price with specific period
+     * @param period TWAP period
+     * @return success Whether successful
+     * @return price Price (if successful)
      */
     function tryGetPriceWithPeriod(uint32 period) internal view returns (bool success, uint256 price) {
         try pool.observe(_createPeriodsArray(period)) returns (
@@ -210,25 +206,24 @@ contract Oracle is Ownable, Pausable {
         }
     }
 
-    // ========== 向後兼容函數 ==========
     
     /**
-     * @notice 獲取 SoulShard 相對於 USD 的價格（向後兼容）
-     * @dev 使用自適應方式，但返回格式與 V21 相同
+     * @notice Get SoulShard price in USD (backward compatible)
+     * @dev Uses adaptive method but returns same format as V21
      */
     function getSoulShardPriceInUSD() public view returns (uint256 price) {
         (price, ) = getPriceAdaptive();
     }
     
     /**
-     * @notice 公開函數：獲取當前價格（別名）
+     * @notice Public function: Get current price (alias)
      */
     function getLatestPrice() public view returns (uint256) {
         return getSoulShardPriceInUSD();
     }
 
     /**
-     * @notice 計算需要多少 SoulShard 來支付指定的 USD 金額
+     * @notice Calculate required SoulShard amount for specified USD amount
      */
     function getRequiredSoulShardAmount(uint256 usdAmount) public view returns (uint256 soulAmount) {
         uint256 soulShardPrice = getSoulShardPriceInUSD();
@@ -237,7 +232,7 @@ contract Oracle is Ownable, Pausable {
     }
 
     /**
-     * @notice 根據輸入的代幣和數量，計算出需要輸出的另一種代幣的數量
+     * @notice Calculate output token amount based on input token and amount
      */
     function getAmountOut(address tokenIn, uint256 amountIn) external view returns (uint256 amountOut) {
         require(tokenIn == soulShardToken || tokenIn == usdToken, "Oracle: Invalid input token");
@@ -245,10 +240,10 @@ contract Oracle is Ownable, Pausable {
         uint256 soulShardPrice = getSoulShardPriceInUSD();
         require(soulShardPrice > 0, "Oracle: ZERO_PRICE");
 
-        if (tokenIn == soulShardToken) { 
+        if (tokenIn == soulShardToken) {
             // SoulShard → USD: amount * price / 1e18
             amountOut = amountIn.mulDiv(soulShardPrice, 1e18);
-        } else { 
+        } else {
             // USD → SoulShard: amount * 1e18 / price
             // Lowered threshold to allow smaller prices while maintaining overflow protection
             require(soulShardPrice >= 1, "Oracle: Price cannot be zero");
@@ -256,12 +251,11 @@ contract Oracle is Ownable, Pausable {
         }
     }
 
-    // ========== V22 新增功能 ==========
     
     /**
-     * @notice 測試所有週期的可用性
-     * @return available 每個週期是否可用
-     * @return prices 每個週期的價格（如果可用）
+     * @notice Test availability of all periods
+     * @return available Whether each period is available
+     * @return prices Price for each period (if available)
      */
     function testAllPeriods() external view returns (bool[] memory available, uint256[] memory prices) {
         available = new bool[](adaptivePeriods.length);
@@ -277,22 +271,20 @@ contract Oracle is Ownable, Pausable {
     }
     
     /**
-     * @notice 獲取當前配置的自適應週期
+     * @notice Get currently configured adaptive periods
      */
     function getAdaptivePeriods() external view returns (uint32[] memory) {
         return adaptivePeriods;
     }
 
-    // ========== Getter 函數 ==========
     
     function soulToken() public view returns (address) {
         return soulShardToken;
     }
 
-    // ========== 管理函數 ==========
     
     /**
-     * @notice 設置 TWAP 週期（向後兼容）
+     * @notice Set TWAP period (backward compatible)
      */
     function setTwapPeriod(uint32 _newTwapPeriod) external onlyOwner {
         require(_newTwapPeriod > 0, "Oracle: TWAP period must be > 0");
@@ -301,13 +293,13 @@ contract Oracle is Ownable, Pausable {
     }
     
     /**
-     * @notice 設置自適應週期列表
-     * @param _periods 週期陣列，必須從大到小排序
+     * @notice Set adaptive periods list
+     * @param _periods Period array, must be sorted in descending order
      */
     function setAdaptivePeriods(uint32[] calldata _periods) external onlyOwner {
         require(_periods.length > 0 && _periods.length <= 10, "Oracle: Invalid periods length");
         
-        // 驗證降序排列
+        // Verify descending order
         for (uint i = 1; i < _periods.length; i++) {
             require(_periods[i] < _periods[i-1], "Oracle: Periods must be descending");
             require(_periods[i] > 0, "Oracle: Invalid period");
@@ -317,10 +309,9 @@ contract Oracle is Ownable, Pausable {
         emit AdaptivePeriodsUpdated(_periods);
     }
     
-    // ========== 內部輔助函數 ==========
     
     /**
-     * @notice 創建週期陣列供 observe 使用
+     * @notice Create periods array for observe function
      */
     function _createPeriodsArray(uint32 period) private pure returns (uint32[] memory) {
         uint32[] memory periods = new uint32[](2);
@@ -329,7 +320,6 @@ contract Oracle is Ownable, Pausable {
         return periods;
     }
 
-    // --- 暫停功能 ---
     function pause() external onlyOwner {
         _pause();
     }

@@ -7,7 +7,7 @@ async function main() {
     console.log("🔍 驗證 DungeonMasterV3 合約...");
     
     const DUNGEON_MASTER_V3 = "0x84eD128634F9334Bd63a929824066901a74a0E71";
-    const DEPLOYER = "0x10925A7138649C7E1794CE646182eeb5BF8ba647";
+    const DEPLOYER = "0xEbCF4A36Ad1485A9737025e9d72186b604487274";
     
     try {
         await run("verify:verify", {

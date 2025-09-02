@@ -1,32 +1,36 @@
-/**
- * DungeonDelvers 配置讀取器
- * 自動生成於: 2025-08-03T15:55:40.251Z
- * 從 v25-config.js 生成
- */
+// 自動生成的配置讀取器
+// 總是指向最新的 vXX-config.js
 
-const v25Config = require('./v25-config.js');
+const path = require('path');
 
+// 載入最新配置
+const latestConfig = require('./v25-config.js');
+
+// 提供向後相容的介面
 module.exports = {
-  version: v25Config.version,
-  contracts: v25Config.contracts,
-  deployer: v25Config.deployer,
-  startBlock: v25Config.startBlock,
-  network: v25Config.network,
+  // 原始配置
+  raw: latestConfig,
   
-  // 輔助方法
+  // 版本資訊
+  version: 'V25',
+  
+  // 快速存取
+  contracts: latestConfig.contracts,
+  deployer: latestConfig.deployer,
+  network: latestConfig.network,
+  startBlock: latestConfig.startBlock,
+  
+  // 取得合約地址
   getAddress(contractName) {
-    const contract = this.contracts[contractName];
-    return contract ? contract.address : null;
+    return latestConfig.contracts[contractName]?.address;
   },
   
+  // 取得所有地址（扁平化）
   getAllAddresses() {
     const addresses = {};
-    for (const [name, data] of Object.entries(this.contracts)) {
-      addresses[`${name}_ADDRESS`] = data.address;
+    for (const [key, data] of Object.entries(latestConfig.contracts)) {
+      addresses[`${key}_ADDRESS`] = data.address;
     }
     return addresses;
-  },
-  
-  // 原始配置
-  raw: v25Config
+  }
 };

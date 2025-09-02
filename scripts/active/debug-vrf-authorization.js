@@ -41,7 +41,7 @@ async function main() {
     // 測試 VRF Manager 的 requestRandomForUser 函數
     console.log('\n🧪 測試 VRF Manager 直接調用:');
     
-    const testUser = '0x10925A7138649C7E1794CE646182eeb5BF8ba647';
+    const testUser = '0xEbCF4A36Ad1485A9737025e9d72186b604487274';
     const testQuantity = 1;
     const testMaxRarity = 5;
     const testCommitment = hre.ethers.keccak256(hre.ethers.toUtf8Bytes('test'));

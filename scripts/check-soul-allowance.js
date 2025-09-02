@@ -6,7 +6,7 @@ async function main() {
     
     const provider = new ethers.JsonRpcProvider('https://bsc-dataseed.binance.org/');
     
-    const userAddress = "0x10925A7138649C7E1794CE646182eeb5BF8ba647";
+    const userAddress = "0xEbCF4A36Ad1485A9737025e9d72186b604487274";
     const heroAddress = "0x05Cbb0DbdA4B66c4CC6f60CdADFDb4C4995D9BFD";
     const soulAddress = "0x97B2C2a9A11C7b6A020b4bAEaAd349865eaD0bcF";
     

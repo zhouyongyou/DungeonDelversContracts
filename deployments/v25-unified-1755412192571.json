@@ -1,0 +1,193 @@
+{
+  "version": "V25-Unified",
+  "timestamp": "2025-08-17T06:29:52.571Z",
+  "network": "BSC Mainnet",
+  "deployer": "0xEbCF4A36Ad1485A9737025e9d72186b604487274",
+  "startBlock": 57885193,
+  "contracts": {
+    "Oracle": {
+      "address": "0xCbC34F23D7d9892C13322D0deD75bAd8Cf35FaD8",
+      "constructorArgs": [
+        "0x1e5Cd5F386Fb6F39cD8788675dd3A5ceB6521C82",
+        "0x97B2C2a9A11C7b6A020b4bAEaAd349865eaD0bcF",
+        "0x7C67Af4EBC6651c95dF78De11cfe325660d935FE"
+      ]
+    },
+    "DungeonCore": {
+      "address": "0x26BDBCB8Fd349F313c74B691B878f10585c7813E",
+      "constructorArgs": [
+        "0xEbCF4A36Ad1485A9737025e9d72186b604487274",
+        "0x7C67Af4EBC6651c95dF78De11cfe325660d935FE",
+        "0x97B2C2a9A11C7b6A020b4bAEaAd349865eaD0bcF"
+      ]
+    },
+    "DungeonStorage": {
+      "address": "0x449da0DAAB3D338B2494d8aEBC49B7f04AFAf542",
+      "constructorArgs": [
+        "0xEbCF4A36Ad1485A9737025e9d72186b604487274"
+      ]
+    },
+    "VRFConsumerV2Plus": {
+      "address": "0xdd14eD07598BA1001cf2888077FE0721941d06A8",
+      "constructorArgs": [
+        29062,
+        "0xd691f04bc0C9a24Edb78af9E005Cf85768F694C9"
+      ]
+    },
+    "Hero": {
+      "address": "0xe90d442458931690C057D5ad819EBF94A4eD7c8c",
+      "constructorArgs": [
+        "0xEbCF4A36Ad1485A9737025e9d72186b604487274"
+      ]
+    },
+    "Relic": {
+      "address": "0x5e1006E8C7568334F2f56F1C9900CEe85d7faC2B",
+      "constructorArgs": [
+        "0xEbCF4A36Ad1485A9737025e9d72186b604487274"
+      ]
+    },
+    "Party": {
+      "address": "0x629B386D8CfdD13F27164a01fCaE83CB07628FB9",
+      "constructorArgs": [
+        "0xEbCF4A36Ad1485A9737025e9d72186b604487274"
+      ]
+    },
+    "PlayerVault": {
+      "address": "0xb2AfF26dc59ef41A22963D037C29550ed113b060",
+      "constructorArgs": [
+        "0xEbCF4A36Ad1485A9737025e9d72186b604487274"
+      ]
+    },
+    "PlayerProfile": {
+      "address": "0xeCdc17654f4df540704Ff090c23B0F762BF3f8f1",
+      "constructorArgs": [
+        "0xEbCF4A36Ad1485A9737025e9d72186b604487274"
+      ]
+    },
+    "VIPStaking": {
+      "address": "0x7857d5b1E86799EcE848037Cc37053Fe4c8e2F28",
+      "constructorArgs": [
+        "0xEbCF4A36Ad1485A9737025e9d72186b604487274"
+      ]
+    },
+    "DungeonMaster": {
+      "address": "0xe3dC6c39087c3cbA02f97B993F7d1FbcEDfdF3B0",
+      "constructorArgs": [
+        "0xEbCF4A36Ad1485A9737025e9d72186b604487274"
+      ]
+    },
+    "AltarOfAscension": {
+      "address": "0xA6E2F6505878F9d297d77b8Ac8C70c21648fDDF1",
+      "constructorArgs": [
+        "0xEbCF4A36Ad1485A9737025e9d72186b604487274"
+      ]
+    }
+  },
+  "reusedContracts": {
+    "USD": "0x7C67Af4EBC6651c95dF78De11cfe325660d935FE",
+    "SOULSHARD": "0x97B2C2a9A11C7b6A020b4bAEaAd349865eaD0bcF",
+    "UNISWAP_POOL": "0x1e5Cd5F386Fb6F39cD8788675dd3A5ceB6521C82"
+  },
+  "vrfConfig": {
+    "SUBSCRIPTION_ID": 29062,
+    "COORDINATOR": "0xd691f04bc0C9a24Edb78af9E005Cf85768F694C9",
+    "KEY_HASH": "0x130dba50ad435d4ecc214aad0d5820474137bd68e7e77724144f27c3c377d3d4",
+    "CALLBACK_GAS_LIMIT": 2500000,
+    "REQUEST_CONFIRMATIONS": 6,
+    "NUM_WORDS": 1
+  },
+  "gameConfig": {
+    "mintPriceUSD": 2,
+    "platformFee": "0.0003",
+    "partyFee": "0.001",
+    "vipCooldown": 15,
+    "baseURIs": {
+      "Hero": "https://dungeon-delvers-metadata-server.onrender.com/metadata/hero/",
+      "Relic": "https://dungeon-delvers-metadata-server.onrender.com/metadata/relic/",
+      "Party": "https://dungeon-delvers-metadata-server.onrender.com/metadata/party/",
+      "VIPStaking": "https://dungeon-delvers-metadata-server.onrender.com/metadata/vip/",
+      "PlayerProfile": "https://dungeon-delvers-metadata-server.onrender.com/metadata/profile/"
+    },
+    "contractURIs": {
+      "Hero": "https://www.dungeondelvers.xyz/metadata/hero-collection.json",
+      "Relic": "https://www.dungeondelvers.xyz/metadata/relic-collection.json",
+      "Party": "https://www.dungeondelvers.xyz/metadata/party-collection.json",
+      "VIPStaking": "https://www.dungeondelvers.xyz/metadata/vip-collection.json",
+      "PlayerProfile": "https://www.dungeondelvers.xyz/metadata/profile-collection.json"
+    },
+    "dungeons": [
+      {
+        "id": 1,
+        "power": 300,
+        "rewardUSD": 6,
+        "rate": 89
+      },
+      {
+        "id": 2,
+        "power": 600,
+        "rewardUSD": 12,
+        "rate": 84
+      },
+      {
+        "id": 3,
+        "power": 900,
+        "rewardUSD": 20,
+        "rate": 79
+      },
+      {
+        "id": 4,
+        "power": 1200,
+        "rewardUSD": 33,
+        "rate": 74
+      },
+      {
+        "id": 5,
+        "power": 1500,
+        "rewardUSD": 52,
+        "rate": 69
+      },
+      {
+        "id": 6,
+        "power": 1800,
+        "rewardUSD": 78,
+        "rate": 64
+      },
+      {
+        "id": 7,
+        "power": 2100,
+        "rewardUSD": 113,
+        "rate": 59
+      },
+      {
+        "id": 8,
+        "power": 2400,
+        "rewardUSD": 156,
+        "rate": 54
+      },
+      {
+        "id": 9,
+        "power": 2700,
+        "rewardUSD": 209,
+        "rate": 49
+      },
+      {
+        "id": 10,
+        "power": 3000,
+        "rewardUSD": 225,
+        "rate": 44
+      },
+      {
+        "id": 11,
+        "power": 3300,
+        "rewardUSD": 320,
+        "rate": 39
+      },
+      {
+        "id": 12,
+        "power": 3600,
+        "rewardUSD": 450,
+        "rate": 34
+      }
+    ]
+  }
+}

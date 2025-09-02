@@ -12,7 +12,7 @@ async function main() {
   
   // BSC 主網 VRF V2.5 配置
   const coordinatorAddress = "0xd691f04bc0C9a24Edb78af9E005Cf85768F694C9";
-  const subscriptionId = "114131353280130458891383141995968474440293173552039681622016393393251650814328";
+  const subscriptionId = "88422796721004450630713121079263696788635490871993157345476848872165866246915";
   
   console.log("📊 優化特性：");
   console.log("─".repeat(60));

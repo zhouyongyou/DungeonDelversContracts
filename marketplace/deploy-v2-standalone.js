@@ -37,7 +37,7 @@ const MARKETPLACE_V2_CONFIG = {
   },
   
   // 手續費接收地址
-  feeRecipient: "0x10925A7138649C7E1794CE646182eeb5BF8ba647",
+  feeRecipient: "0xEbCF4A36Ad1485A9737025e9d72186b604487274",
   
   // 部署選項
   options: {

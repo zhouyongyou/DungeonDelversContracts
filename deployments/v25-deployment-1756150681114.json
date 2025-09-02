@@ -1,0 +1,20 @@
+{
+  "network": {
+    "name": "bsc",
+    "chainId": "56",
+    "deployer": "0xEbCF4A36Ad1485A9737025e9d72186b604487274"
+  },
+  "timestamp": "2025-08-25T19:38:01.114Z",
+  "contracts": {
+    "DungeonCore": "0x5B64A5939735Ff762493D9B9666b3e13118c5722",
+    "VRFConsumerV2Plus": "0x934C8cd6C4F39673CA44c9e88a54cbE2F71782B9",
+    "AltarOfAscension": "0xAf3e5F1F1E77183253eb71D0b7EB3745556aF2e3",
+    "DungeonMaster": "0xa0C0edA0A1901EA0568c2060d38678b6fbdc62E8",
+    "PlayerProfile": "0xB28BC7325cC42FA625705F7c463CF1f178D2F635",
+    "VIPStaking": "0x1f2e44B3C311957bf1727b086dC4Fca43Df222ce",
+    "Hero": "0x8FeFc245c04E4E04c5B4c9eE17A8e0593E4d16C0",
+    "Relic": "0xd0367023AAe6f69981f04B2045fD4F9B8c7A6431",
+    "Party": "0xF1716DaA4De48e10c2de16bB7190784D66FDF08d"
+  },
+  "gasUsed": {}
+}

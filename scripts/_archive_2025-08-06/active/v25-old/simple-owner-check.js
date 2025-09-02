@@ -26,7 +26,7 @@ async function main() {
     console.log("當前探索費:", ethers.formatEther(fee), "BNB");
     
     // 檢查是否為您的地址
-    const yourAddress = "0x10925A7138649C7E1794CE646182eeb5BF8ba647";
+    const yourAddress = "0xEbCF4A36Ad1485A9737025e9d72186b604487274";
     console.log("\n您的地址:", yourAddress);
     console.log("是 Owner 嗎?", owner.toLowerCase() === yourAddress.toLowerCase());
     

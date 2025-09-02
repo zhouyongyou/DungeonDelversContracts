@@ -10,7 +10,7 @@ async function main() {
     const dungeonCoreAddress = "0x04b33eEB6Da358ea9Dd002a1E1c28AC90A25881E";
     
     // 你的地址
-    const playerAddress = "0x10925A7138649C7E1794CE646182eeb5BF8ba647";
+    const playerAddress = "0xEbCF4A36Ad1485A9737025e9d72186b604487274";
     
     // PlayerVault 簡化 ABI
     const playerVaultABI = [

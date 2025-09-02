@@ -3,7 +3,7 @@ const hre = require('hardhat');
 async function main() {
   const heroAddress = '0x575e7407C06ADeb47067AD19663af50DdAe460CF';
   const soulShardAddress = '0x97B2C2a9A11C7b6A020b4bAEaAd349865eaD0bcF';
-  const userAddress = '0x10925A7138649C7E1794CE646182eeb5BF8ba647';
+  const userAddress = '0xEbCF4A36Ad1485A9737025e9d72186b604487274';
   
   console.log('=== Hero 合約狀態檢查 ===');
   console.log('Hero 地址:', heroAddress);

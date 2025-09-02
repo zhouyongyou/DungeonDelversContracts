@@ -6,7 +6,7 @@ async function main() {
   
   // DungeonCore 構造函數參數
   const dungeonCoreParams = [
-    "0x10925A7138649C7E1794CE646182eeb5BF8ba647", // initialOwner
+    "0xEbCF4A36Ad1485A9737025e9d72186b604487274", // initialOwner
     "0x55d398326f99059fF775485246999027B3197955", // usdToken (USDT)
     "0xc88dAD283Ac209D77Bfe452807d378615AB8B94a"  // soulShardToken
   ];

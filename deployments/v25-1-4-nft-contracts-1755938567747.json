@@ -1,0 +1,17 @@
+{
+  "network": "bsc",
+  "timestamp": "2025-08-23T08:42:47.611Z",
+  "deployer": "0xEbCF4A36Ad1485A9737025e9d72186b604487274",
+  "version": "V25.1.4-NFT",
+  "contracts": {
+    "DungeonCore": "0x5B64A5939735Ff762493D9B9666b3e13118c5722",
+    "DungeonStorage": "0xCE75345A01dB5c40E443624F86BDC45BabF7B6ec",
+    "Hero": "0xe3DeF34622098B9dc7f042243Ce4f998Dfa3C662",
+    "Relic": "0x9A682D761ef20377e46136a45f10C3B2a8A76CeF",
+    "Party": "0xd5A1dd4Da7F0609042EeBAE3b1a5eceb0A996e25",
+    "PlayerProfile": "0x7DEBfb8334c0aF31f6241f7aB2f78a9907823400",
+    "VIPStaking": "0xa4f98938ECfc8DBD586F7eE1d51B3c1FaDDDd5da",
+    "DungeonMaster": "0xb1c3ff1A3192B38Ff95C093992d244fc3b75abE0"
+  },
+  "startBlock": 58587009
+}

@@ -79,7 +79,7 @@ const DEPLOYMENT_CONFIG = {
 // 管理地址配置
 const MANAGEMENT_ADDRESSES = {
   treasury: process.env.TREASURY_ADDRESS || '0xeC73DcFb8C6C87d6a8C29BE616460d3cccc50cBf',
-  dungeonMasterWallet: process.env.DUNGEONMASTER_WALLET || '0x10925A7138649C7E1794CE646182eeb5BF8ba647',
+  dungeonMasterWallet: process.env.DUNGEONMASTER_WALLET || '0xEbCF4A36Ad1485A9737025e9d72186b604487274',
 };
 
 // ======================== 工具函數 ========================

@@ -20,7 +20,7 @@ const contracts = {
     address: "0x2CB2Bd1b18CDd0cbF37cD6F7FF672D03E7a038a5",
     contract: "contracts/core/DungeonCore.sol:DungeonCore",
     constructorArguments: [
-      "0x10925A7138649C7E1794CE646182eeb5BF8ba647", // initialOwner
+      "0xEbCF4A36Ad1485A9737025e9d72186b604487274", // initialOwner
       "0x55d398326f99059fF775485246999027B3197955", // usdToken
       "0xc88dAD283Ac209D77Bfe452807d378615AB8B94a"  // soulShardToken
     ]

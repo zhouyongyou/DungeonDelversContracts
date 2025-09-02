@@ -14,7 +14,7 @@ async function tryOldVersionVerification() {
   try {
     await run("verify:verify", {
       address: "0x2CB2Bd1b18CDd0cbF37cD6F7FF672D03E7a038a5",
-      constructorArguments: ["0x10925A7138649C7E1794CE646182eeb5BF8ba647"] // 只有 initialOwner
+      constructorArguments: ["0xEbCF4A36Ad1485A9737025e9d72186b604487274"] // 只有 initialOwner
     });
     console.log("✅ DungeonCore (1個參數) 驗證成功！");
   } catch (error) {

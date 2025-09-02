@@ -1,7 +1,7 @@
 {
   "network": "BSC Mainnet",
   "timestamp": "2025-08-07T10:25:25.243Z",
-  "deployer": "0x10925A7138649C7E1794CE646182eeb5BF8ba647",
+  "deployer": "0xEbCF4A36Ad1485A9737025e9d72186b604487274",
   "contracts": {
     "VRFConsumerV2Plus": "0x980d224ec4d198d94f34a8af76a19c00dabe2436",
     "Hero": "0x671d937b171e2ba2c4dc23c133b07e4449f283ef",

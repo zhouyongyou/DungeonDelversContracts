@@ -4,7 +4,7 @@ async function main() {
     const HERO_ADDRESS = "0x5eded2670a6e7eb4a9c581bc397edc3b48cafd6d";
     const RELIC_ADDRESS = "0x7a9469587ffd28a69d4420d8893e7a0e92ef6316";
     const ALTAR_ADDRESS = "0x3de7c97e6b65be8a1d726f5261cda1dd7d1e0cf1";
-    const DEPLOYER_ADDRESS = "0x10925A7138649C7E1794CE646182eeb5BF8ba647";
+    const DEPLOYER_ADDRESS = "0xEbCF4A36Ad1485A9737025e9d72186b604487274";
 
     console.log("=== 開始驗證合約原始碼 ===");
 

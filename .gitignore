@@ -7,9 +7,27 @@ typechain-types
 # Node modules
 node_modules
 
-# Environment variables
+# Environment variables - CRITICAL SECURITY
 .env
 .env.*
+!.env.example
+!.env.template
+
+# Private keys and secrets - NEVER COMMIT
+*.pem
+*.key
+*.pfx
+*.p12
+secrets.txt
+private-keys.txt
+*private*
+*secret*
+
+# Scripts with sensitive data
+scripts/*rescue*.js
+scripts/*bundle*.js
+scripts/private/
+scripts/temp/
 
 # Editor directories and files
 .idea

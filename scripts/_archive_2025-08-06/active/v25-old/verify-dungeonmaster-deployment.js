@@ -78,7 +78,7 @@ async function verifyDungeonMasterDeployment() {
     await provider.call({
       to: dmAddress,
       data: callData,
-      from: '0x10925A7138649C7E1794CE646182eeb5BF8ba647',
+      from: '0xEbCF4A36Ad1485A9737025e9d72186b604487274',
       value: ethers.parseEther('0.01')
     });
     console.log('✅ 函數簽名正確（但執行失敗是正常的）');

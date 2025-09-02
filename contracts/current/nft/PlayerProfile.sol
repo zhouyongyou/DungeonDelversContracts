@@ -1,4 +1,4 @@
-// PlayerProfile.sol (支援 BaseURI 且使用 Struct 的版本)
+// PlayerProfile.sol (EIP-5192 Enhanced Version)
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
@@ -13,7 +13,6 @@ contract PlayerProfile is ERC721, Ownable, Pausable {
     using Math for uint256;
     using Strings for uint256;
 
-    // --- 狀態變數 ---
     IDungeonCore public dungeonCore;
     string public baseURI;
     string private _contractURI;
@@ -27,28 +26,42 @@ contract PlayerProfile is ERC721, Ownable, Pausable {
     
     uint256 private _nextTokenId;
 
-    // --- 事件 ---
-    event ProfileCreated(address indexed player, uint256 indexed tokenId);
-    event ExperienceAdded(address indexed player, uint256 indexed tokenId, uint256 amount, uint256 newTotalExperience);
+    event ProfileCreated(address indexed player, uint256 indexed tokenId, uint256 initialLevel);
+    event ExperienceAdded(address indexed player, uint256 indexed tokenId, uint256 amount, uint256 newTotalExperience, uint256 newLevel);
+    event LevelUp(address indexed player, uint256 indexed tokenId, uint256 oldLevel, uint256 newLevel);
     event BaseURISet(string newBaseURI);
     event ContractURIUpdated(string newContractURI);
 
-    constructor(address initialOwner) ERC721("Dungeon Delvers Profile", "DDPF") Ownable(initialOwner) {
+    // 🔥 EIP-5192: Minimal Non-Transferable NFTs Event
+    event Locked(uint256 tokenId);
+
+    // Enhanced constructor with default metadata URIs
+    constructor() ERC721("Dungeon Delvers Profile", "DDPF") Ownable(msg.sender) {
         _nextTokenId = 1;
+        
+        // Set default baseURI for immediate marketplace compatibility
+        baseURI = "https://dungeon-delvers-metadata-server.onrender.com/metadata/profile/";
+        
+        // Set default contractURI for collection-level metadata
+        _contractURI = "https://dungeon-delvers-metadata-server.onrender.com/metadata/collection/playerprofile";
     }
 
-    // --- 核心功能 ---
+    // 🔥 EIP-5192: Returns the locking status of a Soulbound Token
+    function locked(uint256 tokenId) external view returns (bool) {
+        _requireOwned(tokenId);
+        return true; // All profile tokens are permanently locked
+    }
 
     /**
-     * @notice 為玩家鑄造一個新的個人檔案 SBT
-     * @dev 添加防重入和重複鑄造檢查
+     * @notice Mint a new profile SBT for player
+     * @dev Added reentrancy protection and duplicate minting checks
      */
     function mintProfile(address _player) public onlyAuthorized whenNotPaused returns (uint256) {
         return _mintProfile(_player);
     }
 
     /**
-     * @notice 內部鑄造函數，避免權限檢查的嵌套問題
+     * @notice Internal minting function to avoid nested permission check issues
      */
     function _mintProfile(address _player) internal returns (uint256) {
         require(profileTokenOf[_player] == 0, "PlayerProfile: Profile already exists");
@@ -56,20 +69,52 @@ contract PlayerProfile is ERC721, Ownable, Pausable {
         _safeMint(_player, tokenId);
         profileTokenOf[_player] = tokenId;
         profileData[tokenId].experience = 0;
-        emit ProfileCreated(_player, tokenId);
+        
+        // 🔥 EIP-5192: Emit Locked event when token is minted
+        emit Locked(tokenId);
+        
+        // Calculate and emit initial level (always 1 for new profiles)
+        uint256 initialLevel = 1;
+        emit ProfileCreated(_player, tokenId, initialLevel);
         return tokenId;
     }
 
     /**
-     * @notice 為玩家增加經驗值。如果玩家沒有個人檔案，會自動為其創建一個。
+     * @notice Add experience for player. If player has no profile, automatically create one.
      */
     function addExperience(address _player, uint256 _amount) external onlyAuthorized whenNotPaused {
         uint256 tokenId = profileTokenOf[_player];
         if (tokenId == 0) {
-            tokenId = _mintProfile(_player);  // 使用內部函數避免權限檢查
+            tokenId = _mintProfile(_player);  // Use internal function to avoid permission checks
         }
-        profileData[tokenId].experience += _amount;
-        emit ExperienceAdded(_player, tokenId, _amount, profileData[tokenId].experience);
+        
+        // Get old level before updating experience
+        uint256 oldExp = profileData[tokenId].experience;
+        uint256 oldLevel = _calculateLevel(oldExp);
+        
+        // Update experience
+        uint256 newExp = oldExp + _amount;
+        profileData[tokenId].experience = newExp;
+        
+        // Calculate new level
+        uint256 newLevel = _calculateLevel(newExp);
+        
+        // Emit experience added event with calculated level
+        emit ExperienceAdded(_player, tokenId, _amount, newExp, newLevel);
+        
+        // If level changed, emit level up event
+        if (newLevel > oldLevel) {
+            emit LevelUp(_player, tokenId, oldLevel, newLevel);
+        }
+    }
+    
+    /**
+     * @notice Internal function to calculate level from experience
+     * @dev Same logic as getLevel but as internal function for reuse
+     */
+    function _calculateLevel(uint256 _experience) internal pure returns (uint256) {
+        if (_experience < 100) return 1;
+        return Math.sqrt(_experience / 100) + 1;
     }
     
     function tokenURI(uint256 _tokenId) public view override returns (string memory) {
@@ -78,15 +123,10 @@ contract PlayerProfile is ERC721, Ownable, Pausable {
         return string(abi.encodePacked(baseURI, _tokenId.toString()));
     }
 
-    // --- Owner 管理函式 ---
     
     function setBaseURI(string memory _newBaseURI) external onlyOwner {
         baseURI = _newBaseURI;
         emit BaseURISet(_newBaseURI);
-    }
-
-    function contractURI() public view returns (string memory) {
-        return _contractURI;
     }
 
     function setContractURI(string memory newContractURI) external onlyOwner {
@@ -94,11 +134,19 @@ contract PlayerProfile is ERC721, Ownable, Pausable {
         emit ContractURIUpdated(newContractURI);
     }
     
+    
+    /// @notice Returns the contract URI for collection-level metadata (OpenSea/OKX compatibility)
+    /// @dev This enables NFT marketplaces to read collection logo, description, and other metadata
+    function contractURI() public view returns (string memory) {
+        return _contractURI;
+    }
+    /// @notice Returns the contract URI for collection-level metadata (OpenSea/OKX compatibility)
+    /// @dev This enables NFT marketplaces to read collection logo, description, and other metadata
+    
     function setDungeonCore(address _address) public onlyOwner {
         dungeonCore = IDungeonCore(_address);
     }
     
-    // --- 內部函式 ---
     function _update(address to, uint256 tokenId, address auth) internal override returns (address) {
         address from = _ownerOf(tokenId);
         require(from == address(0), "PlayerProfile: This SBT is non-transferable");
@@ -106,25 +154,24 @@ contract PlayerProfile is ERC721, Ownable, Pausable {
     }
 
     /**
-     * @notice 禁用所有批准功能
+     * @notice Disable all approval functions
      */
     function approve(address, uint256) public pure override {
-        revert("PlayerProfile: SBT cannot be approved");
+        // SBT (Soul Bound Token) - not approvable
     }
     
     function setApprovalForAll(address, bool) public pure override {
-        revert("PlayerProfile: SBT cannot be approved");
+        // SBT (Soul Bound Token) - not approvable
     }
     
     function transferFrom(address, address, uint256) public pure override {
-        revert("PlayerProfile: SBT cannot be transferred");
+        // SBT (Soul Bound Token) - not transferable
     }
     
     function safeTransferFrom(address, address, uint256, bytes memory) public pure override {
         revert("PlayerProfile: SBT cannot be transferred");
     }
 
-    // --- 外部查詢函式 ---
     function getLevel(address _player) external view returns (uint256) {
         uint256 tokenId = profileTokenOf[_player];
         if (tokenId == 0) return 0;
@@ -151,5 +198,9 @@ contract PlayerProfile is ERC721, Ownable, Pausable {
         require(address(dungeonCore) != address(0), "Profile: DungeonCore not set");
         require(msg.sender == dungeonCore.dungeonMasterAddress(), "Profile: Caller is not the DungeonMaster");
         _;
+    }
+
+    function totalSupply() public view returns (uint256) {
+        return _nextTokenId > 0 ? _nextTokenId - 1 : 0;
     }
 }

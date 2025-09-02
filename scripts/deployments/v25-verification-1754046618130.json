@@ -18,7 +18,7 @@
       "contractName": "PlayerVault",
       "address": "0x8c3A73E27C518f082150330e5666e765B52297AF",
       "constructorArgs": [
-        "0x10925A7138649C7E1794CE646182eeb5BF8ba647"
+        "0xEbCF4A36Ad1485A9737025e9d72186b604487274"
       ]
     },
     {
@@ -26,7 +26,7 @@
       "contractName": "DungeonCore",
       "address": "0x398F362ec79064159FFbb1079C9cA683896B758b",
       "constructorArgs": [
-        "0x10925A7138649C7E1794CE646182eeb5BF8ba647",
+        "0xEbCF4A36Ad1485A9737025e9d72186b604487274",
         "0x7C67Af4EBC6651c95dF78De11cfe325660d935FE",
         "0x97B2C2a9A11C7b6A020b4bAEaAd349865eaD0bcF"
       ]
@@ -36,7 +36,7 @@
       "contractName": "DungeonStorage",
       "address": "0xB5eFB972f67cA8488EDdd19bDf4e86D30dE779c1",
       "constructorArgs": [
-        "0x10925A7138649C7E1794CE646182eeb5BF8ba647"
+        "0xEbCF4A36Ad1485A9737025e9d72186b604487274"
       ]
     },
     {
@@ -44,7 +44,7 @@
       "contractName": "DungeonMasterV2_Fixed",
       "address": "0x913E5c5c6d844630fd01CbDed82F029f356f1809",
       "constructorArgs": [
-        "0x10925A7138649C7E1794CE646182eeb5BF8ba647"
+        "0xEbCF4A36Ad1485A9737025e9d72186b604487274"
       ]
     },
     {
@@ -52,7 +52,7 @@
       "contractName": "Hero",
       "address": "0x20E0db8EFCC7608fCFFBbF2f95A86824b034D1e7",
       "constructorArgs": [
-        "0x10925A7138649C7E1794CE646182eeb5BF8ba647"
+        "0xEbCF4A36Ad1485A9737025e9d72186b604487274"
       ]
     },
     {
@@ -60,7 +60,7 @@
       "contractName": "Relic",
       "address": "0x3c8F1b4172a076D31f0F8fa981E166aDA92C2B79",
       "constructorArgs": [
-        "0x10925A7138649C7E1794CE646182eeb5BF8ba647"
+        "0xEbCF4A36Ad1485A9737025e9d72186b604487274"
       ]
     },
     {
@@ -68,7 +68,7 @@
       "contractName": "Party",
       "address": "0x1f21fE51c039321246b219B9F659eaCA9a53176F",
       "constructorArgs": [
-        "0x10925A7138649C7E1794CE646182eeb5BF8ba647"
+        "0xEbCF4A36Ad1485A9737025e9d72186b604487274"
       ]
     },
     {
@@ -76,7 +76,7 @@
       "contractName": "VIPStaking",
       "address": "0xa55fee3ba652e6Ff42ac12C8598C5fDfC26EE4Bf",
       "constructorArgs": [
-        "0x10925A7138649C7E1794CE646182eeb5BF8ba647"
+        "0xEbCF4A36Ad1485A9737025e9d72186b604487274"
       ]
     },
     {
@@ -84,7 +84,7 @@
       "contractName": "PlayerProfile",
       "address": "0xB203a1e73500E40A1eeb1D6A51cDDbf2fEb227a2",
       "constructorArgs": [
-        "0x10925A7138649C7E1794CE646182eeb5BF8ba647"
+        "0xEbCF4A36Ad1485A9737025e9d72186b604487274"
       ]
     },
     {
@@ -92,7 +92,7 @@
       "contractName": "AltarOfAscensionV2Fixed",
       "address": "0x167F42bcC21a5ab5319b787F8C2e045f9Aeaa4dD",
       "constructorArgs": [
-        "0x10925A7138649C7E1794CE646182eeb5BF8ba647"
+        "0xEbCF4A36Ad1485A9737025e9d72186b604487274"
       ]
     }
   ]

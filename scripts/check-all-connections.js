@@ -3,31 +3,31 @@ const hre = require("hardhat");
 async function main() {
     console.log("🔍 檢查所有合約互連狀態...\n");
     
-    // 合約地址
+    // V25.0.4 合約地址
     const CONTRACTS = {
-        // 主要合約
-        DungeonMaster: "0xc0bbae55cf9245f76628d2c5299cd6fa35cd102a",
-        Hero: "0x671d937b171e2ba2c4dc23c133b07e4449f283ef",
-        Relic: "0x42bf1bd8fc5a8dfdd0e97de131246ec0e3ec73da",
-        AltarOfAscension: "0xa86749237d4631ad92ba859d0b0df4770f6147ba",
-        Party: "0x28A85D14e0F87d6eD04e21c30992Df8B3e9434E3",
+        // 核心合約
+        DungeonCore: "0x5B64A5939735Ff762493D9B9666b3e13118c5722",
+        Oracle: "0xEE322Eff70320759487f67875113C062AC1F4cfB",
         
-        // 複用合約
-        DungeonCore: "0x8a2D2b1961135127228EdD71Ff98d6B097915a13",
-        PlayerVault: "0x62Bce9aF5E2C47b13f62A2e0fCB1f9C7AfaF8787",
-        PlayerProfile: "0x0f5932e89908400a5AfDC306899A2987b67a3155",
-        VIPStaking: "0xC0D8C84e28E5BcfC9cBD109551De53BA04e7328C",
-        Oracle: "0xf8CE896aF39f95a9d5Dd688c35d381062263E25a",
+        // NFT 合約
+        Hero: "0xE44A7CA10bAC8B1042EeBd66ccF24c5b1D734b19",
+        Relic: "0x91Bf924E9CEF490F7C999C1F083eE1636595220D",
+        Party: "0x495bcE2D9561E0f7623fF244e4BA28DCFfEe71d9",
+        
+        // 遊戲合約
+        DungeonMaster: "0xAAdE1919B2EA95cBBFcDEa41CBf9D48ae0d44cdF",
+        DungeonStorage: "0xCE75345A01dB5c40E443624F86BDC45BabF7B6ec",
+        AltarOfAscension: "0x56B62168734827b9b3D750ac1aB9F249e0a0EEd3",
+        PlayerVault: "0x446a82f2003484Bdc83f29e094fcb66D01094db0",
+        PlayerProfile: "0x3509d0f0cD6f7b518860f945128205ac4F426090",
+        VIPStaking: "0x18d13f4FdE3245ABa6D0fb91597291e1F46b0661",
         
         // Token 合約
-        SoulShard: "0x97B2C2a9A11C7b6A020b4bAEaAd349865eaD0bcF",
-        USD: "0x7C67Af4EBC6651c95dF78De11cfe325660d935FE",
+        SoulShard: "0xB73FE158689EAB3396B64794b573D4BEc7113412",
+        USD: "0x9DC0b768533222fddbe6A9Bd71eAD96a7c612C61",
         
         // VRF Manager
-        VRFManager: "0x84b1ffc7b0839906ba1ecf510ed3a74481b8438e",
-        
-        // Storage
-        DungeonStorage: "0x539AC926C6daE898f2C843aF8C59Ff92B4b3B468"
+        VRFManager: "0xa94555C309Dd83d9fB0531852d209c46Fa50637f"
     };
     
     const [signer] = await hre.ethers.getSigners();
@@ -63,32 +63,32 @@ async function main() {
     console.log("-".repeat(60));
     
     const dungeonCoreABI = [
-        "function heroAddress() view returns (address)",
-        "function relicAddress() view returns (address)",
-        "function partyAddress() view returns (address)",
+        "function heroContractAddress() view returns (address)",
+        "function relicContractAddress() view returns (address)",
+        "function partyContractAddress() view returns (address)",
         "function dungeonMasterAddress() view returns (address)",
         "function altarOfAscensionAddress() view returns (address)",
         "function playerVaultAddress() view returns (address)",
         "function playerProfileAddress() view returns (address)",
         "function vipStakingAddress() view returns (address)",
         "function oracleAddress() view returns (address)",
-        "function soulShardAddress() view returns (address)"
+        "function soulShardTokenAddress() view returns (address)"
     ];
     
     try {
         const dungeonCore = new hre.ethers.Contract(CONTRACTS.DungeonCore, dungeonCoreABI, signer);
         
         const modules = [
-            { name: "Hero", getter: "heroAddress" },
-            { name: "Relic", getter: "relicAddress" },
-            { name: "Party", getter: "partyAddress" },
+            { name: "Hero", getter: "heroContractAddress" },
+            { name: "Relic", getter: "relicContractAddress" },
+            { name: "Party", getter: "partyContractAddress" },
             { name: "DungeonMaster", getter: "dungeonMasterAddress" },
             { name: "AltarOfAscension", getter: "altarOfAscensionAddress" },
             { name: "PlayerVault", getter: "playerVaultAddress" },
             { name: "PlayerProfile", getter: "playerProfileAddress" },
             { name: "VIPStaking", getter: "vipStakingAddress" },
             { name: "Oracle", getter: "oracleAddress" },
-            { name: "SoulShard", getter: "soulShardAddress" }
+            { name: "SoulShard", getter: "soulShardTokenAddress" }
         ];
         
         for (const module of modules) {
@@ -117,7 +117,7 @@ async function main() {
     ];
     
     const coreCheckABI = [
-        "function dungeonCoreAddress() view returns (address)",
+        "function dungeonCore() view returns (address)",
         "function core() view returns (address)"
     ];
     
@@ -127,7 +127,7 @@ async function main() {
             let coreAddress;
             
             try {
-                coreAddress = await contract.dungeonCoreAddress();
+                coreAddress = await contract.dungeonCore();
             } catch {
                 try {
                     coreAddress = await contract.core();
@@ -154,12 +154,12 @@ async function main() {
     console.log("-".repeat(60));
     
     const dmStorageABI = [
-        "function dungeonStorageAddress() view returns (address)"
+        "function dungeonStorage() view returns (address)"
     ];
     
     try {
         const dm = new hre.ethers.Contract(CONTRACTS.DungeonMaster, dmStorageABI, signer);
-        const storageAddress = await dm.dungeonStorageAddress();
+        const storageAddress = await dm.dungeonStorage();
         const match = storageAddress.toLowerCase() === CONTRACTS.DungeonStorage.toLowerCase();
         console.log(`DungeonMaster -> Storage: ${storageAddress.slice(0, 8)}... ${match ? "✅" : "❌"}`);
     } catch (error) {
@@ -173,15 +173,15 @@ async function main() {
     console.log("-".repeat(60));
     
     const oracleABI = [
-        "function soulShardAddress() view returns (address)",
-        "function usdAddress() view returns (address)"
+        "function soulShardToken() view returns (address)",
+        "function usdToken() view returns (address)"
     ];
     
     try {
         const oracle = new hre.ethers.Contract(CONTRACTS.Oracle, oracleABI, signer);
         
-        const soulShardAddress = await oracle.soulShardAddress();
-        const usdAddress = await oracle.usdAddress();
+        const soulShardAddress = await oracle.soulShardToken();
+        const usdAddress = await oracle.usdToken();
         
         console.log(`SoulShard: ${soulShardAddress.slice(0, 8)}... ${soulShardAddress.toLowerCase() === CONTRACTS.SoulShard.toLowerCase() ? "✅" : "❌"}`);
         console.log(`USD: ${usdAddress.slice(0, 8)}... ${usdAddress.toLowerCase() === CONTRACTS.USD.toLowerCase() ? "✅" : "❌"}`);

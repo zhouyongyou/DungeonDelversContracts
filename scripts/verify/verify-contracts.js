@@ -35,53 +35,53 @@ async function main() {
     {
       name: "DungeonStorage",
       address: addresses.DUNGEONSTORAGE_ADDRESS,
-      constructorArguments: [addresses.DUNGEONMASTERWALLET_ADDRESS || "0x10925A7138649C7E1794CE646182eeb5BF8ba647"]
+      constructorArguments: [addresses.DUNGEONMASTERWALLET_ADDRESS || "0xEbCF4A36Ad1485A9737025e9d72186b604487274"]
     },
     {
       name: "Hero",
       address: addresses.HERO_ADDRESS,
-      constructorArguments: [addresses.DUNGEONMASTERWALLET_ADDRESS || "0x10925A7138649C7E1794CE646182eeb5BF8ba647"]
+      constructorArguments: [addresses.DUNGEONMASTERWALLET_ADDRESS || "0xEbCF4A36Ad1485A9737025e9d72186b604487274"]
     },
     {
       name: "Relic",
       address: addresses.RELIC_ADDRESS,
-      constructorArguments: [addresses.DUNGEONMASTERWALLET_ADDRESS || "0x10925A7138649C7E1794CE646182eeb5BF8ba647"]
+      constructorArguments: [addresses.DUNGEONMASTERWALLET_ADDRESS || "0xEbCF4A36Ad1485A9737025e9d72186b604487274"]
     },
     {
       name: "Party",
       address: addresses.PARTY_ADDRESS,
       contract: "contracts/Party_V3.sol:Party",
-      constructorArguments: [addresses.DUNGEONMASTERWALLET_ADDRESS || "0x10925A7138649C7E1794CE646182eeb5BF8ba647"]
+      constructorArguments: [addresses.DUNGEONMASTERWALLET_ADDRESS || "0xEbCF4A36Ad1485A9737025e9d72186b604487274"]
     },
     {
       name: "PlayerVault",
       address: addresses.PLAYERVAULT_ADDRESS,
-      constructorArguments: [addresses.DUNGEONMASTERWALLET_ADDRESS || "0x10925A7138649C7E1794CE646182eeb5BF8ba647"]
+      constructorArguments: [addresses.DUNGEONMASTERWALLET_ADDRESS || "0xEbCF4A36Ad1485A9737025e9d72186b604487274"]
     },
     {
       name: "PlayerProfile",
       address: addresses.PLAYERPROFILE_ADDRESS,
-      constructorArguments: [addresses.DUNGEONMASTERWALLET_ADDRESS || "0x10925A7138649C7E1794CE646182eeb5BF8ba647"]
+      constructorArguments: [addresses.DUNGEONMASTERWALLET_ADDRESS || "0xEbCF4A36Ad1485A9737025e9d72186b604487274"]
     },
     {
       name: "AltarOfAscension",
       address: addresses.ALTAROFASCENSION_ADDRESS,
-      constructorArguments: [addresses.DUNGEONMASTERWALLET_ADDRESS || "0x10925A7138649C7E1794CE646182eeb5BF8ba647"]
+      constructorArguments: [addresses.DUNGEONMASTERWALLET_ADDRESS || "0xEbCF4A36Ad1485A9737025e9d72186b604487274"]
     },
     {
       name: "VIPStaking",
       address: addresses.VIPSTAKING_ADDRESS,
-      constructorArguments: [addresses.DUNGEONMASTERWALLET_ADDRESS || "0x10925A7138649C7E1794CE646182eeb5BF8ba647"]
+      constructorArguments: [addresses.DUNGEONMASTERWALLET_ADDRESS || "0xEbCF4A36Ad1485A9737025e9d72186b604487274"]
     },
     {
       name: "DungeonCore",
       address: addresses.DUNGEONCORE_ADDRESS,
-      constructorArguments: [addresses.DUNGEONMASTERWALLET_ADDRESS || "0x10925A7138649C7E1794CE646182eeb5BF8ba647"]
+      constructorArguments: [addresses.DUNGEONMASTERWALLET_ADDRESS || "0xEbCF4A36Ad1485A9737025e9d72186b604487274"]
     },
     {
       name: "DungeonMasterV7",
       address: addresses.DUNGEONMASTER_ADDRESS,
-      constructorArguments: [addresses.DUNGEONMASTERWALLET_ADDRESS || "0x10925A7138649C7E1794CE646182eeb5BF8ba647"]
+      constructorArguments: [addresses.DUNGEONMASTERWALLET_ADDRESS || "0xEbCF4A36Ad1485A9737025e9d72186b604487274"]
     }
   ];
   

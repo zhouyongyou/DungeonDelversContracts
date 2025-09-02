@@ -8,7 +8,7 @@ async function main() {
   const wallet = new ethers.Wallet(process.env.PRIVATE_KEY, provider);
   
   const coordinatorAddress = "0xd691f04bc0C9a24Edb78af9E005Cf85768F694C9";
-  const subId = "114131353280130458891383141995968474440293173552039681622016393393251650814328";
+  const subId = "88422796721004450630713121079263696788635490871993157345476848872165866246915";
   
   // Coordinator ABI (只包含需要的函數)
   const coordinatorAbi = [

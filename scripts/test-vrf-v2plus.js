@@ -122,7 +122,7 @@ async function main() {
     if (error.message.includes("InvalidConsumer")) {
       console.log("\n原因：合約未添加為 Consumer");
       console.log("請先添加 Consumer：");
-      console.log("https://vrf.chain.link/bsc/114131353280130458891383141995968474440293173552039681622016393393251650814328");
+      console.log("https://vrf.chain.link/bsc/88422796721004450630713121079263696788635490871993157345476848872165866246915");
       console.log("合約地址:", contractAddress);
     } else {
       console.log("\n其他錯誤，請檢查：");

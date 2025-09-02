@@ -1,7 +1,7 @@
 {
   "timestamp": "2025-07-18T11:33:56.410Z",
   "network": "bsc",
-  "deployer": "0x10925A7138649C7E1794CE646182eeb5BF8ba647",
+  "deployer": "0xEbCF4A36Ad1485A9737025e9d72186b604487274",
   "contracts": {
     "Oracle": "0x367f832fDAEFB8Bc038637a8c2E0F87521121a98",
     "DungeonStorage": "0x6FF605478fea3C3270f2eeD550129c58Dea81403",

@@ -19,8 +19,8 @@ async function main() {
   
   // 項目路徑
   const projects = {
-    frontend: '/Users/sotadic/Documents/GitHub/DungeonDelvers',
-    subgraph: '/Users/sotadic/Documents/GitHub/DungeonDelversSubgraph'
+    frontend: '/Users/sotadic/Documents/GitHub/SoulboundSaga',
+    subgraph: '/Users/sotadic/Documents/GitHub/SoulboundSaga/DDgraphql/dungeon-delvers'
   };
   
   console.log('\n🎯 目標項目:');

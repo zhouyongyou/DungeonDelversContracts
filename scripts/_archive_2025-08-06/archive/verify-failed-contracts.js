@@ -28,13 +28,13 @@ const failedContracts = {
   },
   Party: {
     address: "0x54025749950137d64469fb11263B475F6A346b83",
-    constructorArgs: ["0x10925A7138649C7E1794CE646182eeb5BF8ba647"],
+    constructorArgs: ["0xEbCF4A36Ad1485A9737025e9d72186b604487274"],
     contractPath: "contracts/nft/Party_V3.sol:Party"
   },
   DungeonCore: {
     address: "0xC880c8253A617FaBe83bACd010E9E26369e12aDB",
     constructorArgs: [
-      "0x10925A7138649C7E1794CE646182eeb5BF8ba647", // initialOwner
+      "0xEbCF4A36Ad1485A9737025e9d72186b604487274", // initialOwner
       "0x55d398326f99059fF775485246999027B3197955", // usdToken (USDT)
       "0xc88dAD283Ac209D77Bfe452807d378615AB8B94a"  // soulShardToken
     ],

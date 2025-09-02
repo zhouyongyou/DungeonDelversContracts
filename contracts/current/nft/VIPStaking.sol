@@ -1,4 +1,4 @@
-// VIPStaking.sol
+// VIPStaking.sol (EIP-5192 Enhanced Version)
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
@@ -15,9 +15,7 @@ contract VIPStaking is ERC721, Ownable, ReentrancyGuard, Pausable {
     using SafeERC20 for IERC20;
     using Strings for uint256;
 
-    // --- 狀態變數 ---
     IDungeonCore public dungeonCore;
-    IERC20 public soulShardToken;
     string public baseURI;
     string private _contractURI;
     
@@ -37,28 +35,45 @@ contract VIPStaking is ERC721, Ownable, ReentrancyGuard, Pausable {
     }
     mapping(address => UnstakeRequest) public unstakeQueue;
 
-    // --- 事件 ---
-    event Staked(address indexed user, uint256 amount, uint256 tokenId);
-    event UnstakeRequested(address indexed user, uint256 amount, uint256 availableAt);
-    event UnstakeClaimed(address indexed user, uint256 amount);
+    event Staked(address indexed user, uint256 amount, uint256 tokenId, uint8 vipLevel);
+    event UnstakeRequested(address indexed user, uint256 amount, uint256 availableAt, uint8 newVipLevel);
+    event UnstakeClaimed(address indexed user, uint256 amount, uint8 newVipLevel);
+    event VipLevelChanged(address indexed user, uint8 oldLevel, uint8 newLevel);
     event DungeonCoreSet(address indexed newAddress);
-    event SoulShardTokenSet(address indexed newAddress);
     event BaseURISet(string newBaseURI);
     event ContractURIUpdated(string newContractURI);
 
-    // --- 構造函數 ---
-    constructor(address initialOwner) ERC721("Dungeon Delvers VIP", "DDV") Ownable(initialOwner) {
+    // 🔥 EIP-5192: Minimal Non-Transferable NFTs Event
+    event Locked(uint256 tokenId);
+
+    // Enhanced constructor with default metadata URIs
+    constructor() ERC721("Dungeon Delvers VIP", "DDV") Ownable(msg.sender) {
         _nextTokenId = 1;
         unstakeCooldown = 24 hours;
+        
+        // Set default baseURI for immediate marketplace compatibility
+        baseURI = "https://dungeon-delvers-metadata-server.onrender.com/metadata/vip/";
+        
+        // Set default contractURI for collection-level metadata
+        _contractURI = "https://dungeon-delvers-metadata-server.onrender.com/metadata/collection/vipstaking";
     }
 
-    // --- 核心質押功能 ---
+    // 🔥 EIP-5192: Returns the locking status of a Soulbound Token
+    function locked(uint256 tokenId) external view returns (bool) {
+        _requireOwned(tokenId);
+        return true; // All VIP tokens are permanently locked
+    }
+
     function stake(uint256 _amount) public nonReentrant whenNotPaused {
         require(_amount > 0, "VIP: Cannot stake 0");
         require(unstakeQueue[msg.sender].amount == 0, "VIP: You have a pending unstake to claim");
-        require(address(soulShardToken) != address(0), "VIP: Token address not set");
+        address soulShardAddr = _getSoulShardToken();
+        require(soulShardAddr != address(0), "VIP: Token address not set");
         
-        soulShardToken.safeTransferFrom(msg.sender, address(this), _amount);
+        // Get old VIP level before staking
+        uint8 oldVipLevel = getVipLevel(msg.sender);
+        
+        IERC20(soulShardAddr).safeTransferFrom(msg.sender, address(this), _amount);
         StakeInfo storage userStake = userStakes[msg.sender];
         userStake.amount += _amount;
 
@@ -67,15 +82,29 @@ contract VIPStaking is ERC721, Ownable, ReentrancyGuard, Pausable {
             currentTokenId = _nextTokenId++;
             userStake.tokenId = currentTokenId;
             _safeMint(msg.sender, currentTokenId);
+            
+            // 🔥 EIP-5192: Emit Locked event when token is minted
+            emit Locked(currentTokenId);
         }
         
-        emit Staked(msg.sender, _amount, currentTokenId);
+        // Calculate new VIP level after staking
+        uint8 newVipLevel = getVipLevel(msg.sender);
+        
+        emit Staked(msg.sender, _amount, currentTokenId, newVipLevel);
+        
+        // If VIP level changed, emit level change event
+        if (newVipLevel != oldVipLevel) {
+            emit VipLevelChanged(msg.sender, oldVipLevel, newVipLevel);
+        }
     }
 
     function requestUnstake(uint256 _amount) public nonReentrant whenNotPaused {
         StakeInfo storage userStake = userStakes[msg.sender];
         require(_amount > 0 && _amount <= userStake.amount, "VIP: Invalid unstake amount");
         require(unstakeQueue[msg.sender].amount == 0, "VIP: Previous unstake request still pending");
+
+        // Get old VIP level before unstaking
+        uint8 oldVipLevel = getVipLevel(msg.sender);
 
         userStake.amount -= _amount;
         totalPendingUnstakes += _amount;
@@ -85,7 +114,16 @@ contract VIPStaking is ERC721, Ownable, ReentrancyGuard, Pausable {
             amount: _amount,
             availableAt: availableAt
         });
-        emit UnstakeRequested(msg.sender, _amount, availableAt);
+
+        // Calculate new VIP level after unstaking
+        uint8 newVipLevel = getVipLevel(msg.sender);
+        
+        emit UnstakeRequested(msg.sender, _amount, availableAt, newVipLevel);
+        
+        // If VIP level changed, emit level change event
+        if (newVipLevel != oldVipLevel) {
+            emit VipLevelChanged(msg.sender, oldVipLevel, newVipLevel);
+        }
     }
 
     function claimUnstaked() public nonReentrant {
@@ -98,14 +136,16 @@ contract VIPStaking is ERC721, Ownable, ReentrancyGuard, Pausable {
         delete unstakeQueue[msg.sender];
         totalPendingUnstakes -= amountToClaim;
 
-        soulShardToken.safeTransfer(msg.sender, amountToClaim);
-        emit UnstakeClaimed(msg.sender, amountToClaim);
+        // Calculate current VIP level (should be same as after requestUnstake)
+        uint8 currentVipLevel = getVipLevel(msg.sender);
+
+        IERC20(_getSoulShardToken()).safeTransfer(msg.sender, amountToClaim);
+        emit UnstakeClaimed(msg.sender, amountToClaim, currentVipLevel);
     }
     
-    // --- SBT 實現（強化版）---
     /**
-     * @notice 覆寫 _update 以實現 SBT
-     * @dev 只允許鑄造，完全禁止轉移
+     * @notice Override _update to implement SBT
+     * @dev Only allow minting, completely prohibit transfers
      */
     function _update(address to, uint256 tokenId, address auth) internal override returns (address) {
         address from = _ownerOf(tokenId);
@@ -114,35 +154,34 @@ contract VIPStaking is ERC721, Ownable, ReentrancyGuard, Pausable {
     }
     
     /**
-     * @notice 禁用所有批准功能
+     * @notice Disable all approval functions
      */
     function approve(address, uint256) public pure override {
-        revert("VIP: SBT cannot be approved");
+        // SBT (Soul Bound Token) - not approvable
     }
     
     function setApprovalForAll(address, bool) public pure override {
-        revert("VIP: SBT cannot be approved");
+        // SBT (Soul Bound Token) - not approvable
     }
     
     function transferFrom(address, address, uint256) public pure override {
-        revert("VIP: SBT cannot be transferred");
+        // SBT (Soul Bound Token) - not transferable
     }
     
     function safeTransferFrom(address, address, uint256, bytes memory) public pure override {
-        revert("VIP: SBT cannot be transferred");
+        // SBT (Soul Bound Token) - not transferable
     }
     
-    // --- 查詢函數 ---
     function getVipLevel(address _user) public view returns (uint8) {
         uint256 stakedAmount = userStakes[_user].amount;
         if (stakedAmount == 0 || address(dungeonCore) == address(0)) return 0;
         uint256 stakedValueUSD = dungeonCore.getUSDValueForSoulShard(stakedAmount);
         
-        // stakedValueUSD 有 18 位小數，需要除以 1e18 轉換為實際美元價值
+        // stakedValueUSD has 18 decimals, need to divide by 1e18 to convert to actual USD value
         if (stakedValueUSD < 100 * 1e18) return 0;
         uint256 level = Math.sqrt(stakedValueUSD / (100 * 1e18));
         
-        // 添加合理的上限保護
+        // Add reasonable upper limit protection
         if (level > 255) level = 255;
         return uint8(level);
     }
@@ -158,15 +197,17 @@ contract VIPStaking is ERC721, Ownable, ReentrancyGuard, Pausable {
         return string(abi.encodePacked(baseURI, _tokenId.toString()));
     }
     
-    // --- Owner 管理函式 ---
     function setDungeonCore(address _newAddress) external onlyOwner {
         dungeonCore = IDungeonCore(_newAddress);
         emit DungeonCoreSet(_newAddress);
     }
 
-    function setSoulShardToken(address _newAddress) external onlyOwner {
-        soulShardToken = IERC20(_newAddress);
-        emit SoulShardTokenSet(_newAddress);
+    function _getSoulShardToken() internal view returns (address) {
+        return dungeonCore.soulShardTokenAddress();
+    }
+
+    function totalSupply() public view returns (uint256) {
+        return _nextTokenId > 0 ? _nextTokenId - 1 : 0;
     }
     
     function setBaseURI(string memory _newBaseURI) external onlyOwner {
@@ -174,38 +215,44 @@ contract VIPStaking is ERC721, Ownable, ReentrancyGuard, Pausable {
         emit BaseURISet(_newBaseURI);
     }
 
-    function contractURI() public view returns (string memory) {
-        return _contractURI;
-    }
-
     function setContractURI(string memory newContractURI) external onlyOwner {
         _contractURI = newContractURI;
         emit ContractURIUpdated(newContractURI);
     }
+    
+    
+    /// @notice Returns the contract URI for collection-level metadata (OpenSea/OKX compatibility)
+    /// @dev This enables NFT marketplaces to read collection logo, description, and other metadata
+    function contractURI() public view returns (string memory) {
+        return _contractURI;
+    }
+    /// @notice Returns the contract URI for collection-level metadata (OpenSea/OKX compatibility)
+    /// @dev This enables NFT marketplaces to read collection logo, description, and other metadata
 
     function setUnstakeCooldown(uint256 _newCooldown) external onlyOwner {
         unstakeCooldown = _newCooldown;
     }
     
     function withdrawStakedTokens(uint256 amount) external onlyOwner {
-        uint256 contractBalance = soulShardToken.balanceOf(address(this));
+        IERC20 token = IERC20(_getSoulShardToken());
+        uint256 contractBalance = token.balanceOf(address(this));
         uint256 availableToWithdraw = contractBalance - totalPendingUnstakes;
         
-        // 如果 amount = 0 或超過可用餘額，提取全部可用資金
+        // If amount = 0 or exceeds available balance, withdraw all available funds
         if (amount == 0 || amount > availableToWithdraw) {
             amount = availableToWithdraw;
         }
         
-        // 如果沒有可提取資金，靜默返回而不是拋出錯誤
+        // If no withdrawable funds, return silently instead of throwing error
         if (amount == 0) {
             return;
         }
         
-        soulShardToken.safeTransfer(owner(), amount);
+        token.safeTransfer(owner(), amount);
     }
     
     /**
-     * @notice 暫停/恢復合約
+     * @notice Pause/unpause contract
      */
     function pause() external onlyOwner {
         _pause();
@@ -214,4 +261,21 @@ contract VIPStaking is ERC721, Ownable, ReentrancyGuard, Pausable {
     function unpause() external onlyOwner {
         _unpause();
     }
+    
+    /**
+     * @notice Withdraw native BNB (safety function)
+     * @dev Added for emergency withdrawal if contract receives BNB
+     */
+    function withdrawNative() external onlyOwner {
+        uint256 balance = address(this).balance;
+        require(balance > 0, "VIPStaking: No BNB to withdraw");
+        
+        (bool success, ) = owner().call{value: balance}("");
+        require(success, "VIPStaking: BNB transfer failed");
+    }
+    
+    /**
+     * @notice Allow contract to receive BNB
+     */
+    receive() external payable {}
 }

@@ -1,0 +1,191 @@
+# 🚀 DungeonDelvers V25.2.3 部署指南
+
+## 📋 概述
+
+此部署將更新三個核心 NFT 合約：
+- **Hero** (英雄 NFT) - "Dungeon Delvers Hero" (DDH)
+- **Relic** (聖物 NFT) - "Dungeon Delvers Relic" (DDR)  
+- **VIPStaking** (VIP 質押) - "Dungeon Delvers VIP" (DDV)
+
+## 🎯 部署特色
+
+### ✅ 完整自動化流程
+1. **智能部署**: 自動處理 gas 優化和 nonce 管理
+2. **開源驗證**: 自動提交到 BSCScan 進行開源驗證
+3. **CORE 互連**: 自動設定與 DungeonCore 的雙向連接
+4. **配置同步**: 自動更新 .env 配置文件
+5. **詳細報告**: 生成 JSON 和 Markdown 部署報告
+
+### 🔧 技術特徵
+- **Gas 優化**: 使用 0.11 gwei gas price，最適合 BSC 網路低成本
+- **錯誤處理**: 完整的錯誤追蹤和狀態保存
+- **安全檢查**: 部署前驗證餘額和環境配置
+- **原子性操作**: 失敗時自動回滾和狀態保存
+
+## 📋 部署前準備
+
+### 1. 環境檢查
+```bash
+cd /Users/sotadic/Documents/DungeonDelversContracts
+
+# 確認 .env 文件存在且包含必要配置
+cat .env | grep -E "PRIVATE_KEY|BSCSCAN_API_KEY|VITE_DUNGEONCORE_ADDRESS"
+```
+
+### 2. 餘額檢查
+確保部署者錢包至少有 **0.1 BNB**:
+- 部署成本: ~0.03 BNB
+- 設定交易: ~0.02 BNB  
+- 緩衝: 0.05 BNB
+
+### 3. 網路狀態
+確認 BSC 網路正常且 gas price 合理（建議 0.1-0.2 gwei）
+
+## 🚀 執行部署
+
+### 方法 1: 一鍵執行腳本 (推薦)
+```bash
+cd /Users/sotadic/Documents/DungeonDelversContracts
+./scripts/deploy-execute.sh
+```
+
+### 方法 2: 手動執行
+```bash
+cd /Users/sotadic/Documents/DungeonDelversContracts
+
+# 1. 編譯合約
+npx hardhat compile
+
+# 2. 執行部署
+npx hardhat run scripts/deploy-hero-relic-vip.js --network bsc
+```
+
+## 📊 部署階段說明
+
+### 階段 1: 合約部署 (約 3-5 分鐘)
+- 部署 Hero.sol → 獲取地址
+- 部署 Relic.sol → 獲取地址  
+- 部署 VIPStaking.sol → 獲取地址
+- 等待區塊確認
+
+### 階段 2: 開源驗證 (約 3-5 分鐘)
+- 提交 Hero 原始碼到 BSCScan
+- 提交 Relic 原始碼到 BSCScan
+- 提交 VIPStaking 原始碼到 BSCScan
+- 等待驗證完成
+
+### 階段 3: CORE 互連 (約 2-3 分鐘)
+- Hero.setContracts(DungeonCore)
+- Relic.setContracts(DungeonCore)
+- VIPStaking.setDungeonCore(DungeonCore)
+- DungeonCore.setModuleAddress("HERO", HeroAddress)
+- DungeonCore.setModuleAddress("RELIC", RelicAddress)
+- DungeonCore.setModuleAddress("VIPSTAKING", VIPStakingAddress)
+
+### 階段 4: 配置更新
+- 更新 .env 中的合約地址
+- 生成部署報告文件
+
+## 📁 輸出文件
+
+部署完成後會生成：
+
+```bash
+deployments/
+├── v25-2-3-deployment.json        # 完整部署數據 (JSON)
+└── v25-2-3-deployment-[時間戳].md # 可讀性報告 (Markdown)
+```
+
+### 部署報告內容
+- 📍 所有合約地址和交易哈希
+- ✅ 開源驗證狀態
+- 🔗 BSCScan 連結
+- 📊 Gas 使用統計
+- ❌ 錯誤記錄 (如有)
+
+## 🔧 部署後步驟
+
+### 1. 驗證部署結果
+```bash
+# 檢查合約地址是否更新
+grep -E "VITE_(HERO|RELIC|VIPSTAKING)_ADDRESS" .env
+
+# 查看部署報告
+cat deployments/v25-2-3-deployment-*.md
+```
+
+### 2. 同步配置到其他項目
+```bash
+# 使用統一配置管理系統同步
+node scripts/ultimate-config-system.js sync
+```
+
+### 3. 驗證合約功能
+在 BSCScan 上測試基本功能：
+- Hero: 檢查 totalSupply(), baseURI()
+- Relic: 檢查 totalSupply(), baseURI()
+- VIPStaking: 檢查 unstakeCooldown(), baseURI()
+
+### 4. 重啟相關服務
+```bash
+# 前端重啟
+cd /Users/sotadic/Documents/GitHub/DungeonDelvers
+npm run dev
+
+# 後端重啟 (如需要)
+# 子圖重新部署 (如需要)
+```
+
+## 🚨 故障排除
+
+### 常見問題
+
+#### 1. "insufficient funds for gas"
+**解決方案**: 確保部署錢包有至少 0.1 BNB
+
+#### 2. "nonce too low" 錯誤  
+**解決方案**: 等待 30 秒後重新執行，或手動清除 Hardhat 快取：
+```bash
+npx hardhat clean
+```
+
+#### 3. BSCScan 驗證失敗
+**解決方案**: 手動在 BSCScan 驗證，使用以下參數：
+- Compiler Type: Solidity (Single file)
+- Compiler Version: v0.8.20+commit.a1b79de6
+- License: MIT
+
+#### 4. CORE 互連設定失敗
+**解決方案**: 檢查 DUNGEON_CORE 地址是否正確，手動執行設定：
+```javascript
+// 在 Hardhat console 中執行
+const core = await ethers.getContractAt("DungeonCore", "CORE_ADDRESS");
+await core.setModuleAddress("HERO", "HERO_ADDRESS");
+```
+
+### 錯誤記錄查看
+所有錯誤都會記錄在部署 JSON 文件中：
+```bash
+# 查看錯誤詳情
+jq '.errors' deployments/v25-2-3-deployment.json
+```
+
+## 📞 技術支援
+
+### 重要檔案位置
+- **部署腳本**: `scripts/deploy-hero-relic-vip.js`
+- **執行腳本**: `scripts/deploy-execute.sh`
+- **配置文件**: `.env`
+- **部署記錄**: `deployments/`
+
+### 聯絡資訊
+如果遇到問題，請：
+1. 檢查 deployments 目錄中的錯誤記錄
+2. 確認 .env 配置正確性
+3. 驗證網路連接和餘額狀態
+
+---
+
+**預祝部署成功！** 🎉
+
+*Generated by DungeonDelvers Deployment System V25.2.3*

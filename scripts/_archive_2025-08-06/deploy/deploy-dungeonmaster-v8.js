@@ -13,7 +13,7 @@ async function main() {
     dungeonCore: "0xd03d3D7456ba3B52E6E0112eBc2494dB1cB34524",
     dungeonStorage: "0x40D0DFA394707e26247a1EFfAe0f9C1b248Fff10",
     soulShard: "0xc88dAD283Ac209D77Bfe452807d378615AB8B94a",
-    dungeonMasterWallet: "0x10925A7138649C7E1794CE646182eeb5BF8ba647"
+    dungeonMasterWallet: "0xEbCF4A36Ad1485A9737025e9d72186b604487274"
   };
 
   // 部署 DungeonMasterV8

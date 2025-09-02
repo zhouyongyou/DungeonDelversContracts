@@ -5,7 +5,7 @@ async function main() {
   console.log('🔄 更新前端項目合約配置');
   console.log('======================\n');
   
-  const frontendPath = '/Users/sotadic/Documents/GitHub/DungeonDelvers';
+  const frontendPath = '/Users/sotadic/Documents/GitHub/SoulboundSaga';
   const contractsConfigPath = path.join(frontendPath, 'src/config/contracts.ts');
   
   // 新的合約地址

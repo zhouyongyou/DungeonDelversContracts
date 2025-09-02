@@ -21,7 +21,7 @@
     },
     {
       "name": "DungeonMaster.dungeonMasterWallet",
-      "expected": "0x10925A7138649C7E1794CE646182eeb5BF8ba647",
+      "expected": "0xEbCF4A36Ad1485A9737025e9d72186b604487274",
       "error": "execution reverted (no data present; likely require(false) occurred (action=\"call\", data=\"0x\", reason=\"require(false)\", transaction={ \"data\": \"0xa73769c8\", \"to\": \"0x9D3acBa5Bb1eeadf235A3a2DC10e4b9a0E94B374\" }, invocation=null, revert=null, code=CALL_EXCEPTION, version=6.15.0)"
     },
     {

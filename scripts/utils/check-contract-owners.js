@@ -28,7 +28,7 @@ async function checkOwners() {
   console.log('🔍 檢查所有合約的 Owner/Admin...\n');
 
   const provider = new ethers.JsonRpcProvider(BSC_RPC);
-  const deployerAddress = '0x10925A7138649C7E1794CE646182eeb5BF8ba647';
+  const deployerAddress = '0xEbCF4A36Ad1485A9737025e9d72186b604487274';
   
   console.log(`📝 Deployer 地址: ${deployerAddress}\n`);
 

@@ -18,19 +18,19 @@ function log(message, color = 'reset') {
 const contracts = {
   PlayerVault: {
     address: "0xA5BA5EE03d452eA5e57c72657c8EC03C6F388E1f",
-    constructorArgs: ["0x10925A7138649C7E1794CE646182eeb5BF8ba647"]
+    constructorArgs: ["0xEbCF4A36Ad1485A9737025e9d72186b604487274"]
   },
   PlayerProfile: {
     address: "0x39b09c3c64D5ada443d2965cb31C7bad7AC66F2f",
-    constructorArgs: ["0x10925A7138649C7E1794CE646182eeb5BF8ba647"]
+    constructorArgs: ["0xEbCF4A36Ad1485A9737025e9d72186b604487274"]
   },
   AltarOfAscension: {
     address: "0xB9878bBDcB82926f0D03E0157e8c34AEa35E06cb",
-    constructorArgs: ["0x10925A7138649C7E1794CE646182eeb5BF8ba647"]
+    constructorArgs: ["0xEbCF4A36Ad1485A9737025e9d72186b604487274"]
   },
   VIPStaking: {
     address: "0x738eA7A2408F56D47EF127954Db42D37aE6339D5",
-    constructorArgs: ["0x10925A7138649C7E1794CE646182eeb5BF8ba647"]
+    constructorArgs: ["0xEbCF4A36Ad1485A9737025e9d72186b604487274"]
   }
 };
 

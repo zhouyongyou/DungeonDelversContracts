@@ -5,7 +5,7 @@ async function main() {
   console.log('🔄 更新子圖項目合約配置');
   console.log('======================\n');
   
-  const subgraphPath = '/Users/sotadic/Documents/GitHub/DungeonDelvers/DDgraphql/dungeon-delvers';
+  const subgraphPath = '/Users/sotadic/Documents/GitHub/SoulboundSaga/DDgraphql/dungeon-delvers';
   
   // 新的合約地址
   const newAddresses = {

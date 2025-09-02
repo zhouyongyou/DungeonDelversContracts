@@ -7,8 +7,8 @@ console.log('🧹 開始清理和重新同步 ABI 文件...\n');
 
 // 項目路徑
 const CONTRACTS_ROOT = '/Users/sotadic/Documents/DungeonDelversContracts';
-const FRONTEND_ROOT = '/Users/sotadic/Documents/GitHub/DungeonDelvers';
-const SUBGRAPH_ROOT = '/Users/sotadic/Documents/GitHub/DungeonDelvers/DDgraphql/dungeon-delvers';
+const FRONTEND_ROOT = '/Users/sotadic/Documents/GitHub/SoulboundSaga';
+const SUBGRAPH_ROOT = '/Users/sotadic/Documents/GitHub/SoulboundSaga/DDgraphql/dungeon-delvers';
 
 const CONTRACTS_ABI_DIR = path.join(CONTRACTS_ROOT, 'abis');
 const FRONTEND_ABI_DIR = path.join(FRONTEND_ROOT, 'src/abis');

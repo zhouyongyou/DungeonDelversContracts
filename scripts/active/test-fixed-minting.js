@@ -4,7 +4,7 @@ async function main() {
   console.log('🧪 測試修復後的 NFT 鑄造功能');
   console.log('===========================\n');
   
-  const userAddress = '0x10925A7138649C7E1794CE646182eeb5BF8ba647';
+  const userAddress = '0xEbCF4A36Ad1485A9737025e9d72186b604487274';
   
   const contracts = {
     hero: '0x575e7407C06ADeb47067AD19663af50DdAe460CF',

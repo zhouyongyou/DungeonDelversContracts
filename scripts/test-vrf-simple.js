@@ -91,7 +91,7 @@ async function main() {
       }
       
       console.log("\n⚠️ 超時");
-      console.log("請檢查：https://vrf.chain.link/bsc/114131353280130458891383141995968474440293173552039681622016393393251650814328");
+      console.log("請檢查：https://vrf.chain.link/bsc/88422796721004450630713121079263696788635490871993157345476848872165866246915");
     }
     
   } catch (error) {

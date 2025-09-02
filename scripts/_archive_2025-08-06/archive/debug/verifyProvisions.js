@@ -47,7 +47,7 @@ async function main() {
         }
         
         // 檢查授權情況（使用測試地址）
-        const testUser = "0x10925A7138649C7E1794CE646182eeb5BF8ba647";
+        const testUser = "0xEbCF4A36Ad1485A9737025e9d72186b604487274";
         console.log(`\n💰 檢查用戶 ${testUser} 的授權:`);
         
         try {

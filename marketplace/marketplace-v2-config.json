@@ -13,7 +13,7 @@
   "deployment": {
     "blockNumber": 55723777,
     "timestamp": "2025-07-29T12:07:36.990Z",
-    "deployer": "0x10925A7138649C7E1794CE646182eeb5BF8ba647"
+    "deployer": "0xEbCF4A36Ad1485A9737025e9d72186b604487274"
   },
   "stablecoins": {
     "USDT": "0x55d398326f99059fF775485246999027B3197955",
@@ -28,6 +28,6 @@
   "parameters": {
     "platformFee": 250,
     "maxFee": 1000,
-    "feeRecipient": "0x10925A7138649C7E1794CE646182eeb5BF8ba647"
+    "feeRecipient": "0xEbCF4A36Ad1485A9737025e9d72186b604487274"
   }
 }

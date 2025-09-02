@@ -9,7 +9,7 @@ async function main() {
     // 合約地址
     const vrfManagerAddress = "0xE1D1c53e2e467BFF3d6e4EffB7b89C0C10711ad1";
     const heroAddress = "0x05Cbb0DbdA4B66c4CC6f60CdADFDb4C4995D9BFD";
-    const userAddress = "0x10925A7138649C7E1794CE646182eeb5BF8ba647";
+    const userAddress = "0xEbCF4A36Ad1485A9737025e9d72186b604487274";
     
     // VRF Manager ABI
     const vrfManagerAbi = [

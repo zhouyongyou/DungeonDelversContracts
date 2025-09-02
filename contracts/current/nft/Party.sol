@@ -1,4 +1,4 @@
-// contracts/Party.sol
+// Party.sol
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
@@ -8,6 +8,7 @@ import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol
 import {Pausable} from "@openzeppelin/contracts/utils/Pausable.sol";
 import "@openzeppelin/contracts/token/ERC721/utils/ERC721Holder.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "../interfaces/interfaces.sol";
 
 contract Party is ERC721, Ownable, ReentrancyGuard, Pausable, ERC721Holder {
@@ -15,9 +16,6 @@ contract Party is ERC721, Ownable, ReentrancyGuard, Pausable, ERC721Holder {
     string public baseURI;
     string private _contractURI;
 
-    // --- 狀態變數 ---
-    IHero public heroContract;
-    IRelic public relicContract;
     IDungeonCore public dungeonCoreContract;
 
     uint256 public platformFee = 0.001 ether;
@@ -25,49 +23,40 @@ contract Party is ERC721, Ownable, ReentrancyGuard, Pausable, ERC721Holder {
         uint256[] heroIds;
         uint256[] relicIds;
         uint256 totalPower;
-        uint256 totalCapacity;
         uint8 partyRarity;
     }
     mapping(uint256 => PartyComposition) public partyCompositions;
     uint256 private _nextTokenId;
     
-    // Direct power lookup mappings for DungeonMaster compatibility
     mapping(uint256 => uint256) public partyPowerDirect;
-    mapping(uint256 => uint256) public partyCapacityDirect;
 
-    // --- 事件 ---
     event PartyCreated(
         uint256 indexed partyId,
         address indexed owner,
         uint256[] heroIds,
         uint256[] relicIds,
         uint256 totalPower,
-        uint256 totalCapacity,
         uint8 partyRarity
     );
     event PlatformFeeSet(uint256 newFee);
-    event HeroContractSet(address indexed newAddress);
-    event RelicContractSet(address indexed newAddress);
     event DungeonCoreSet(address indexed newAddress);
     event BaseURISet(string newBaseURI);
     event ContractURIUpdated(string newContractURI);
     event OperatorApprovalSet(address indexed operator, bool approved);
-    event PartyDisbanded(uint256 indexed partyId, address indexed owner);
-    event PartyMemberChanged(uint256 indexed partyId, uint256[] heroIds, uint256[] relicIds);
-    event PartyMemberAdded(uint256 indexed partyId, address indexed owner, uint256 indexed heroId);
-    event PartyMemberRemoved(uint256 indexed partyId, address indexed owner, uint256 indexed heroId);
 
-    // --- 建構函式 ---
-    constructor(
-        address initialOwner
-    ) ERC721("Dungeon Delvers Party", "DDP") Ownable(initialOwner) {
+    // Enhanced constructor with default metadata URIs
+    constructor() ERC721("Dungeon Delvers Party", "DDP") Ownable(msg.sender) {
         _nextTokenId = 1;
+        
+        // Set default baseURI for immediate marketplace compatibility
+        baseURI = "https://dungeon-delvers-metadata-server.onrender.com/metadata/party/";
+        
+        // Set default contractURI for collection-level metadata
+        _contractURI = "https://dungeon-delvers-metadata-server.onrender.com/metadata/collection/party";
     }
 
-    // 接收原生代幣的函式
     receive() external payable {}
 
-    // --- 核心功能 ---
     function createParty(uint256[] calldata _heroIds, uint256[] calldata _relicIds) 
         external 
         payable 
@@ -78,28 +67,31 @@ contract Party is ERC721, Ownable, ReentrancyGuard, Pausable, ERC721Holder {
         require(msg.value >= platformFee, "Party: Platform fee not met");
         require(_relicIds.length > 0 && _relicIds.length <= 5, "Party: Invalid relic count");
         require(_heroIds.length <= 25, "Party: Too many heroes");
+        IHero heroContract = IHero(_getHeroContract());
+        IRelic relicContract = IRelic(_getRelicContract());
         require(address(heroContract) != address(0) && address(relicContract) != address(0), "Party: Contracts not set");
 
         uint256 totalPower = 0;
         uint256 totalCapacity = 0;
         
-        // 驗證聖物並計算總容量
+        // Verify relic ownership and calculate total capacity
         for (uint i = 0; i < _relicIds.length; i++) {
             require(relicContract.ownerOf(_relicIds[i]) == msg.sender, "Party: You do not own all relics");
             (, uint8 capacity) = relicContract.getRelicProperties(_relicIds[i]);
             totalCapacity += capacity;
         }
 
+        // Capacity check: heroes must not exceed total capacity
         require(_heroIds.length <= totalCapacity, "Party: Too many heroes for capacity");
         
-        // 驗證英雄並計算總戰力
+        // Verify heroes and calculate total power
         for (uint i = 0; i < _heroIds.length; i++) {
             require(heroContract.ownerOf(_heroIds[i]) == msg.sender, "Party: You do not own all heroes");
             (, uint256 power) = heroContract.getHeroProperties(_heroIds[i]);
             totalPower += power;
         }
 
-        // 安全性升級：使用 safeTransferFrom 將 NFT 轉入本合約
+        // Security upgrade: use safeTransferFrom to transfer NFTs to this contract
         for (uint i = 0; i < _relicIds.length; i++) {
             relicContract.safeTransferFrom(msg.sender, address(this), _relicIds[i]);
         }
@@ -108,43 +100,30 @@ contract Party is ERC721, Ownable, ReentrancyGuard, Pausable, ERC721Holder {
         }
         
         partyId = _nextTokenId;
-        uint8 partyRarity = _calculatePartyRarity(totalCapacity);
+        uint8 partyRarity = _calculatePartyRarity(totalPower);
         
         partyCompositions[partyId] = PartyComposition({
             heroIds: _heroIds,
             relicIds: _relicIds,
             totalPower: totalPower,
-            totalCapacity: totalCapacity,
             partyRarity: partyRarity
         });
         
-        // Store power/capacity in direct mappings for fast lookup
+        // Store power in direct mapping for fast lookup
         partyPowerDirect[partyId] = totalPower;
-        partyCapacityDirect[partyId] = totalCapacity;
 
         _safeMint(msg.sender, partyId);
         _nextTokenId++;
         
-        emit PartyCreated(partyId, msg.sender, _heroIds, _relicIds, totalPower, totalCapacity, partyRarity);
+        emit PartyCreated(partyId, msg.sender, _heroIds, _relicIds, totalPower, partyRarity);
     }
     
-    // --- 元數據 URI ---
     function tokenURI(uint256 tokenId) public view override returns (string memory) {
         _requireOwned(tokenId);
         require(bytes(baseURI).length > 0, "Party: baseURI not set");
         return string(abi.encodePacked(baseURI, tokenId.toString()));
     }
     
-    // --- Owner 管理函式 ---
-    function setHeroContract(address _heroAddress) public onlyOwner {
-        heroContract = IHero(_heroAddress);
-        emit HeroContractSet(_heroAddress);
-    }
-
-    function setRelicContract(address _relicAddress) public onlyOwner {
-        relicContract = IRelic(_relicAddress);
-        emit RelicContractSet(_relicAddress);
-    }
 
     function setDungeonCore(address _coreAddress) public onlyOwner {
         dungeonCoreContract = IDungeonCore(_coreAddress);
@@ -156,18 +135,20 @@ contract Party is ERC721, Ownable, ReentrancyGuard, Pausable, ERC721Holder {
         emit BaseURISet(_newBaseURI);
     }
 
-    function contractURI() public view returns (string memory) {
-        return _contractURI;
-    }
-
     function setContractURI(string memory newContractURI) external onlyOwner {
         _contractURI = newContractURI;
         emit ContractURIUpdated(newContractURI);
     }
+    
+    /// @notice Returns the contract URI for collection-level metadata (OpenSea/OKX compatibility)
+    /// @dev This enables NFT marketplaces to read collection logo, description, and other metadata
+    function contractURI() public view returns (string memory) {
+        return _contractURI;
+    }
 
     function setOperatorApproval(address operator, bool approved) external onlyOwner {
-        heroContract.setApprovalForAll(operator, approved);
-        relicContract.setApprovalForAll(operator, approved);
+        IHero(_getHeroContract()).setApprovalForAll(operator, approved);
+        IRelic(_getRelicContract()).setApprovalForAll(operator, approved);
         emit OperatorApprovalSet(operator, approved);
     }
 
@@ -175,16 +156,35 @@ contract Party is ERC721, Ownable, ReentrancyGuard, Pausable, ERC721Holder {
     function unpause() public onlyOwner { _unpause(); }
 
     /**
-     * @notice 提取合約中收取的平台費用 (BNB)
+     * @notice Withdraw platform fees collected in contract (BNB)
      */
     function withdrawNative() external onlyOwner {
         (bool success, ) = owner().call{value: address(this).balance}("");
         require(success, "Party: Native withdraw failed");
     }
+    
+    /**
+     * @notice Withdraw SoulShard tokens (safety function)
+     * @dev Added for emergency withdrawal if contract receives SOUL tokens
+     */
+    function withdrawSoulShard() external onlyOwner {
+        address soulShardAddress = dungeonCoreContract.soulShardTokenAddress();
+        require(soulShardAddress != address(0), "Party: SoulShard not set");
+        
+        IERC20 soulShard = IERC20(soulShardAddress);
+        uint256 balance = soulShard.balanceOf(address(this));
+        
+        require(balance > 0, "Party: No SOUL to withdraw");
+        soulShard.transfer(owner(), balance);
+    }
 
     function setPlatformFee(uint256 _newFee) external onlyOwner {
         platformFee = _newFee;
         emit PlatformFeeSet(_newFee);
+    }
+
+    function totalSupply() public view returns (uint256) {
+        return _nextTokenId > 0 ? _nextTokenId - 1 : 0;
     }
 
     function _requireNotLocked(uint256 _partyId) internal view {
@@ -193,10 +193,10 @@ contract Party is ERC721, Ownable, ReentrancyGuard, Pausable, ERC721Holder {
         }
     }
     
-    function getPartyComposition(uint256 _partyId) external view returns (uint256 totalPower, uint256 totalCapacity) {
+    function getPartyComposition(uint256 _partyId) external view returns (uint256 totalPower) {
         ownerOf(_partyId);
         PartyComposition memory comp = partyCompositions[_partyId];
-        return (comp.totalPower, comp.totalCapacity);
+        return comp.totalPower;
     }
     
     function getFullPartyComposition(uint256 _partyId) external view returns (PartyComposition memory) {
@@ -204,22 +204,25 @@ contract Party is ERC721, Ownable, ReentrancyGuard, Pausable, ERC721Holder {
         return partyCompositions[_partyId];
     }
 
-    function _calculatePartyRarity(uint256 _capacity) private pure returns (uint8) {
-        if (_capacity >= 20) return 5;
-        if (_capacity >= 15) return 4;
-        if (_capacity >= 10) return 3;
-        if (_capacity >= 5) return 2;
-        return 1;
+    function _calculatePartyRarity(uint256 _totalPower) private pure returns (uint8) {
+        if (_totalPower >= 2700) return 5;  // UR - Ultra Rare (2700+)
+        if (_totalPower >= 2100) return 4;  // SSR - Super Super Rare (2100-2699)
+        if (_totalPower >= 1500) return 3;  // SR - Super Rare (1500-2099)
+        if (_totalPower >= 900) return 2;   // R - Rare (900-1499)
+        return 1;                            // N - Normal (0-899)
     }
     
-    // Fast power/capacity lookup functions for DungeonMaster
     function getPartyPowerQuick(uint256 _partyId) external view returns (uint256) {
         ownerOf(_partyId); // Check party exists
         return partyPowerDirect[_partyId];
     }
     
-    function getPartyCapacityQuick(uint256 _partyId) external view returns (uint256) {
-        ownerOf(_partyId); // Check party exists
-        return partyCapacityDirect[_partyId];
+
+    function _getHeroContract() internal view returns (address) {
+        return dungeonCoreContract.heroContractAddress();
+    }
+
+    function _getRelicContract() internal view returns (address) {
+        return dungeonCoreContract.relicContractAddress();
     }
 }

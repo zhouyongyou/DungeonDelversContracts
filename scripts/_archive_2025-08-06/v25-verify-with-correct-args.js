@@ -4,7 +4,7 @@ const execAsync = promisify(exec);
 require('dotenv').config();
 
 // The deployer address (owner) for all contracts
-const DEPLOYER_ADDRESS = '0x10925A7138649C7E1794CE646182eeb5BF8ba647';
+const DEPLOYER_ADDRESS = '0xEbCF4A36Ad1485A9737025e9d72186b604487274';
 
 // VRF Manager V2Plus constructor arguments
 const VRF_WRAPPER = '0xEcA584828452209c7022772edEFd03C5C0FE3A6c'; // BSC Mainnet VRF V2.5 Wrapper

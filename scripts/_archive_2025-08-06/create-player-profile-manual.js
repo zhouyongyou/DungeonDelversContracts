@@ -13,7 +13,7 @@ const CONTRACTS = {
   PLAYERPROFILE: "0xCf352E394fD2Ff27D65bB525C032a2c03Bd79AC7"
 };
 
-const PLAYER_ADDRESS = "0x10925A7138649C7E1794CE646182eeb5BF8ba647";
+const PLAYER_ADDRESS = "0xEbCF4A36Ad1485A9737025e9d72186b604487274";
 
 async function main() {
   console.log("🔧 手動為玩家創建檔案...\n");

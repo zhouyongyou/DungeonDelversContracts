@@ -5,7 +5,7 @@ async function main() {
   console.log('=========================\n');
   
   const hero = await hre.ethers.getContractAt('Hero', '0xD48867dbac5f1c1351421726B6544f847D9486af');
-  const userAddress = '0x10925A7138649C7E1794CE646182eeb5BF8ba647';
+  const userAddress = '0xEbCF4A36Ad1485A9737025e9d72186b604487274';
   
   try {
     // 檢查鑄造價格設定（USD）

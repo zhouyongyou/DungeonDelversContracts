@@ -1,0 +1,20 @@
+{
+  "timestamp": 1756056308545,
+  "date": "2025-08-24T17:25:08.545Z",
+  "results": {
+    "PlayerVault": {
+      "status": "success",
+      "address": "0x030F34B673941Aeff293CbF89504A2E33b9FC17f"
+    },
+    "Hero": {
+      "status": "success",
+      "address": "0x48150A69E7494F278A7AdCB6F7dF8ab26ae09b84"
+    },
+    "Relic": {
+      "status": "success",
+      "address": "0xAC850c628FD3919135fF812681567791b22Fd06c"
+    }
+  },
+  "deploymentFile": "pvh-deployment-2025-08-24.json",
+  "notes": "PlayerVault、Hero、Relic 合約驗證記錄"
+}

@@ -1,0 +1,95 @@
+{
+  "network": "bsc",
+  "timestamp": "2025-08-31T17:10:05.678Z",
+  "deployer": "0xEbCF4A36Ad1485A9737025e9d72186b604487274",
+  "contracts": {
+    "hero": {
+      "name": "Hero",
+      "symbol": "DDH",
+      "address": "0x941F44De87B303D792924e38fb8C9BADc697Eba2",
+      "deploymentHash": "0xa4a62bee18ea4a697125fff459a883b353a23fb32250e805eaa2b44b5fb24f1e",
+      "deployer": "0xEbCF4A36Ad1485A9737025e9d72186b604487274",
+      "timestamp": "2025-08-31T17:10:10.513Z",
+      "verified": true
+    },
+    "relic": {
+      "name": "Relic",
+      "symbol": "DDR",
+      "address": "0xB96D6356C836eA19F7dd006537C4836dD2d3e38d",
+      "deploymentHash": "0xb5ff3d828f14a4f20c362abf300d55be0e66587903b651d858724605d62e6e08",
+      "deployer": "0xEbCF4A36Ad1485A9737025e9d72186b604487274",
+      "timestamp": "2025-08-31T17:10:15.129Z",
+      "verified": true
+    },
+    "vipstaking": {
+      "name": "VIPStaking",
+      "symbol": "DDV",
+      "address": "0x48B5693926d3363024F318dDf486101ee8480AB2",
+      "deploymentHash": "0x279b6643561aeb078f301dcd71bebaa5a6a5f63c96594a8b314e6b0df419df95",
+      "deployer": "0xEbCF4A36Ad1485A9737025e9d72186b604487274",
+      "timestamp": "2025-08-31T17:10:20.440Z",
+      "verified": false,
+      "verificationError": "A network request failed. This is an error from the block explorer, not Hardhat. Error: Connect Timeout Error"
+    }
+  },
+  "transactions": [
+    {
+      "type": "deployment",
+      "contract": "Hero",
+      "hash": "0xa4a62bee18ea4a697125fff459a883b353a23fb32250e805eaa2b44b5fb24f1e",
+      "address": "0x941F44De87B303D792924e38fb8C9BADc697Eba2"
+    },
+    {
+      "type": "deployment",
+      "contract": "Relic",
+      "hash": "0xb5ff3d828f14a4f20c362abf300d55be0e66587903b651d858724605d62e6e08",
+      "address": "0xB96D6356C836eA19F7dd006537C4836dD2d3e38d"
+    },
+    {
+      "type": "deployment",
+      "contract": "VIPStaking",
+      "hash": "0x279b6643561aeb078f301dcd71bebaa5a6a5f63c96594a8b314e6b0df419df95",
+      "address": "0x48B5693926d3363024F318dDf486101ee8480AB2"
+    },
+    {
+      "type": "setup",
+      "description": "VIPStaking → Core",
+      "hash": "0x0ae2beb3c130f67c572ce90f724f81671c9c0b29fd26bc826c2cadf9ff53429c",
+      "contract": "vipstaking"
+    }
+  ],
+  "errors": [
+    {
+      "stage": "Hero → Core",
+      "error": "hero.setContracts is not a function",
+      "timestamp": "2025-08-31T17:12:58.340Z"
+    },
+    {
+      "stage": "Relic → Core",
+      "error": "relic.setContracts is not a function",
+      "timestamp": "2025-08-31T17:12:58.344Z"
+    },
+    {
+      "stage": "Core → Hero",
+      "error": "dungeonCore.setModuleAddress is not a function",
+      "timestamp": "2025-08-31T17:13:04.661Z"
+    },
+    {
+      "stage": "Core → Relic",
+      "error": "dungeonCore.setModuleAddress is not a function",
+      "timestamp": "2025-08-31T17:13:04.661Z"
+    },
+    {
+      "stage": "Core → VIPStaking",
+      "error": "dungeonCore.setModuleAddress is not a function",
+      "timestamp": "2025-08-31T17:13:04.661Z"
+    }
+  ],
+  "summary": {
+    "totalContracts": 3,
+    "successfulDeployments": 3,
+    "verifiedContracts": 2,
+    "totalTransactions": 4,
+    "totalErrors": 5
+  }
+}

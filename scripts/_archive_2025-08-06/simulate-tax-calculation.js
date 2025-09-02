@@ -8,7 +8,7 @@ async function main() {
     const dungeonCoreAddress = "0x04b33eEB6Da358ea9Dd002a1E1c28AC90A25881E";
     const vipStakingAddress = "0xdC285539069Fa51b9259bd1F1d66f23f74B96A6c";
     const playerProfileAddress = "0x145F19e672a7D53ddb16bcE3fdeAd976bb3ef82f";
-    const playerAddress = "0x10925A7138649C7E1794CE646182eeb5BF8ba647";
+    const playerAddress = "0xEbCF4A36Ad1485A9737025e9d72186b604487274";
     
     // 完整的 ABI
     const playerVaultABI = [

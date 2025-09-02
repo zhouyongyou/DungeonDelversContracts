@@ -12,7 +12,7 @@ async function main() {
     const DUNGEONCORE_ADDRESS = "0xA1c1e58fB2077b5Db861902B4A15F50b54F3f7e4";
 
     // 測试用戶地址（如果你有特定用戶地址，請在這裡添加）
-    const TEST_USER_ADDRESS = "0x10925A7138649C7E1794CE646182eeb5BF8ba647"; // 替換為實際用戶地址
+    const TEST_USER_ADDRESS = "0xEbCF4A36Ad1485A9737025e9d72186b604487274"; // 替換為實際用戶地址
 
     // 獲取簽名者
     const [deployer] = await ethers.getSigners();

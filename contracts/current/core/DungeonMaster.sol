@@ -1,4 +1,4 @@
-// DungeonMaster_fixed.sol - 增強錯誤處理和一致性改進
+// DungeonMaster.sol - Enhanced error handling and consistency improvements
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
@@ -11,24 +11,16 @@ import "../interfaces/interfaces.sol";
 contract DungeonMaster is Ownable, ReentrancyGuard, Pausable, IVRFCallback {
     using SafeERC20 for IERC20;
     
-    // --- 狀態變數 ---
     IDungeonCore public dungeonCore;
-    IDungeonStorage public dungeonStorage;
-    IERC20 public soulShardToken;
     
-    // === VRF 相關 ===
-    address public vrfManager;
     mapping(uint256 => address) public requestIdToUser; // requestId => user
     
-    // 遊戲設定
     uint256 public globalRewardMultiplier = 1000; // 1000 = 100%
     uint256 public explorationFee = 0.0015 ether;
     uint256 public constant COOLDOWN_PERIOD = 24 hours;
 
-    // 定義與 DungeonStorage 匹配的結構
     struct PartyStatus {
-        uint256 cooldownEndsAt;
-        uint256 unclaimedRewards;
+        uint256 cooldownEndsAt;  // Cooldown end time
     }
 
     struct Dungeon {
@@ -44,72 +36,68 @@ contract DungeonMaster is Ownable, ReentrancyGuard, Pausable, IVRFCallback {
         address player;
         bool fulfilled;
         uint256 payment;
+        uint256 requestId;  // Store VRF requestId for event emission
+        uint256 timestamp;  // When the request was created
     }
     
     mapping(address => ExpeditionRequest) public userRequests;
 
-    // --- 事件 ---
-    event ExpeditionFulfilled(address indexed player, uint256 indexed partyId, bool success, uint256 reward, uint256 expGained);
-    event RewardsBanked(address indexed user, uint256 indexed partyId, uint256 amount);
+    event ExpeditionFulfilled(address indexed player, uint256 indexed requestId, uint256 indexed partyId, bool success, uint256 reward, uint256 expGained, uint256 dungeonId);
     event DungeonCoreSet(address indexed newAddress);
-    event DungeonStorageSet(address indexed newAddress);
-    event SoulShardTokenSet(address indexed newAddress);
     event DungeonSet(uint256 indexed dungeonId, uint256 requiredPower, uint256 rewardAmountUSD, uint8 baseSuccessRate);
     event ExpeditionRequested(address indexed player, uint256 partyId, uint256 dungeonId);
-    event ExpeditionRevealed(address indexed player, uint256 partyId, bool success);
-    event RevealedByProxy(address indexed user, address indexed proxy);
-    // === VRF 事件 ===
-    event VRFManagerSet(address indexed vrfManager);
     event VRFRequestFulfilled(uint256 indexed requestId, uint256 randomWordsCount);
-    // 🔧 新增：錯誤處理事件
     event ExpeditionProcessingError(address indexed user, uint256 requestId, string reason);
+    event EmergencyCleanup(address indexed user, uint256 refundAmount);
 
-    constructor(address _initialOwner) Ownable(_initialOwner) {}
+    // Modified: Use msg.sender as owner instead of requiring parameter
+    constructor() Ownable(msg.sender) {}
     
-    // --- 核心遊戲邏輯 ---
 
-    // === VRF 整合的探索請求函數（標準回調版本）===
+    // VRF integrated exploration request function (standard callback version)
     function requestExpedition(uint256 _partyId, uint256 _dungeonId) 
         external payable nonReentrant whenNotPaused
     {
         require(userRequests[msg.sender].player == address(0) || userRequests[msg.sender].fulfilled, "DungeonMaster: Previous expedition request still pending");
         
-        // 檢查是否為隊伍擁有者
+        // Check if caller is party owner
         IParty partyContract = IParty(dungeonCore.partyContractAddress());
         require(partyContract.ownerOf(_partyId) == msg.sender, "DungeonMaster: Caller is not the party owner");
         
-        require(address(dungeonCore) != address(0) && address(dungeonStorage) != address(0), "DungeonMaster: Core contracts not properly configured");
+        require(address(dungeonCore) != address(0), "DungeonMaster: DungeonCore not configured");
+        require(_getDungeonStorage() != address(0), "DungeonMaster: DungeonStorage not configured in DungeonCore");
         
-        // 驗證地城和隊伍狀態
+        // Validate dungeon and party status
         Dungeon memory dungeon = _getDungeon(_dungeonId);
         PartyStatus memory partyStatus = _getPartyStatus(_partyId);
 
         require(dungeon.isInitialized, "DungeonMaster: Dungeon does not exist or not initialized");
         require(block.timestamp >= partyStatus.cooldownEndsAt, "DungeonMaster: Party is still on cooldown period");
         
-        // 檢查隊伍戰力
-        (uint256 totalPower, ) = partyContract.getPartyComposition(_partyId);
+        // Check party power
+        uint256 totalPower = partyContract.getPartyComposition(_partyId);
         require(totalPower >= dungeon.requiredPower, "DungeonMaster: Party power insufficient for this dungeon");
 
-        // 🎯 嚴格費用檢查，無退款邏輯
+        // Strict fee check, no refund logic
         require(msg.value == explorationFee, "DungeonMaster: Exact exploration fee payment required");
 
-        // 立即設置冷卻（防止重複使用）
+        // Immediately set cooldown (prevent double usage)
         partyStatus.cooldownEndsAt = block.timestamp + COOLDOWN_PERIOD;
         _setPartyStatus(_partyId, partyStatus);
         
-        if (vrfManager != address(0)) {
+        address vrfManagerAddr = _getVRFManager();
+        if (vrfManagerAddr != address(0)) {
             bytes32 requestData = keccak256(abi.encodePacked(msg.sender, _partyId, _dungeonId));
             
-            // 🎯 VRF 調用無需傳遞 ETH（訂閱模式）
-            uint256 requestId = IVRFManager(vrfManager).requestRandomForUser{value: 0}(
+            // VRF call doesn't need ETH transfer (subscription mode)
+            uint256 requestId = IVRFManager(vrfManagerAddr).requestRandomForUser{value: 0}(
                 msg.sender,
-                1, // 只需要一個隨機數用於探索結果
-                1, // maxRarity 對探索無意義，設為1
+                1, // Only need one random number for exploration result
+                1, // maxRarity is meaningless for exploration, set to 1
                 requestData
             );
             
-            // 🎯 記錄 requestId 對應的用戶（標準回調需要）
+            // Record requestId to user mapping (required for standard callback)
             requestIdToUser[requestId] = msg.sender;
             
             userRequests[msg.sender] = ExpeditionRequest({
@@ -117,91 +105,92 @@ contract DungeonMaster is Ownable, ReentrancyGuard, Pausable, IVRFCallback {
                 dungeonId: _dungeonId,
                 player: msg.sender,
                 fulfilled: false,
-                payment: msg.value
+                payment: msg.value,
+                requestId: requestId,  // Store requestId for later use
+                timestamp: block.timestamp  // Record when request was created
             });
             
             emit ExpeditionRequested(msg.sender, _partyId, _dungeonId);
             return;
         }
         
-        // VRF 不可用時直接失敗
+        // Direct failure when VRF is unavailable
         revert("DungeonMaster: VRF required for expeditions");
     }
     
-    // === 🎯 標準 VRF 回調實現（最小修復版本）===
+    // Standard VRF callback implementation (minimal fix version)
     function onVRFFulfilled(uint256 requestId, uint256[] memory randomWords) external override {
-        // 🎯 安全性改進：使用 return 而非 require，避免卡死 VRF 系統
-        if (msg.sender != vrfManager) return;
+        // Security improvement: use return instead of require to avoid blocking VRF system
+        if (msg.sender != _getVRFManager()) return;
         if (randomWords.length == 0) return;
         
-        // 🎯 標準回調模式：直接在回調中處理業務邏輯
+        // Standard callback mode: handle business logic directly in callback
         address user = requestIdToUser[requestId];
         if (user == address(0)) return;
         
         ExpeditionRequest storage request = userRequests[user];
         if (request.fulfilled) return;
         
-        // 🔧 最小修復：直接處理，移除 try-catch 複雜度
+        // Minimal fix: direct processing, remove try-catch complexity
         _processExpeditionWithVRF(user, request, randomWords[0]);
         
-        // 🎯 關鍵修復：清理數據始終在處理邏輯之後執行
+        // Key fix: data cleanup always executed after processing logic
         delete requestIdToUser[requestId];
         delete userRequests[user];
         
-        // 發出 VRF 完成事件以便前端監聽
+        // Emit VRF completion event for frontend monitoring
         emit VRFRequestFulfilled(requestId, randomWords.length);
     }
 
-    // === VRF 結果處理（優化版本）===
+    // VRF result processing (optimized version)
     function _processExpeditionWithVRF(
         address user, 
         ExpeditionRequest storage request, 
         uint256 randomWord
     ) private {
-        // 🔧 修復：先執行所有處理邏輯，最後才設置 fulfilled
+        // Fix: execute all processing logic first, then set fulfilled last
         
-        // 驗證隊伍所有權（防止在等待期間轉移） - 使用安全檢查
+        // Verify party ownership (prevent transfer during waiting period) - use safe check
         address partyOwner = address(0);
         try IParty(dungeonCore.partyContractAddress()).ownerOf(request.partyId) returns (address owner) {
             partyOwner = owner;
         } catch {
-            // 如果調用失敗，當作隊伍已轉移處理
-            emit ExpeditionFulfilled(request.player, request.partyId, false, 0, 0);
+            // If call fails, treat as party transferred
+            emit ExpeditionFulfilled(request.player, request.requestId, request.partyId, false, 0, 0, request.dungeonId);
             emit ExpeditionProcessingError(user, 0, "Party contract call failed");
             request.fulfilled = true;
             return;
         }
         
         if (partyOwner != request.player) {
-            // 如果隊伍已轉移，探索失敗但不回滾狀態
-            emit ExpeditionFulfilled(request.player, request.partyId, false, 0, 0);
+            // If party transferred, expedition fails but don't rollback state
+            emit ExpeditionFulfilled(request.player, request.requestId, request.partyId, false, 0, 0, request.dungeonId);
             request.fulfilled = true;
             return;
         }
         
-        // 使用 VRF 隨機數處理探索結果
+        // Use VRF random number to process exploration result
         Dungeon memory dungeon = _getDungeon(request.dungeonId);
         
         uint8 vipBonus = 0;
         try IVIPStaking(dungeonCore.vipStakingAddress()).getVipLevel(request.player) returns (uint8 level) { 
             vipBonus = level; 
         } catch {
-            // VIP 查詢失敗時使用 0 加成
+            // Use 0 bonus when VIP query fails
         }
         
         uint256 finalSuccessRate = dungeon.baseSuccessRate + vipBonus;
         if (finalSuccessRate > 100) finalSuccessRate = 100;
 
-        // 使用 VRF 隨機數生成結果
+        // Generate result using VRF random number
         uint256 randomValue = randomWord % 100;
         bool success = randomValue < finalSuccessRate;
 
         (uint256 reward, uint256 expGained) = _handleExpeditionOutcome(request.player, request.dungeonId, success);
         
-        emit ExpeditionFulfilled(request.player, request.partyId, success, reward, expGained);
-        emit ExpeditionRevealed(request.player, request.partyId, success);
+        emit ExpeditionFulfilled(request.player, request.requestId, request.partyId, success, reward, expGained, request.dungeonId);
         
-        // 🔧 關鍵修復：所有處理完成後才設置 fulfilled
+        // Key fix: set fulfilled only after all processing is complete
         request.fulfilled = true;
     }
     
@@ -209,22 +198,22 @@ contract DungeonMaster is Ownable, ReentrancyGuard, Pausable, IVRFCallback {
         Dungeon memory dungeon = _getDungeon(_dungeonId);
         
         if (_success) {
-            // 🔧 增強：依賴調用保護
+            // Enhanced: dependency call protection
             uint256 soulShardReward;
             try dungeonCore.getSoulShardAmountForUSD(dungeon.rewardAmountUSD) returns (uint256 baseReward) {
                 soulShardReward = (baseReward * globalRewardMultiplier) / 1000;
             } catch {
-                // Oracle 失敗時給予固定獎勵
+                // Give fixed reward when Oracle fails
                 soulShardReward = 0;
                 emit ExpeditionProcessingError(_player, 0, "Oracle price unavailable - no reward given");
             }
             
             if (soulShardReward > 0) {
-                // 直接記帳到 PlayerVault - 增強錯誤處理
+                // Direct accounting to PlayerVault - enhanced error handling
                 try IPlayerVault(dungeonCore.playerVaultAddress()).deposit(_player, soulShardReward) {
                     reward = soulShardReward;
                 } catch {
-                    // Vault 存款失敗，記錄錯誤
+                    // Vault deposit failed, record error
                     reward = 0;
                     emit ExpeditionProcessingError(_player, 0, "Vault deposit failed - reward lost");
                 }
@@ -235,41 +224,32 @@ contract DungeonMaster is Ownable, ReentrancyGuard, Pausable, IVRFCallback {
             expGained = dungeon.requiredPower / 20;
         }
         
-        // 🔧 增強：經驗值添加保護
+        // Enhanced: experience point addition protection
         try IPlayerProfile(dungeonCore.playerProfileAddress()).addExperience(_player, expGained) {
-            // 成功
+            // Success
         } catch {
-            // 經驗值添加失敗，記錄但不影響探索結果
+            // Experience addition failed, record but don't affect exploration result
             emit ExpeditionProcessingError(_player, 0, "Experience gain failed");
         }
     }
 
-    // 內部輔助函數
     function _getPartyStatus(uint256 _partyId) private view returns (PartyStatus memory) {
-        (uint256 provisionsRemaining, uint256 cooldownEndsAt, uint256 unclaimedRewards, uint8 fatigueLevel) = 
-            IDungeonStorage(dungeonStorage).partyStatuses(_partyId);
+        IDungeonStorage.PartyStatus memory storageStatus = IDungeonStorage(_getDungeonStorage()).getPartyStatus(_partyId);
         
         return PartyStatus({
-            cooldownEndsAt: cooldownEndsAt,
-            unclaimedRewards: unclaimedRewards
+            cooldownEndsAt: storageStatus.cooldownEndsAt
         });
     }
 
     function _setPartyStatus(uint256 _partyId, PartyStatus memory _status) private {
-        (uint256 provisionsRemaining, , , uint8 fatigueLevel) = 
-            IDungeonStorage(dungeonStorage).partyStatuses(_partyId);
-        
-        IDungeonStorage(dungeonStorage).setPartyStatus(_partyId, IDungeonStorage.PartyStatus({
-            provisionsRemaining: provisionsRemaining,
-            cooldownEndsAt: _status.cooldownEndsAt,
-            unclaimedRewards: _status.unclaimedRewards,
-            fatigueLevel: fatigueLevel
+        IDungeonStorage(_getDungeonStorage()).setPartyStatus(_partyId, IDungeonStorage.PartyStatus({
+            cooldownEndsAt: _status.cooldownEndsAt
         }));
     }
 
     function _getDungeon(uint256 _dungeonId) private view returns (Dungeon memory) {
         (uint256 requiredPower, uint256 rewardAmountUSD, uint8 baseSuccessRate, bool isInitialized) = 
-            IDungeonStorage(dungeonStorage).dungeons(_dungeonId);
+            IDungeonStorage(_getDungeonStorage()).dungeons(_dungeonId);
         
         return Dungeon({
             requiredPower: requiredPower,
@@ -279,59 +259,88 @@ contract DungeonMaster is Ownable, ReentrancyGuard, Pausable, IVRFCallback {
         });
     }
 
-    // 獎勵領取函數
-    function claimRewards(uint256 _partyId) external view {
-        revert("DungeonMaster: Rewards are automatically deposited to PlayerVault");
-    }
 
-    // === 查詢函數 ===
+    function _getVRFManager() internal view returns (address) {
+        return dungeonCore.getVRFManager();
+    }
+    
+    function _getDungeonStorage() internal view returns (address) {
+        return dungeonCore.dungeonStorageAddress();
+    }
+    
     function getUserRequest(address _user) external view returns (ExpeditionRequest memory) {
         return userRequests[_user];
     }
 
-    // === VRF 管理函數 ===
-    function setVRFManager(address _vrfManager) external onlyOwner {
-        vrfManager = _vrfManager;
-        
-        // 注意：需要 VRFManager 的 owner 手動授權此合約
-        // 不再自動調用 authorizeContract，避免權限錯誤
-        
-        emit VRFManagerSet(_vrfManager);
-    }
     
-    // 查詢探索所需的總費用（簡化版本）
+    // Query total cost required for exploration (simplified version)
     function getExpeditionCost() external view returns (uint256 totalCost, uint256 explorationFeeAmount, uint256 vrfFeeAmount) {
         explorationFeeAmount = explorationFee;
-        vrfFeeAmount = 0; // VRF 訂閱模式下費用為 0
-        totalCost = explorationFeeAmount; // 總費用就是探索費
+        vrfFeeAmount = 0; // VRF subscription mode cost is 0
+        totalCost = explorationFeeAmount; // Total cost is exploration fee
     }
 
-    // 🔧 新增：緊急清理用戶請求
+    /**
+     * @notice Emergency cleanup user request with refund
+     * @dev Admin function to clear stuck expedition and refund exploration fee
+     * @param user Address of the stuck user
+     */
     function emergencyCleanupUser(address user) external onlyOwner {
         ExpeditionRequest storage request = userRequests[user];
         require(request.player != address(0), "DungeonMaster: No pending request");
         
-        // 清理數據
+        // Store payment amount before deletion
+        uint256 refundAmount = request.payment;
+        
+        // Cleanup data
         delete userRequests[user];
         
-        emit ExpeditionProcessingError(user, 0, "Emergency cleanup by admin");
+        // Refund exploration fee if payment was made
+        if (refundAmount > 0) {
+            (bool success, ) = user.call{value: refundAmount}("");
+            require(success, "DungeonMaster: Refund failed");
+        }
+        
+        emit EmergencyCleanup(user, refundAmount);
+    }
+    
+    /**
+     * @notice Self emergency reset - user can reset their own stuck expedition request
+     * @dev Allows users to reset their own expedition request after timeout, with refund
+     */
+    function selfEmergencyReset() external nonReentrant {
+        ExpeditionRequest storage request = userRequests[msg.sender];
+        
+        // Check if user has pending request
+        require(request.player != address(0) && !request.fulfilled, "DungeonMaster: No pending request to reset");
+        
+        // Check if enough time has passed (5 minutes = 300 seconds)
+        require(
+            block.timestamp >= request.timestamp + 300,
+            "DungeonMaster: Must wait 5 minutes before emergency reset"
+        );
+        
+        // Store payment amount before deletion
+        uint256 refundAmount = request.payment;
+        
+        // Force reset request
+        delete userRequests[msg.sender];
+        
+        // Refund exploration fee if payment was made
+        if (refundAmount > 0) {
+            (bool success, ) = msg.sender.call{value: refundAmount}("");
+            require(success, "DungeonMaster: Refund failed");
+        }
+        
+        emit EmergencyCleanup(msg.sender, refundAmount);
     }
 
-    // --- 管理函數 ---
     function setDungeonCore(address _newAddress) external onlyOwner {
         dungeonCore = IDungeonCore(_newAddress);
         emit DungeonCoreSet(_newAddress);
     }
 
-    function setDungeonStorage(address _newAddress) external onlyOwner {
-        dungeonStorage = IDungeonStorage(_newAddress);
-        emit DungeonStorageSet(_newAddress);
-    }
 
-    function setSoulShardToken(address _newAddress) external onlyOwner {
-        soulShardToken = IERC20(_newAddress);
-        emit SoulShardTokenSet(_newAddress);
-    }
 
     function setGlobalRewardMultiplier(uint256 _newMultiplier) external onlyOwner {
         globalRewardMultiplier = _newMultiplier;
@@ -344,14 +353,16 @@ contract DungeonMaster is Ownable, ReentrancyGuard, Pausable, IVRFCallback {
     function pause() external onlyOwner { _pause(); }
     function unpause() external onlyOwner { _unpause(); }
 
-    // 🎯 簡化的資金提取（無需保護退款資金）
-    function withdrawNativeFunding() external onlyOwner {
+    // Simplified fund withdrawal (no need to protect refund funds)
+    function withdrawNative() external onlyOwner {
         (bool success, ) = owner().call{value: address(this).balance}("");
         require(success, "DungeonMaster: Native token withdrawal failed");
     }
 
     function withdrawSoulShard() external onlyOwner {
-        require(address(soulShardToken) != address(0), "DungeonMaster: SoulShard token contract not configured");
+        address soulShardAddr = dungeonCore.soulShardTokenAddress();
+        require(soulShardAddr != address(0), "DungeonMaster: SoulShard token contract not configured");
+        IERC20 soulShardToken = IERC20(soulShardAddr);
         uint256 balance = soulShardToken.balanceOf(address(this));
         if (balance > 0) {
             soulShardToken.safeTransfer(owner(), balance);
@@ -366,18 +377,22 @@ contract DungeonMaster is Ownable, ReentrancyGuard, Pausable, IVRFCallback {
             baseSuccessRate: _baseSuccessRate,
             isInitialized: true
         });
-        dungeonStorage.setDungeon(_dungeonId, dungeonData);
+        IDungeonStorage(_getDungeonStorage()).setDungeon(_dungeonId, dungeonData);
         emit DungeonSet(_dungeonId, _requiredPower, _rewardAmountUSD, _baseSuccessRate);
     }
 
-    // --- 查詢函數 ---
-    function getPartyStatus(uint256 _partyId) external view returns (uint256 cooldownEndsAt, uint256 unclaimedRewards) {
+    function getPartyStatus(uint256 _partyId) external view returns (uint256 cooldownEndsAt) {
         PartyStatus memory status = _getPartyStatus(_partyId);
-        return (status.cooldownEndsAt, status.unclaimedRewards);
+        return status.cooldownEndsAt;
     }
     
     function getDungeon(uint256 _dungeonId) external view returns (uint256 requiredPower, uint256 rewardAmountUSD, uint8 baseSuccessRate, bool isInitialized) {
         Dungeon memory dungeon = _getDungeon(_dungeonId);
         return (dungeon.requiredPower, dungeon.rewardAmountUSD, dungeon.baseSuccessRate, dungeon.isInitialized);
+    }
+    
+    // Query whether user can explore
+    function canExplore(address user) external view returns (bool) {
+        return userRequests[user].player == address(0) || userRequests[user].fulfilled;
     }
 }

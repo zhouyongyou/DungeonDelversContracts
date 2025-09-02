@@ -28,9 +28,9 @@ const colors = {
 
 // 項目路徑配置
 const PROJECT_PATHS = {
-  frontend: '/Users/sotadic/Documents/GitHub/DungeonDelvers',
+  frontend: '/Users/sotadic/Documents/GitHub/SoulboundSaga',
   backend: '/Users/sotadic/Documents/dungeon-delvers-metadata-server',
-  subgraph: '/Users/sotadic/Documents/GitHub/DungeonDelvers/DDgraphql/dungeon-delvers',
+  subgraph: '/Users/sotadic/Documents/GitHub/SoulboundSaga/DDgraphql/dungeon-delvers',
   contracts: '/Users/sotadic/Documents/DungeonDelversContracts'
 };
 
@@ -282,7 +282,7 @@ ${colors.reset}`);
           version: 'V26-VRF',
           lastUpdated: new Date().toISOString(),
           network: masterConfig.network?.name || 'BSC Mainnet',
-          deployer: masterConfig.contracts?.mainnet?.DUNGEONMASTERWALLET_ADDRESS || '0x10925A7138649C7E1794CE646182eeb5BF8ba647',
+          deployer: masterConfig.contracts?.mainnet?.DUNGEONMASTERWALLET_ADDRESS || '0xEbCF4A36Ad1485A9737025e9d72186b604487274',
           startBlock: 56184733,
           contracts: {
             SOULSHARD: {

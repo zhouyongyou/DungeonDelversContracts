@@ -27,7 +27,7 @@ async function verifyContract(address, name, args) {
 async function main() {
   console.log("🚀 開始驗證 VRF 相關合約...\n");
   
-  const deployer = "0x10925A7138649C7E1794CE646182eeb5BF8ba647";
+  const deployer = "0xEbCF4A36Ad1485A9737025e9d72186b604487274";
   const DUNGEON_CORE = "0x8a2D2b1961135127228EdD71Ff98d6B097915a13";
   const DUNGEON_STORAGE = "0x88EF98E7F9095610d7762C30165854f271525B97";
   

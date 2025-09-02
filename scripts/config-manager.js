@@ -204,11 +204,11 @@ class ConfigManager {
         
         const filesToCheck = [
             {
-                path: '/Users/sotadic/Documents/GitHub/DungeonDelvers/.env.local',
+                path: '/Users/sotadic/Documents/GitHub/SoulboundSaga/.env.local',
                 type: 'frontend-env'
             },
             {
-                path: '/Users/sotadic/Documents/GitHub/DungeonDelvers/src/config/contracts.ts',
+                path: '/Users/sotadic/Documents/GitHub/SoulboundSaga/src/config/contracts.ts',
                 type: 'frontend-ts'
             },
             {

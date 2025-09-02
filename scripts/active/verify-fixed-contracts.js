@@ -17,14 +17,14 @@ async function main() {
       name: 'Hero',
       address: '0x575e7407C06ADeb47067AD19663af50DdAe460CF',
       constructorArgs: [
-        '0x10925A7138649C7E1794CE646182eeb5BF8ba647' // Owner address
+        '0xEbCF4A36Ad1485A9737025e9d72186b604487274' // Owner address
       ]
     },
     {
       name: 'Relic', 
       address: '0x36cC82c8fb1c71c4B37eC5E6454960e09a5DC739',
       constructorArgs: [
-        '0x10925A7138649C7E1794CE646182eeb5BF8ba647' // Owner address
+        '0xEbCF4A36Ad1485A9737025e9d72186b604487274' // Owner address
       ]
     }
   ];

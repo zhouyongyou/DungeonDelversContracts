@@ -1,4 +1,4 @@
-// contracts/PlayerVault.sol (簡化虛擬記帳版本)
+// PlayerVault.sol (With Custom Referral Username Support)
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
@@ -8,19 +8,17 @@ import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 
 /**
- * @title PlayerVault (v4.0 - 簡化虛擬記帳版本)
- * @notice 專門負責玩家資金的虛擬記帳、提款和遊戲內消費
- * @dev 主要修改：
- * 1. spendForGame 改為虛擬扣款而非實際轉帳
- * 2. 佣金和稅收也採用虛擬記帳
- * 3. 只有玩家最終提款才實際轉出 SoulShard
+ * @title PlayerVault (With Custom Referral Username Support)
+ * @notice Extended PlayerVault with custom referral username functionality
+ * @dev New features:
+ * 1. Custom username registration with BNB fee
+ * 2. Username to address mapping for referrals
+ * 3. Enhanced referral system supporting both addresses and usernames
  */
 contract PlayerVault is Ownable, ReentrancyGuard {
     using SafeERC20 for IERC20;
 
-    // --- 狀態變數 ---
     IDungeonCore public dungeonCore;
-    IERC20 public soulShardToken;
 
     struct PlayerInfo {
         uint256 withdrawableBalance;
@@ -29,9 +27,19 @@ contract PlayerVault is Ownable, ReentrancyGuard {
     }
     mapping(address => PlayerInfo) public playerInfo;
     mapping(address => address) public referrers;
-    mapping(address => uint256) public totalCommissionPaid;  // 保留：追蹤佣金
-    mapping(address => uint256) public virtualCommissionBalance; // 新增：推薦人的虛擬佣金餘額
-    uint256 public virtualTaxBalance; // 新增：虛擬稅收餘額
+    mapping(address => uint256) public totalCommissionPaid;
+    mapping(address => uint256) public virtualCommissionBalance;
+    uint256 public virtualTaxBalance;
+
+    // ============ NEW: Custom Username Features ============
+    mapping(string => address) public usernameToAddress;    // "john" → 0x123...
+    mapping(address => string) public addressToUsername;    // 0x123... → "john"
+    mapping(string => bool) public usernameExists;          // Check if username is taken
+    
+    uint256 public usernameRegistrationFee = 0.01 ether;    // BNB fee for registration
+    uint256 public constant MIN_USERNAME_LENGTH = 1;
+    uint256 public constant MAX_USERNAME_LENGTH = 15;
+    // ======================================================
 
     uint256 public constant PERCENT_DIVISOR = 10000;
     uint256 public constant USD_DECIMALS = 1e18;
@@ -46,19 +54,24 @@ contract PlayerVault is Ownable, ReentrancyGuard {
 
     uint256 public commissionRate = 500; // 5%
 
-    // --- 事件 ---
+    // Original events
     event Deposited(address indexed player, uint256 amount);
     event Withdrawn(address indexed player, uint256 amount, uint256 taxAmount);
     event GameSpending(address indexed player, address indexed spender, uint256 amount);
-    event VirtualGameSpending(address indexed player, address indexed spender, uint256 amount);
     event ReferralSet(address indexed user, address indexed referrer);
     event CommissionPaid(address indexed user, address indexed referrer, uint256 amount);
-    event VirtualCommissionAdded(address indexed referrer, uint256 amount); // 新增
-    event VirtualTaxCollected(uint256 amount); // 新增
+    event VirtualCommissionAdded(address indexed referrer, uint256 amount);
+    event VirtualTaxCollected(uint256 amount);
     event DungeonCoreSet(address indexed newAddress);
-    event SoulShardTokenSet(address indexed newAddress);
     event TaxParametersUpdated(uint256 standardRate, uint256 largeRate, uint256 decreaseRate, uint256 period);
     event WithdrawThresholdsUpdated(uint256 smallAmount, uint256 largeAmount);
+
+    // ============ NEW: Username Events ============
+    event UsernameRegistered(address indexed user, string username);
+    event UsernameUpdated(address indexed user, string oldUsername, string newUsername);
+    event UsernameRegistrationFeeUpdated(uint256 newFee);
+    event ReferralSetByUsername(address indexed user, address indexed referrer, string username);
+    // =============================================
 
     modifier onlyAuthorizedGameContracts() {
         require(address(dungeonCore) != address(0), "Vault: DungeonCore not set");
@@ -79,9 +92,147 @@ contract PlayerVault is Ownable, ReentrancyGuard {
         _;
     }
 
-    constructor(address initialOwner) Ownable(initialOwner) {}
+    constructor() Ownable(msg.sender) {}
+
+    // ============ NEW: Username Functions ============
     
-    // --- 玩家功能 ---
+    /**
+     * @notice Register a custom username for referrals
+     * @param username The desired username (3-20 characters, alphanumeric + underscore only)
+     */
+    function registerUsername(string memory username) external payable nonReentrant {
+        require(msg.value >= usernameRegistrationFee, "Vault: Insufficient registration fee");
+        require(_isValidUsername(username), "Vault: Invalid username format");
+        require(!usernameExists[username], "Vault: Username already taken");
+        require(bytes(addressToUsername[msg.sender]).length == 0, "Vault: User already has a username. Use updateUsername instead");
+        
+        // Register the username
+        usernameToAddress[username] = msg.sender;
+        addressToUsername[msg.sender] = username;
+        usernameExists[username] = true;
+        
+        emit UsernameRegistered(msg.sender, username);
+    }
+    
+    /**
+     * @notice Update existing username
+     * @param newUsername The new desired username (1-15 characters, alphanumeric + underscore only)
+     */
+    function updateUsername(string memory newUsername) external payable nonReentrant {
+        require(msg.value >= usernameRegistrationFee, "Vault: Insufficient update fee");
+        require(_isValidUsername(newUsername), "Vault: Invalid username format");
+        require(!usernameExists[newUsername], "Vault: Username already taken");
+        
+        string memory oldUsername = addressToUsername[msg.sender];
+        require(bytes(oldUsername).length > 0, "Vault: No existing username. Use registerUsername instead");
+        
+        // Remove old mapping
+        usernameExists[oldUsername] = false;
+        delete usernameToAddress[oldUsername];
+        
+        // Set new mapping
+        usernameToAddress[newUsername] = msg.sender;
+        addressToUsername[msg.sender] = newUsername;
+        usernameExists[newUsername] = true;
+        
+        emit UsernameUpdated(msg.sender, oldUsername, newUsername);
+    }
+    
+    /**
+     * @notice Set referrer using username or address
+     * @param referrerInput Either a username (string) or will be processed by frontend
+     */
+    function setReferrerByUsername(string memory referrerInput) external nonReentrant {
+        address referrerAddr = usernameToAddress[referrerInput];
+        require(referrerAddr != address(0), "Vault: Username not found");
+        require(referrers[msg.sender] == address(0), "Vault: Referrer already set");
+        require(referrerAddr != msg.sender, "Vault: Cannot refer yourself");
+        
+        referrers[msg.sender] = referrerAddr;
+        emit ReferralSetByUsername(msg.sender, referrerAddr, referrerInput);
+        emit ReferralSet(msg.sender, referrerAddr);
+    }
+    
+    /**
+     * @notice Get address from username
+     * @param username The username to resolve
+     * @return The address associated with the username, or zero address if not found
+     */
+    function resolveUsername(string memory username) external view returns (address) {
+        return usernameToAddress[username];
+    }
+    
+    /**
+     * @notice Get username from address  
+     * @param user The address to lookup
+     * @return The username associated with the address, empty string if none
+     */
+    function getUserUsername(address user) external view returns (string memory) {
+        return addressToUsername[user];
+    }
+    
+    /**
+     * @notice Check if username is available
+     * @param username The username to check
+     * @return true if available, false if taken
+     */
+    function isUsernameAvailable(string memory username) external view returns (bool) {
+        return _isValidUsername(username) && !usernameExists[username];
+    }
+    
+    /**
+     * @notice Validate username format (internal)
+     */
+    function _isValidUsername(string memory username) internal pure returns (bool) {
+        bytes memory usernameBytes = bytes(username);
+        uint256 length = usernameBytes.length;
+        
+        // Check length
+        if (length < MIN_USERNAME_LENGTH || length > MAX_USERNAME_LENGTH) {
+            return false;
+        }
+        
+        // Check characters: only a-z, A-Z, 0-9, _
+        for (uint256 i = 0; i < length; i++) {
+            bytes1 char = usernameBytes[i];
+            if (!(char >= 0x30 && char <= 0x39) &&  // 0-9
+                !(char >= 0x41 && char <= 0x5A) &&  // A-Z
+                !(char >= 0x61 && char <= 0x7A) &&  // a-z
+                char != 0x5F) {                      // _
+                return false;
+            }
+        }
+        
+        // Prevent addresses as usernames (0x prefix)
+        if (length >= 2 && usernameBytes[0] == '0' && (usernameBytes[1] == 'x' || usernameBytes[1] == 'X')) {
+            return false;
+        }
+        
+        return true;
+    }
+    
+    /**
+     * @notice Owner can update registration fee
+     */
+    function setUsernameRegistrationFee(uint256 newFee) external onlyOwner {
+        usernameRegistrationFee = newFee;
+        emit UsernameRegistrationFeeUpdated(newFee);
+    }
+    
+    /**
+     * @notice Owner can withdraw BNB from username registrations
+     */
+    function withdrawNative() external onlyOwner {
+        uint256 balance = address(this).balance;
+        require(balance > 0, "Vault: No BNB to withdraw");
+        
+        (bool success, ) = owner().call{value: balance}("");
+        require(success, "Vault: BNB withdrawal failed");
+    }
+    
+    // =============================================
+    
+    // Original functions remain unchanged
     function setReferrer(address _referrer) external nonReentrant {
         require(referrers[msg.sender] == address(0), "Vault: Referrer already set");
         require(_referrer != msg.sender, "Vault: Cannot refer yourself");
@@ -90,11 +241,9 @@ contract PlayerVault is Ownable, ReentrancyGuard {
         emit ReferralSet(msg.sender, _referrer);
     }
 
-    /**
-     * @notice 提款功能 - 從虛擬餘額提取實際代幣
-     */
     function withdraw(uint256 _amount) external nonReentrant {
-        require(address(soulShardToken) != address(0), "Vault: SoulShard token not set");
+        address soulShardAddr = _getSoulShardToken();
+        require(soulShardAddr != address(0), "Vault: SoulShard token not set");
         PlayerInfo storage player = playerInfo[msg.sender];
         require(_amount > 0, "Vault: Amount must be > 0");
         require(player.withdrawableBalance >= _amount, "Vault: Insufficient balance");
@@ -112,47 +261,30 @@ contract PlayerVault is Ownable, ReentrancyGuard {
         _processWithdrawal(player, msg.sender, _amount, taxRate);
     }
 
-    /**
-     * @notice 推薦人提取佣金
-     */
     function withdrawCommission() external nonReentrant {
         uint256 commission = virtualCommissionBalance[msg.sender];
         require(commission > 0, "Vault: No commission to withdraw");
         
         virtualCommissionBalance[msg.sender] = 0;
-        soulShardToken.safeTransfer(msg.sender, commission);
+        IERC20(_getSoulShardToken()).safeTransfer(msg.sender, commission);
         
         emit Withdrawn(msg.sender, commission, 0);
     }
 
-    // --- 遊戲合約互動 ---
-    /**
-     * @notice 存款功能 - 純虛擬記帳
-     */
     function deposit(address _player, uint256 _amount) external onlyDungeonMaster {
         require(_player != address(0), "Vault: Cannot deposit to zero address");
         playerInfo[_player].withdrawableBalance += _amount;
         emit Deposited(_player, _amount);
     }
 
-    /**
-     * @notice 遊戲消費 - 純虛擬扣款
-     */
     function spendForGame(address _player, uint256 _amount) external onlyAuthorizedGameContracts {
         PlayerInfo storage player = playerInfo[_player];
         require(player.withdrawableBalance >= _amount, "Vault: Insufficient balance for game spending");
         
-        // 虛擬扣款
         player.withdrawableBalance -= _amount;
-        
-        // 發出虛擬消費事件
-        emit VirtualGameSpending(_player, msg.sender, _amount);
+        emit GameSpending(_player, msg.sender, _amount);
     }
 
-    // --- 內部邏輯 ---
-    /**
-     * @notice 處理提款 - 佣金和稅收採用虛擬記帳
-     */
     function _processWithdrawal(PlayerInfo storage player, address _withdrawer, uint256 _amount, uint256 _taxRate) private {
         player.withdrawableBalance -= _amount;
         player.lastWithdrawTimestamp = block.timestamp;
@@ -163,7 +295,6 @@ contract PlayerVault is Ownable, ReentrancyGuard {
         address referrer = referrers[_withdrawer];
         uint256 commissionAmount = 0;
         
-        // 佣金採用虛擬記帳
         if (referrer != address(0)) {
             commissionAmount = (amountAfterTaxes * commissionRate) / PERCENT_DIVISOR;
             if (commissionAmount > 0) {
@@ -176,15 +307,13 @@ contract PlayerVault is Ownable, ReentrancyGuard {
         
         uint256 finalAmountToPlayer = amountAfterTaxes - commissionAmount;
 
-        // 稅收採用虛擬記帳
         if (taxAmount > 0) {
             virtualTaxBalance += taxAmount;
             emit VirtualTaxCollected(taxAmount);
         }
 
-        // 只有玩家的部分實際轉出
         if (finalAmountToPlayer > 0) {
-            soulShardToken.safeTransfer(_withdrawer, finalAmountToPlayer);
+            IERC20(_getSoulShardToken()).safeTransfer(_withdrawer, finalAmountToPlayer);
         }
         
         emit Withdrawn(_withdrawer, finalAmountToPlayer, taxAmount);
@@ -215,7 +344,6 @@ contract PlayerVault is Ownable, ReentrancyGuard {
         return initialRate - totalReduction;
     }
 
-    // --- Owner 管理功能 ---
     function setTaxParameters(
         uint256 _standardRate,
         uint256 _largeRate,
@@ -241,9 +369,8 @@ contract PlayerVault is Ownable, ReentrancyGuard {
         emit DungeonCoreSet(_newAddress);
     }
     
-    function setSoulShardToken(address _newAddress) external onlyOwner {
-        soulShardToken = IERC20(_newAddress);
-        emit SoulShardTokenSet(_newAddress);
+    function _getSoulShardToken() internal view returns (address) {
+        return dungeonCore.soulShardTokenAddress();
     }
 
     function setCommissionRate(uint256 _newRate) external onlyOwner {
@@ -251,53 +378,44 @@ contract PlayerVault is Ownable, ReentrancyGuard {
         commissionRate = _newRate;
     }
 
-    /**
-     * @notice Owner 提取稅收
-     */
     function withdrawTax() external onlyOwner {
         uint256 tax = virtualTaxBalance;
         require(tax > 0, "Vault: No tax to withdraw");
         
         virtualTaxBalance = 0;
-        soulShardToken.safeTransfer(owner(), tax);
+        IERC20(_getSoulShardToken()).safeTransfer(owner(), tax);
     }
 
     function withdrawGameRevenue(uint256 amount) external onlyOwner {
-        uint256 contractBalance = soulShardToken.balanceOf(address(this));
+        IERC20 token = IERC20(_getSoulShardToken());
+        uint256 contractBalance = token.balanceOf(address(this));
         
-        // 如果 amount = 0 或超過合約餘額，提取全部
         if (amount == 0 || amount > contractBalance) {
             amount = contractBalance;
         }
         
-        // 如果沒有可提取資金，靜默返回而不是拋出錯誤
         if (amount == 0) {
             return;
         }
         
-        soulShardToken.safeTransfer(owner(), amount);
+        token.safeTransfer(owner(), amount);
     }
 
-    /**
-     * @notice 緊急提取 - 可指定金額或全部提取
-     */
     function emergencyWithdrawSoulShard(uint256 _amount) external onlyOwner {
-        uint256 contractBalance = soulShardToken.balanceOf(address(this));
+        IERC20 token = IERC20(_getSoulShardToken());
+        uint256 contractBalance = token.balanceOf(address(this));
         
-        // 如果 amount = 0 或超過合約餘額，提取全部
         if (_amount == 0 || _amount > contractBalance) {
             _amount = contractBalance;
         }
         
-        // 如果沒有可提取資金，靜默返回
         if (_amount == 0) {
             return;
         }
         
-        soulShardToken.safeTransfer(owner(), _amount);
+        token.safeTransfer(owner(), _amount);
     }
 
-    // --- 查詢功能 ---
     function getPlayerInfo(address _player) external view returns (
         uint256 withdrawableBalance,
         uint256 lastWithdrawTimestamp,
@@ -330,13 +448,12 @@ contract PlayerVault is Ownable, ReentrancyGuard {
         return _calculateTaxRate(_player, amountUSD);
     }
     
-    /**
-     * @notice 檢查合約是否已正確初始化
-     * @return isReady 如果所有必要的地址都已設置則返回 true
-     */
     function isInitialized() external view returns (bool isReady, address tokenAddress, address coreAddress) {
-        tokenAddress = address(soulShardToken);
+        tokenAddress = _getSoulShardToken();
         coreAddress = address(dungeonCore);
         isReady = tokenAddress != address(0) && coreAddress != address(0);
     }
+
+    // Allow contract to receive BNB for username registration fees
+    receive() external payable {}
 }

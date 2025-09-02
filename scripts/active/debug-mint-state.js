@@ -4,7 +4,7 @@ async function main() {
   console.log('🔍 調試鑄造狀態');
   console.log('================\n');
   
-  const userAddress = '0x10925A7138649C7E1794CE646182eeb5BF8ba647';
+  const userAddress = '0xEbCF4A36Ad1485A9737025e9d72186b604487274';
   const hero = await hre.ethers.getContractAt('Hero', '0xD48867dbac5f1c1351421726B6544f847D9486af');
   
   console.log('1️⃣ 檢查合約狀態:');

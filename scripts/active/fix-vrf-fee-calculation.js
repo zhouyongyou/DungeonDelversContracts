@@ -4,7 +4,7 @@ async function main() {
   console.log('🛠️ 部署修復後的合約版本');
   console.log('===============================\n');
   
-  const userAddress = '0x10925A7138649C7E1794CE646182eeb5BF8ba647';
+  const userAddress = '0xEbCF4A36Ad1485A9737025e9d72186b604487274';
   
   console.log('📋 修復內容:');
   console.log('1. Hero.sol - 修正 VRF 費用傳遞邏輯');

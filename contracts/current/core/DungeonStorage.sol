@@ -1,20 +1,18 @@
-// DungeonStorage.sol (已修正)
+// DungeonStorage.sol (Fixed)
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Pausable.sol";
+import "../interfaces/interfaces.sol";
 
 /**
  * @title DungeonStorage
- * @notice DungeonMaster 的專用儲存合約，用於解決主合約大小超限問題。
- * @dev 僅儲存狀態變數，並限制只有授權的 DungeonMaster 合約才能修改數據。
+ * @notice Dedicated storage contract for DungeonMaster to solve main contract size limit issue.
+ * @dev Only stores state variables and restricts data modification to authorized DungeonMaster contract only.
  */
 contract DungeonStorage is Ownable, Pausable {
-    // --- 狀態變數 ---
-    address public logicContract; // 授權可以修改數據的邏輯合約地址 (即 DungeonMaster)
-
-    uint256 public constant NUM_DUNGEONS = 12;
+    IDungeonCore public dungeonCore;
 
     struct Dungeon {
         uint256 requiredPower;
@@ -25,39 +23,129 @@ contract DungeonStorage is Ownable, Pausable {
     mapping(uint256 => Dungeon) public dungeons;
 
     struct PartyStatus {
-        uint256 provisionsRemaining;
-        uint256 cooldownEndsAt;
-        uint256 unclaimedRewards;
-        uint8 fatigueLevel; // 已經不再使用的機制
+        uint256 cooldownEndsAt;  // Cooldown end time
     }
     mapping(uint256 => PartyStatus) public partyStatuses;
 
-    struct ExpeditionRequest {
-        address requester;
-        uint256 partyId;
-        uint256 dungeonId;
-    }
-    mapping(uint256 => ExpeditionRequest) public s_requests;
-
-    // --- 事件 ---
-    event LogicContractSet(address indexed newAddress);
-
-    // --- 修飾符 ---
     modifier onlyLogicContract() {
-        require(msg.sender == logicContract, "Storage: Caller is not the authorized logic contract");
+        address authorizedLogic = _getDungeonMaster();
+        require(msg.sender == authorizedLogic, "Storage: Caller is not authorized");
         _;
     }
 
-    // --- 構造函數 ---
-    constructor(address initialOwner) Ownable(initialOwner) {}
-
-    // --- Owner 管理函式 ---
-    function setLogicContract(address _logicContract) external onlyOwner {
-        logicContract = _logicContract;
-        emit LogicContractSet(_logicContract);
+    function _getDungeonMaster() internal view returns (address) {
+        require(address(dungeonCore) != address(0), "Storage: DungeonCore not set");
+        return dungeonCore.dungeonMasterAddress();
     }
 
-    // --- Getters (任何人都可以讀取數據) ---
+    // Modified: Use msg.sender as owner instead of requiring parameter
+    // Initialize all dungeons with default values on deployment
+    constructor() Ownable(msg.sender) {
+        _initializeDungeons();
+    }
+    
+    function _initializeDungeons() private {
+        // Dungeon 1: 新手礦洞
+        dungeons[1] = Dungeon({
+            requiredPower: 300,
+            rewardAmountUSD: 6,  // $6
+            baseSuccessRate: 89,
+            isInitialized: true
+        });
+        
+        // Dungeon 2: 哥布林洞穴
+        dungeons[2] = Dungeon({
+            requiredPower: 600,
+            rewardAmountUSD: 12,  // $12
+            baseSuccessRate: 84,
+            isInitialized: true
+        });
+        
+        // Dungeon 3: 食人魔山谷
+        dungeons[3] = Dungeon({
+            requiredPower: 900,
+            rewardAmountUSD: 20,  // $20
+            baseSuccessRate: 79,
+            isInitialized: true
+        });
+        
+        // Dungeon 4: 蜘蛛巢穴
+        dungeons[4] = Dungeon({
+            requiredPower: 1200,
+            rewardAmountUSD: 33,  // $33
+            baseSuccessRate: 74,
+            isInitialized: true
+        });
+        
+        // Dungeon 5: 石化蜥蜴沼澤
+        dungeons[5] = Dungeon({
+            requiredPower: 1500,
+            rewardAmountUSD: 52,  // $52
+            baseSuccessRate: 69,
+            isInitialized: true
+        });
+        
+        // Dungeon 6: 巫妖墓穴
+        dungeons[6] = Dungeon({
+            requiredPower: 1800,
+            rewardAmountUSD: 78,  // $78
+            baseSuccessRate: 64,
+            isInitialized: true
+        });
+        
+        // Dungeon 7: 奇美拉之巢
+        dungeons[7] = Dungeon({
+            requiredPower: 2100,
+            rewardAmountUSD: 113,  // $113
+            baseSuccessRate: 59,
+            isInitialized: true
+        });
+        
+        // Dungeon 8: 惡魔前哨站
+        dungeons[8] = Dungeon({
+            requiredPower: 2400,
+            rewardAmountUSD: 156,  // $156
+            baseSuccessRate: 54,
+            isInitialized: true
+        });
+        
+        // Dungeon 9: 巨龍之巔
+        dungeons[9] = Dungeon({
+            requiredPower: 2700,
+            rewardAmountUSD: 209,  // $209
+            baseSuccessRate: 49,
+            isInitialized: true
+        });
+        
+        // Dungeon 10: 混沌深淵
+        dungeons[10] = Dungeon({
+            requiredPower: 3000,
+            rewardAmountUSD: 225,  // $225
+            baseSuccessRate: 44,
+            isInitialized: true
+        });
+        
+        // Dungeon 11: 冥界之門
+        dungeons[11] = Dungeon({
+            requiredPower: 3300,
+            rewardAmountUSD: 320,  // $320
+            baseSuccessRate: 39,
+            isInitialized: true
+        });
+        
+        // Dungeon 12: 虛空裂隙
+        dungeons[12] = Dungeon({
+            requiredPower: 3600,
+            rewardAmountUSD: 450,  // $450
+            baseSuccessRate: 34,
+            isInitialized: true
+        });
+    }
+
+    function setDungeonCore(address _coreAddress) external onlyOwner {
+        dungeonCore = IDungeonCore(_coreAddress);
+    }
+
     function getDungeon(uint256 _dungeonId) external view returns (Dungeon memory) {
         return dungeons[_dungeonId];
     }
@@ -66,11 +154,6 @@ contract DungeonStorage is Ownable, Pausable {
         return partyStatuses[_partyId];
     }
 
-    function getExpeditionRequest(uint256 _requestId) external view returns (ExpeditionRequest memory) {
-        return s_requests[_requestId];
-    }
-
-    // --- Setters (只有授權的 DungeonMaster 才能寫入數據) ---
     function setDungeon(uint256 id, Dungeon calldata data) external onlyLogicContract whenNotPaused {
         dungeons[id] = data;
     }
@@ -79,15 +162,6 @@ contract DungeonStorage is Ownable, Pausable {
         partyStatuses[id] = data;
     }
 
-    function setExpeditionRequest(uint256 id, ExpeditionRequest calldata data) external onlyLogicContract whenNotPaused {
-        s_requests[id] = data;
-    }
-
-    function deleteExpeditionRequest(uint256 id) external onlyLogicContract whenNotPaused {
-        delete s_requests[id];
-    }
-
-    // --- 暫停功能 ---
     function pause() external onlyOwner {
         _pause();
     }

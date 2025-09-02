@@ -3,7 +3,7 @@
 import { ethers } from "hardhat";
 import { formatEther } from "ethers";
 
-const USER_ADDRESS = "0x10925A7138649C7E1794CE646182eeb5BF8ba647";
+const USER_ADDRESS = "0xEbCF4A36Ad1485A9737025e9d72186b604487274";
 const PARTY_ID = 2n;
 const AMOUNT = 1n;
 

@@ -1,4 +1,4 @@
-// AltarOfAscension_fixed.sol - 修復清理邏輯和 fulfilled 設置時機
+// AltarOfAscension.sol - Fixed cleanup logic and fulfilled setting timing
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
@@ -13,13 +13,10 @@ contract AltarOfAscension is Ownable, ReentrancyGuard, Pausable, IVRFCallback {
     IHero public heroContract;
     IRelic public relicContract;
 
-    // === VRF 相關 ===
-    address public vrfManager;
-    mapping(address => uint256) public activeUpgradeRequest; // 🛡️ 防重複請求
-    mapping(uint256 => bool) public lockedTokens; // 🛡️ 防NFT重複使用
-    mapping(uint256 => address) public requestIdToUser; // 🎯 標準回調需要
+    mapping(address => uint256) public activeUpgradeRequest; // Prevent duplicate requests
+    mapping(uint256 => bool) public lockedTokens; // Prevent NFT reuse
+    mapping(uint256 => address) public requestIdToUser; // Required for standard callback
     
-    // 🎯 保留統計系統（子圖依賴）
     struct UpgradeStats {
         uint256 totalAttempts;
         uint256 totalBurned;
@@ -52,22 +49,24 @@ contract AltarOfAscension is Ownable, ReentrancyGuard, Pausable, IVRFCallback {
         uint256[] burnedTokenIds;
         bool fulfilled;
         uint256 payment;
+        uint256 requestId;  // Store VRF requestId for event emission
+        uint256 timestamp;  // When the request was created
     }
     
     mapping(address => UpgradeRequest) public userRequests;
     
-    // 🎯 保留關鍵事件（子圖依賴）
     event UpgradeAttempted(
         address indexed player,
+        uint256 indexed requestId,  // Add requestId as second indexed parameter
         address indexed tokenContract,
         uint8 baseRarity,
         uint8 targetRarity,
         uint256[] burnedTokenIds,
         uint256[] mintedTokenIds,
         uint8 outcome,
-        uint256 fee,        // 🎯 保留：經濟分析需要
-        uint8 vipLevel,     // 🎯 保留：遊戲平衡分析
-        uint8 totalVipBonus // 🎯 保留：VIP 效果追蹤
+        uint256 fee,        // Keep: required for economic analysis
+        uint8 vipLevel,     // Keep: required for game balance analysis
+        uint8 totalVipBonus // Keep: VIP effect tracking
     );
     
     event PlayerStatsUpdated(
@@ -81,13 +80,11 @@ contract AltarOfAscension is Ownable, ReentrancyGuard, Pausable, IVRFCallback {
     event AdditionalVIPBonusSet(address indexed player, uint8 bonusRate);
     event UpgradeRequested(address indexed player, address tokenContract, uint8 baseRarity, uint256[] burnedTokenIds);
     event UpgradeRevealed(address indexed player, uint8 outcome, uint8 targetRarity);
-    // === VRF 事件 ===
-    event VRFManagerSet(address indexed vrfManager);
     event VRFRequestFulfilled(uint256 indexed requestId, uint256 randomWordsCount);
-    // 🔧 新增：緊急清理事件
-    event EmergencyCleanup(address indexed user, uint256 requestId, string reason);
+    event EmergencyCleanup(address indexed user, uint256 requestId, uint256 refundAmount, string reason);
 
-    constructor(address _initialOwner) Ownable(_initialOwner) {
+    // Modified: Use msg.sender as owner instead of requiring parameter
+    constructor() Ownable(msg.sender) {
         upgradeRules[1] = UpgradeRule({
             materialsRequired: 5,
             nativeFee: 0.005 ether,
@@ -111,9 +108,9 @@ contract AltarOfAscension is Ownable, ReentrancyGuard, Pausable, IVRFCallback {
         upgradeRules[3] = UpgradeRule({
             materialsRequired: 3,
             nativeFee: 0.02 ether,
-            greatSuccessChance: 4,
-            successChance: 41,
-            partialFailChance: 40,
+            greatSuccessChance: 5,
+            successChance: 48,
+            partialFailChance: 37,
             cooldownTime: 10 seconds,
             isActive: true
         });
@@ -121,21 +118,20 @@ contract AltarOfAscension is Ownable, ReentrancyGuard, Pausable, IVRFCallback {
         upgradeRules[4] = UpgradeRule({
             materialsRequired: 2,
             nativeFee: 0.05 ether,
-            greatSuccessChance: 3,
-            successChance: 22,
-            partialFailChance: 50,
+            greatSuccessChance: 6,
+            successChance: 34,
+            partialFailChance: 46,
             cooldownTime: 10 seconds,
             isActive: true
         });
     }
 
-    // === VRF 整合的升級函數（標準回調版本）===
     function upgradeNFTs(
         address _tokenContract,
         uint256[] calldata _tokenIds
     ) external payable whenNotPaused nonReentrant {
         require(userRequests[msg.sender].tokenContract == address(0) || userRequests[msg.sender].fulfilled, "Altar: Previous upgrade pending");
-        require(activeUpgradeRequest[msg.sender] == 0, "Altar: Request already active"); // 🛡️ 防重複
+        require(activeUpgradeRequest[msg.sender] == 0, "Altar: Request already active"); // Prevent duplicates
         
         uint8 baseRarity = _validateMaterials(_tokenContract, _tokenIds);
         UpgradeRule memory rule = upgradeRules[baseRarity];
@@ -149,30 +145,32 @@ contract AltarOfAscension is Ownable, ReentrancyGuard, Pausable, IVRFCallback {
             "Altar: Still in cooldown period"
         );
         
-        // 🎯 嚴格費用檢查，無退款
+        // Strict fee check, no refunds
         uint256 totalCost = getUpgradeCost(baseRarity);
         require(msg.value == totalCost, "Altar: Exact payment required");
         
-        // 立即設置冷卻（防止重複使用）
+        // Immediately set cooldown (prevent reuse)
         lastUpgradeTime[msg.sender][baseRarity] = block.timestamp;
         
-        if (vrfManager != address(0)) {
-            // 🎯 簡化的升級數據（移除無用的 materialTokenId）
+        address vrfManagerAddr = _getVRFManager();
+        if (vrfManagerAddr != address(0)) {
+            // Simplified upgrade data (removed useless materialTokenId)
             bytes32 requestData = keccak256(abi.encodePacked(msg.sender, _tokenContract, baseRarity, _tokenIds));
             
-            // 🎯 VRF 調用無需傳遞 ETH（訂閱模式）
-            uint256 requestId = IVRFManager(vrfManager).requestRandomForUser{value: 0}(
+            // VRF call doesn't need ETH (subscription mode)
+            
+            uint256 requestId = IVRFManager(vrfManagerAddr).requestRandomForUser{value: 0}(
                 msg.sender,
-                1, // 只需要一個隨機數
-                1, // maxRarity 無關緊要
+                1, // Only need one random number
+                1, // maxRarity irrelevant for this contract
                 requestData
             );
             
-            // 🛡️ 安全機制
+            // Security mechanism
             activeUpgradeRequest[msg.sender] = requestId;
-            requestIdToUser[requestId] = msg.sender; // 🎯 標準回調需要
+            requestIdToUser[requestId] = msg.sender; // Required for standard callback
             
-            // 🛡️ 鎖定 NFT 防止轉移
+            // Lock NFTs to prevent transfer
             for (uint256 i = 0; i < _tokenIds.length; i++) {
                 lockedTokens[_tokenIds[i]] = true;
             }
@@ -182,64 +180,64 @@ contract AltarOfAscension is Ownable, ReentrancyGuard, Pausable, IVRFCallback {
                 baseRarity: baseRarity,
                 burnedTokenIds: _tokenIds,
                 fulfilled: false,
-                payment: msg.value
+                payment: msg.value,
+                requestId: requestId,  // Store requestId for later use
+                timestamp: block.timestamp  // Record when request was created
             });
             
             emit UpgradeRequested(msg.sender, _tokenContract, baseRarity, _tokenIds);
             return;
         }
         
-        // VRF 不可用時直接失敗
+        // Direct failure when VRF unavailable
         revert("Altar: VRF required for upgrades");
     }
 
-    // === 🎯 修復版本：確保清理邏輯始終執行 ===
     function onVRFFulfilled(uint256 requestId, uint256[] memory randomWords) external override {
-        // 🎯 安全性改進：使用 return 而非 require，避免卡死 VRF 系統
-        if (msg.sender != vrfManager) return;
+        // Security improvement: use return instead of require to avoid VRF system deadlock
+        if (msg.sender != _getVRFManager()) return;
         if (randomWords.length == 0) return;
         
-        // 🎯 標準回調模式：找到對應用戶
+        // Standard callback mode: find corresponding user
         address user = requestIdToUser[requestId];
         if (user == address(0)) return;
         
         UpgradeRequest storage request = userRequests[user];
         if (request.fulfilled) return;
         
-        // 🔧 最小修復：直接處理，移除 try-catch 複雜度
+        // Minimal fix: direct processing, remove try-catch complexity
         _processUpgradeWithVRF(user, request, randomWords[0]);
         
-        // 🔧 關鍵修復：清理邏輯始終在處理邏輯之後執行
+        // Critical fix: cleanup logic always executes after processing logic
         _performCleanup(user, requestId, request.burnedTokenIds);
         
-        // 發出 VRF 完成事件以便前端監聽
+        // Emit VRF completion event for frontend monitoring
         emit VRFRequestFulfilled(requestId, randomWords.length);
     }
 
-    // === VRF 結果處理（優化版本）===
     function _processUpgradeWithVRF(
         address user, 
         UpgradeRequest storage request, 
         uint256 randomWord
     ) private {
-        // 🔧 修復：先執行所有處理邏輯，最後才設置 fulfilled
+        // Fix: execute all processing logic first, set fulfilled last
         
-        // 驗證 NFT 所有權（防止在等待期間轉移） - 使用安全檢查
+        // Verify NFT ownership (prevent transfer during waiting period) - use safety check
         for (uint256 i = 0; i < request.burnedTokenIds.length; i++) {
             address tokenOwner = address(0);
             try IERC721(request.tokenContract).ownerOf(request.burnedTokenIds[i]) returns (address owner) {
                 tokenOwner = owner;
             } catch {
-                // 如果調用失敗，當作 NFT 已轉移處理
-                emit UpgradeAttempted(user, request.tokenContract, request.baseRarity, 0, request.burnedTokenIds, new uint256[](0), 0, request.payment, 0, 0);
-                emit EmergencyCleanup(user, 0, "NFT ownership check failed");
+                // If call fails, treat as NFT already transferred
+                emit UpgradeAttempted(user, request.requestId, request.tokenContract, request.baseRarity, 0, request.burnedTokenIds, new uint256[](0), 0, request.payment, 0, 0);
+                emit EmergencyCleanup(user, request.requestId, 0, "NFT ownership check failed");
                 request.fulfilled = true;
                 return;
             }
             
             if (tokenOwner != user) {
-                // 如果 NFT 已轉移，升級失敗
-                emit UpgradeAttempted(user, request.tokenContract, request.baseRarity, 0, request.burnedTokenIds, new uint256[](0), 0, request.payment, 0, 0);
+                // If NFT already transferred, upgrade fails
+                emit UpgradeAttempted(user, request.requestId, request.tokenContract, request.baseRarity, 0, request.burnedTokenIds, new uint256[](0), 0, request.payment, 0, 0);
                 request.fulfilled = true;
                 return;
             }
@@ -247,12 +245,12 @@ contract AltarOfAscension is Ownable, ReentrancyGuard, Pausable, IVRFCallback {
         
         UpgradeRule memory rule = upgradeRules[request.baseRarity];
         
-        // 獲取 VIP 加成 - 使用安全調用
+        // Get VIP bonus - use safe call
         uint8 vipLevel = 0;
         try IVIPStaking(dungeonCore.vipStakingAddress()).getVipLevel(user) returns (uint8 level) { 
             vipLevel = level; 
         } catch {
-            // VIP 查詢失敗時使用 0 加成
+            // Use 0 bonus when VIP query fails
         }
         
         uint8 totalVipBonus = vipLevel + additionalVipBonusRate[user];
@@ -261,7 +259,7 @@ contract AltarOfAscension is Ownable, ReentrancyGuard, Pausable, IVRFCallback {
         uint256 tempSuccessChance = uint256(rule.successChance) + uint256(totalVipBonus);
         uint8 effectiveSuccessChance = tempSuccessChance > 100 ? 100 : uint8(tempSuccessChance);
 
-        // 使用 VRF 隨機數生成結果 (0-99)
+        // Use VRF random number to generate result (0-99)
         uint256 randomValue = randomWord % 100;
         
         uint8 outcome;
@@ -269,55 +267,55 @@ contract AltarOfAscension is Ownable, ReentrancyGuard, Pausable, IVRFCallback {
         uint8 targetRarity = request.baseRarity;
         
         if (randomValue < rule.greatSuccessChance) {
-            // 大成功 - 產生 2 個 NFT
+            // Great success - generate 2 NFTs
             outcome = 3;
             targetRarity = request.baseRarity + 1;
             mintedIds = _performGreatSuccessUpgrade(user, request.burnedTokenIds, request.baseRarity, request.tokenContract);
         } else if (randomValue < rule.greatSuccessChance + effectiveSuccessChance) {
-            // 成功 - 產生 1 個 NFT
+            // Success - generate 1 NFT
             outcome = 2;
             targetRarity = request.baseRarity + 1;
             mintedIds = _performSuccessfulUpgrade(user, request.burnedTokenIds, request.baseRarity, request.tokenContract);
         } else if (randomValue < rule.greatSuccessChance + effectiveSuccessChance + rule.partialFailChance) {
-            // 部分失敗 - 產生一半 NFT
+            // Partial failure - generate half NFTs
             outcome = 1;
-            targetRarity = request.baseRarity; // 保持同等級
+            targetRarity = request.baseRarity; // Keep same rarity
             mintedIds = _performPartialFailUpgrade(user, request.burnedTokenIds, request.baseRarity, request.tokenContract);
         } else {
-            // 完全失敗
+            // Complete failure
             outcome = 0;
             targetRarity = 0;
-            mintedIds = _performFailedUpgrade(user, request.burnedTokenIds, request.tokenContract);
+            mintedIds = _performFailedUpgrade(request.burnedTokenIds, request.tokenContract);
         }
         
-        // 🎯 保留統計更新（子圖需要）
+        // Update statistics (required for subgraph)
         _updateStats(user, request.burnedTokenIds.length, mintedIds.length, request.payment);
         
-        // 🎯 發出完整事件（子圖依賴）
+        // Emit complete event (subgraph dependency)
         emit UpgradeAttempted(
             user,
+            request.requestId,   // Add requestId parameter
             request.tokenContract,
             request.baseRarity,
             targetRarity,
             request.burnedTokenIds,
             mintedIds,
             outcome,
-            request.payment,     // 🎯 保留費用記錄
-            vipLevel,            // 🎯 保留VIP等級
-            totalVipBonus        // 🎯 保留VIP加成
+            request.payment,     // Retain fee record for economic analysis
+            vipLevel,            // Retain VIP level for balance tracking
+            totalVipBonus        // Retain VIP bonus for effect analysis
         );
         
-        // 🔧 關鍵修復：所有處理完成後才設置 fulfilled
+        // Critical fix: set fulfilled only after all processing complete
         request.fulfilled = true;
     }
 
-    // 🔧 新增：統一的清理函數
     function _performCleanup(address user, uint256 requestId, uint256[] memory tokenIds) private {
-        // 清理所有狀態，無論處理是否成功
+        // Clear all state regardless of processing success
         delete activeUpgradeRequest[user];
         delete requestIdToUser[requestId];
         
-        // 解鎖所有相關 NFT
+        // Unlock all related NFTs
         for (uint256 i = 0; i < tokenIds.length; i++) {
             lockedTokens[tokenIds[i]] = false;
         }
@@ -325,17 +323,16 @@ contract AltarOfAscension is Ownable, ReentrancyGuard, Pausable, IVRFCallback {
         delete userRequests[user];
     }
 
-    // 🎯 簡化的升級處理函數（移除無用的 materialTokenId 參數）
     function _performGreatSuccessUpgrade(
         address user,
         uint256[] memory tokenIds,
         uint8 baseRarity,
         address tokenContract
     ) internal returns (uint256[] memory) {
-        // 燒毀犧牲的NFT
+        // Burn sacrificial NFTs
         _burnNFTs(tokenContract, tokenIds);
         
-        // 大成功 - 產生 2 個升級後的 NFT
+        // Great success - generate 2 upgraded NFTs
         uint8 newRarity = baseRarity + 1;
         uint256[] memory mintedIds = new uint256[](2);
         mintedIds[0] = _mintUpgradedNFT(user, tokenContract, newRarity);
@@ -350,12 +347,12 @@ contract AltarOfAscension is Ownable, ReentrancyGuard, Pausable, IVRFCallback {
         uint8 baseRarity,
         address tokenContract
     ) internal returns (uint256[] memory) {
-        // 燒毀犧牲的NFT
+        // Burn sacrificial NFTs
         _burnNFTs(tokenContract, tokenIds);
         
-        // 🎯 移除無用的材料燒毀邏輯（materialTokenId 總是 0）
+        // Removed useless material burning logic (materialTokenId is always 0)
         
-        // 升級主NFT
+        // Upgrade primary NFT
         uint8 newRarity = baseRarity + 1;
         uint256 newTokenId = _mintUpgradedNFT(user, tokenContract, newRarity);
         
@@ -371,10 +368,10 @@ contract AltarOfAscension is Ownable, ReentrancyGuard, Pausable, IVRFCallback {
         uint8 baseRarity,
         address tokenContract
     ) internal returns (uint256[] memory) {
-        // 燒毀犧牲的NFT
+        // Burn sacrificial NFTs
         _burnNFTs(tokenContract, tokenIds);
         
-        // 部分失敗 - 產生一半數量的同等級 NFT
+        // Partial failure - generate half count of same rarity NFTs
         uint256 mintCount = tokenIds.length / 2;
         uint256[] memory mintedIds = new uint256[](mintCount);
         
@@ -386,14 +383,13 @@ contract AltarOfAscension is Ownable, ReentrancyGuard, Pausable, IVRFCallback {
     }
 
     function _performFailedUpgrade(
-        address user,
         uint256[] memory tokenIds,
         address tokenContract
     ) internal returns (uint256[] memory) {
-        // 燒毀犧牲的NFT
+        // Burn sacrificial NFTs
         _burnNFTs(tokenContract, tokenIds);
         
-        // 🎯 移除無用的材料燒毀邏輯（materialTokenId 總是 0）
+        // Removed useless material burning logic (materialTokenId is always 0)
         
         return new uint256[](0); // no minted tokens
     }
@@ -436,7 +432,7 @@ contract AltarOfAscension is Ownable, ReentrancyGuard, Pausable, IVRFCallback {
         
         for (uint i = 0; i < _tokenIds.length; i++) {
             require(IERC721(_tokenContract).ownerOf(_tokenIds[i]) == msg.sender, "Altar: Not owner");
-            require(!lockedTokens[_tokenIds[i]], "Altar: Token locked"); // 🛡️ 檢查鎖定狀態
+            require(!lockedTokens[_tokenIds[i]], "Altar: Token locked"); // Check lock status for security
             
             uint8 tokenRarity;
             if (_tokenContract == address(heroContract)) {
@@ -461,7 +457,6 @@ contract AltarOfAscension is Ownable, ReentrancyGuard, Pausable, IVRFCallback {
         }
     }
 
-    // 🎯 保留統計更新（子圖依賴）
     function _updateStats(address _player, uint256 _burned, uint256 _minted, uint256 _fee) private {
         playerStats[_player].totalAttempts++;
         playerStats[_player].totalBurned += _burned;
@@ -476,49 +471,82 @@ contract AltarOfAscension is Ownable, ReentrancyGuard, Pausable, IVRFCallback {
         emit PlayerStatsUpdated(_player, playerStats[_player].totalAttempts, playerStats[_player].totalBurned, playerStats[_player].totalMinted);
     }
 
-    // 查詢函數
     function getUserRequest(address _user) external view returns (UpgradeRequest memory) {
         return userRequests[_user];
     }
 
-    // 查詢升級所需的總費用（簡化版本）
+    // Query total upgrade cost (simplified version)
     function getUpgradeCost(uint8 _baseRarity) public view returns (uint256 totalCost) {
         UpgradeRule memory rule = upgradeRules[_baseRarity];
-        uint256 vrfFee = 0; // VRF 訂閱模式下費用為 0
+        uint256 vrfFee = 0; // VRF subscription mode has no direct fee
         totalCost = rule.nativeFee + vrfFee;
     }
 
-    // === VRF 管理函數 ===
-    function setVRFManager(address _vrfManager) external onlyOwner {
-        vrfManager = _vrfManager;
-        
-        // 注意：需要 VRFManager 的 owner 手動授權此合約
-        // 不再自動調用 authorizeContract，避免權限錯誤
-        
-        emit VRFManagerSet(_vrfManager);
+    function _getVRFManager() internal view returns (address) {
+        return dungeonCore.getVRFManager();
     }
 
-    // 🛡️ 緊急解鎖功能（保留並增強）
     function emergencyUnlock(uint256[] memory tokenIds) external onlyOwner {
         for (uint256 i = 0; i < tokenIds.length; i++) {
             lockedTokens[tokenIds[i]] = false;
         }
     }
 
-    // 🔧 新增：緊急清理用戶請求
+    /**
+     * @notice Emergency cleanup user request with refund
+     * @dev Admin function to clear stuck upgrade and refund native fee
+     * @param user Address of the stuck user
+     */
     function emergencyCleanupUser(address user) external onlyOwner {
         UpgradeRequest storage request = userRequests[user];
         require(request.tokenContract != address(0), "Altar: No pending request");
         
         uint256 requestId = activeUpgradeRequest[user];
+        uint256 refundAmount = request.payment;
         
-        // 清理所有狀態
+        // Clear all state
         _performCleanup(user, requestId, request.burnedTokenIds);
         
-        emit EmergencyCleanup(user, requestId, "Admin cleanup");
+        // Refund native fee if payment was made
+        if (refundAmount > 0) {
+            (bool success, ) = user.call{value: refundAmount}("");
+            require(success, "Altar: Refund failed");
+        }
+        
+        emit EmergencyCleanup(user, requestId, refundAmount, "Admin cleanup");
+    }
+    
+    /**
+     * @notice Self emergency reset - user can reset their own stuck upgrade request
+     * @dev Allows users to reset their own upgrade request after timeout, with refund
+     */
+    function selfEmergencyReset() external nonReentrant {
+        UpgradeRequest storage request = userRequests[msg.sender];
+        
+        // Check if user has pending request
+        require(request.tokenContract != address(0) && !request.fulfilled, "Altar: No pending request to reset");
+        
+        // Check if enough time has passed (5 minutes = 300 seconds)
+        require(
+            block.timestamp >= request.timestamp + 300,
+            "Altar: Must wait 5 minutes before emergency reset"
+        );
+        
+        uint256 requestId = activeUpgradeRequest[msg.sender];
+        uint256 refundAmount = request.payment;
+        
+        // Clear all state
+        _performCleanup(msg.sender, requestId, request.burnedTokenIds);
+        
+        // Refund native fee if payment was made
+        if (refundAmount > 0) {
+            (bool success, ) = msg.sender.call{value: refundAmount}("");
+            require(success, "Altar: Refund failed");
+        }
+        
+        emit EmergencyCleanup(msg.sender, requestId, refundAmount, "Self reset");
     }
 
-    // Owner 管理函數
     function setDungeonCore(address _address) external onlyOwner {
         dungeonCore = IDungeonCore(_address);
         heroContract = IHero(dungeonCore.heroContractAddress());
@@ -547,10 +575,29 @@ contract AltarOfAscension is Ownable, ReentrancyGuard, Pausable, IVRFCallback {
         _unpause();
     }
 
-    // 🎯 簡化的資金提取
-    function withdrawBNB() external onlyOwner {
+    function canUpgrade(address user) external view returns (bool) {
+        return userRequests[user].tokenContract == address(0) || userRequests[user].fulfilled;
+    }
+
+    function withdrawNative() external onlyOwner {
         (bool success, ) = owner().call{value: address(this).balance}("");
         require(success, "Altar: Native withdraw failed");
+    }
+
+    /**
+     * @notice Withdraw SoulShard tokens (safety function)
+     * @dev Added for emergency withdrawal if contract receives SOUL tokens
+     */
+    function withdrawSoulShard() external onlyOwner {
+        address soulShardAddress = dungeonCore.soulShardTokenAddress();
+        require(soulShardAddress != address(0), "Altar: SoulShard not set");
+        
+        IERC20 soulShard = IERC20(soulShardAddress);
+        uint256 balance = soulShard.balanceOf(address(this));
+        
+        if (balance > 0) {
+            soulShard.transfer(owner(), balance);
+        }
     }
 
     receive() external payable {}

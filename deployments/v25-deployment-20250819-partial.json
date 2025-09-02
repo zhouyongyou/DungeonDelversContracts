@@ -1,0 +1,40 @@
+{
+  "network": "BSC Mainnet",
+  "deploymentDate": "2025-08-19",
+  "blockNumber": 58146943,
+  "deployer": "0xEbCF4A36Ad1485A9737025e9d72186b604487274",
+  "status": "partially_completed",
+  "contracts": {
+    "Oracle": "0x3ED2f384C95c465428276a8C9Dcb7Ef5Af443c6d",
+    "DungeonCore": "0xca52d328d846EE69f3f889C8ecE1C3C1f05bf826",
+    "DungeonStorage": "0x5d8513681506540338d3A1669243144F68eC16a3",
+    "VRFConsumerV2Plus": "0xC7f8a19F1b7A5E9c1254E9D49dde834ec7Fc2Aa5",
+    "Hero": "0x70F1a8336DB60d0E97551339973Fe0d0c8E0EbC8",
+    "Relic": "0x0B030a01682b2871950C9994a1f4274da96edBB1",
+    "Party": "0x5196631AB636a0C951c56943f84029a909540B9E",
+    "PlayerVault": "0x69f011AF03A7C98EFd244b813dC3F8F89D0BAB65",
+    "PlayerProfile": "0x7E1E437cC88C581ca41698b345bE8aeCA8084559",
+    "VIPStaking": "0x2A758Fb08A80E49a3164BC217fe822c06c726752",
+    "DungeonMaster": "0xA2e6a50190412693fBD2B3c6A95eF9A95c17f1B9",
+    "AltarOfAscension": "0xe75dd1b6aDE42d7bbDB287da571b5A35E12d744B"
+  },
+  "reusedContracts": {
+    "USD": "0x7C67Af4EBC6651c95dF78De11cfe325660d935FE",
+    "SOULSHARD": "0x97B2C2a9A11C7b6A020b4bAEaAd349865eaD0bcF",
+    "UNISWAP_POOL": "0x1e5Cd5F386Fb6F39cD8788675dd3A5ceB6521C82"
+  },
+  "completedSteps": [
+    "All contracts deployed",
+    "DungeonCore addresses registered",
+    "Hero.setDungeonCore completed"
+  ],
+  "pendingSteps": [
+    "Relic.setDungeonCore",
+    "Party.setDungeonCore",
+    "Other contracts setDungeonCore",
+    "Set platform fees",
+    "Set base URIs",
+    "Initialize dungeons",
+    "VRF subscription setup"
+  ]
+}

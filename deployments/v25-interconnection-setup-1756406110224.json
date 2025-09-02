@@ -1,0 +1,25 @@
+{
+  "timestamp": "2025-08-28T18:35:10.224Z",
+  "network": {
+    "name": "bsc",
+    "chainId": "56"
+  },
+  "signer": "0xEbCF4A36Ad1485A9737025e9d72186b604487274",
+  "contractAddresses": {
+    "ALTAROFASCENSION": "0x3146E1026c134f098cAf15C4e3c2b751A357D77c",
+    "DUNGEONMASTER": "0x0256aeceC4D93EF13e14237Ab5C63d2DD3EEe2be",
+    "DUNGEONSTORAGE": "0x474ee307d9Cd81670a4773E4E9A124853fa51Db0",
+    "RELIC": "0x5B967D67C7cbBcBA140820757C670c99c61EE530",
+    "HERO": "0x3052ab6c5b307478d943beba63efcdd97aecb526",
+    "PLAYERPROFILE": "0xc869e2dcc64f76149e8392a0735b76bcfe79669a",
+    "VIPSTAKING": "0xacce5647880211c07d17eeae49364bb7db36aa3c",
+    "PARTY": "0x3cfed1ac185f66830342a9a796cb5bb4ef611fe6",
+    "PLAYERVAULT": "0x6a3fb49538c58cbeb537daf12c276cbc97c6e8ec"
+  },
+  "results": {
+    "successful": [],
+    "failed": [],
+    "skipped": []
+  },
+  "totalErrors": []
+}

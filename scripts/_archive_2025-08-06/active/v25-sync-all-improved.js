@@ -401,7 +401,7 @@ ${colors.reset}`);
         version: masterConfig.version,
         lastUpdated: masterConfig.lastUpdated,
         network: masterConfig.network?.name || 'BSC Mainnet',
-        deployer: masterConfig.contracts?.mainnet?.DUNGEONMASTERWALLET_ADDRESS || '0x10925A7138649C7E1794CE646182eeb5BF8ba647',
+        deployer: masterConfig.contracts?.mainnet?.DUNGEONMASTERWALLET_ADDRESS || '0xEbCF4A36Ad1485A9737025e9d72186b604487274',
         startBlock: 56184733,
         contracts: {
           SOULSHARD: {

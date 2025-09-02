@@ -31,7 +31,7 @@ const CONTRACT_URIS = {
 
 // 費用參數
 const FEE_PARAMS = {
-  DUNGEONMASTER_WALLET: '0x10925A7138649C7E1794CE646182eeb5BF8ba647'
+  DUNGEONMASTER_WALLET: '0xEbCF4A36Ad1485A9737025e9d72186b604487274'
 };
 
 async function setupV23ContractsEnhanced() {
@@ -241,7 +241,7 @@ Contract URI JSON 格式示例（OpenSea 標準）：
   "image": "https://dungeon-delvers-metadata-server.onrender.com/images/hero-collection.png",
   "external_link": "https://dungeondelvers.com",
   "seller_fee_basis_points": 500,  // 5%
-  "fee_recipient": "0x10925A7138649C7E1794CE646182eeb5BF8ba647"
+  "fee_recipient": "0xEbCF4A36Ad1485A9737025e9d72186b604487274"
 }
 
 Base URI 和 Contract URI 的差異：

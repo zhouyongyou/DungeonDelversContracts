@@ -321,7 +321,7 @@ async function main() {
     log(`✅ DungeonMaster V7 deployed at: ${addresses.DUNGEONMASTER_ADDRESS}`, 'green');
     
     // DungeonMaster Wallet
-    addresses.DUNGEONMASTERWALLET_ADDRESS = "0x10925A7138649C7E1794CE646182eeb5BF8ba647";
+    addresses.DUNGEONMASTERWALLET_ADDRESS = "0xEbCF4A36Ad1485A9737025e9d72186b604487274";
     
     // ============ Phase 6: Setup Complete Connections ============
     log('\n🔗 Phase 6: Setting up Contract Connections', 'yellow');

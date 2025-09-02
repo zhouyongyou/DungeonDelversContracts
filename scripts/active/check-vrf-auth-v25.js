@@ -74,7 +74,7 @@ async function main() {
     console.log('─────────────────────────────────');
     
     // 檢查一個測試用戶的 VRF 狀態
-    const testUser = '0x10925A7138649C7E1794CE646182eeb5BF8ba647';
+    const testUser = '0xEbCF4A36Ad1485A9737025e9d72186b604487274';
     try {
       const [fulfilled, randomWords] = await vrfManager.getRandomForUser(testUser);
       console.log(`測試用戶 VRF 狀態: ${fulfilled ? '已完成' : '未請求或未完成'}`);

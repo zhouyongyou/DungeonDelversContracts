@@ -4,7 +4,7 @@ async function main() {
   console.log('🔍 前端 vs 合約價格對比調試');
   console.log('=============================\n');
   
-  const userAddress = '0x10925A7138649C7E1794CE646182eeb5BF8ba647';
+  const userAddress = '0xEbCF4A36Ad1485A9737025e9d72186b604487274';
   const heroAddress = '0xD48867dbac5f1c1351421726B6544f847D9486af';
   const dungeonCoreAddress = '0x8a2D2b1961135127228EdD71Ff98d6B097915a13';
   const soulShardAddress = '0x97B2C2a9A11C7b6A020b4bAEaAd349865eaD0bcF';

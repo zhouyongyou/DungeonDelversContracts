@@ -1,4 +1,4 @@
-// Hero_fixed.sol - 修復 fulfilled 設置時機和錯誤處理
+// Hero.sol - Fixed fulfilled flag timing and error handling
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
@@ -20,17 +20,13 @@ contract Hero is ERC721, Ownable, ReentrancyGuard, Pausable, IVRFCallback {
     struct HeroData {
         uint8 rarity;
         uint256 power;
-        bool isRevealed;  // 保留但永遠為 true（向後相容）
     }
     mapping(uint256 => HeroData) public heroData;
     
     IDungeonCore public dungeonCore;
-    IERC20 public soulShardToken;
-    address public ascensionAltarAddress;
+    
 
-    // === VRF 相關 ===
-    address public vrfManager;
-    mapping(uint256 => address) public requestIdToUser; // 🎯 重要：標準回調需要
+    mapping(uint256 => address) public requestIdToUser; // Important: Required for standard callback
 
     uint256 private _nextTokenId;
     uint256 public mintPriceUSD = 2 * 1e18;
@@ -43,35 +39,40 @@ contract Hero is ERC721, Ownable, ReentrancyGuard, Pausable, IVRFCallback {
         uint8 maxRarity;
         bool fromVault;
         uint256[] pendingTokenIds;
+        uint256 requestId;  // Store VRF requestId for event emission
+        uint256 timestamp;  // When the request was created
     }
     
     mapping(address => MintRequest) public userRequests;
 
-    // --- 事件 ---
     event HeroMinted(uint256 indexed tokenId, address indexed owner, uint8 rarity, uint256 power);
-    event BatchMintCompleted(address indexed player, uint256 quantity, uint8 maxRarity, uint256[] tokenIds);
+    event BatchMintCompleted(address indexed player, uint256 indexed requestId, uint256 quantity, uint8 maxRarity, uint256[] tokenIds);
     event ContractsSet(address indexed core, address indexed token);
     event BaseURISet(string newBaseURI);
     event ContractURIUpdated(string newContractURI);
-    event AscensionAltarSet(address indexed newAddress);
     event HeroBurned(uint256 indexed tokenId, address indexed owner, uint8 rarity, uint256 power);
     event MintRequested(address indexed player, uint256 quantity, bool fromVault);
-    event VRFManagerSet(address indexed vrfManager);
+    event EmergencyReset(address indexed user, uint256 refundAmount);
     
     modifier onlyAltar() {
-        require(msg.sender == ascensionAltarAddress, "Hero: Not authorized - only Altar of Ascension can call");
+        require(msg.sender == _getAscensionAltar(), "Hero: Not authorized - only Altar of Ascension can call");
         _;
     }
     
-    constructor(
-        address initialOwner
-    ) ERC721("Dungeon Delvers Hero", "DDH") Ownable(initialOwner) {
+    // Enhanced constructor with default metadata URIs
+    constructor() ERC721("Dungeon Delvers Hero", "DDH") Ownable(msg.sender) {
         _nextTokenId = 1;
+        
+        // Set default baseURI for immediate marketplace compatibility
+        baseURI = "https://dungeon-delvers-metadata-server.onrender.com/metadata/hero/";
+        
+        // Set default contractURI for collection-level metadata
+        _contractURI = "https://dungeon-delvers-metadata-server.onrender.com/metadata/collection/hero";
     }
 
-    // === VRF 整合的鑄造函數 ===
     function mintFromWallet(uint256 _quantity) external payable nonReentrant whenNotPaused {
         require(_quantity > 0 && _quantity <= 50, "Hero: Invalid quantity - must be between 1 and 50");
+        // Simple check - only one pending request per user
         require(userRequests[msg.sender].quantity == 0 || userRequests[msg.sender].fulfilled, "Hero: Previous mint request still pending");
         
         uint8 maxRarity = 5;
@@ -81,10 +82,10 @@ contract Hero is ERC721, Ownable, ReentrancyGuard, Pausable, IVRFCallback {
         uint256 requiredPayment = platformFee * _quantity;
         require(msg.value >= requiredPayment, "Hero: Insufficient payment provided");
         
-        // SoulShard 支付
-        soulShardToken.safeTransferFrom(msg.sender, address(this), requiredAmount);
+        // SoulShard payment - using query mode
+        IERC20(_getSoulShardToken()).safeTransferFrom(msg.sender, address(this), requiredAmount);
         
-        // 預先鑄造 NFT
+        // Pre-mint NFTs
         uint256[] memory tokenIds = new uint256[](_quantity);
         for (uint256 i = 0; i < _quantity; i++) {
             uint256 tokenId = _nextTokenId++;
@@ -93,24 +94,24 @@ contract Hero is ERC721, Ownable, ReentrancyGuard, Pausable, IVRFCallback {
             
             heroData[tokenId] = HeroData({
                 rarity: 0,
-                power: 0,
-                isRevealed: false  // 暫時為 false，回調後變 true
+                power: 0
             });
         }
         
         bytes32 requestData = keccak256(abi.encodePacked(msg.sender, _quantity));
         
-        require(vrfManager != address(0), "VRF not configured");
+        address vrfManagerAddr = _getVRFManager();
+        require(vrfManagerAddr != address(0), "VRF not configured");
         
-        // 🎯 調用 VRF（注意：接口定義為 payable，但訂閱模式不需要傳 ETH）
-        uint256 requestId = IVRFManager(vrfManager).requestRandomForUser{value: 0}(
+        // Call VRF (Note: interface is payable, but subscription mode doesn't need ETH)
+        uint256 requestId = IVRFManager(vrfManagerAddr).requestRandomForUser{value: 0}(
             msg.sender,
-            1,  // 🎯 優化：只請求 1 個隨機數（足夠生成所有 NFT 的種子）
+            _quantity,  // Pass the actual quantity to calculate correct gas limit
             maxRarity,
             requestData
         );
         
-        // 🎯 重要：記錄 requestId 對應關係
+        // Important: Record requestId mapping
         requestIdToUser[requestId] = msg.sender;
         
         userRequests[msg.sender] = MintRequest({
@@ -119,7 +120,9 @@ contract Hero is ERC721, Ownable, ReentrancyGuard, Pausable, IVRFCallback {
             fulfilled: false,
             maxRarity: maxRarity,
             fromVault: false,
-            pendingTokenIds: tokenIds
+            pendingTokenIds: tokenIds,
+            requestId: requestId,  // Store requestId for later use
+            timestamp: block.timestamp  // Record when request was created
         });
         
         emit MintRequested(msg.sender, _quantity, false);
@@ -127,6 +130,7 @@ contract Hero is ERC721, Ownable, ReentrancyGuard, Pausable, IVRFCallback {
 
     function mintFromVault(uint256 _quantity) external payable nonReentrant whenNotPaused {
         require(_quantity > 0 && _quantity <= 50, "Hero: Invalid quantity - must be between 1 and 50");
+        // Simple check - only one pending request per user
         require(userRequests[msg.sender].quantity == 0 || userRequests[msg.sender].fulfilled, "Hero: Previous mint request still pending");
         
         uint8 maxRarity = 5;
@@ -136,10 +140,10 @@ contract Hero is ERC721, Ownable, ReentrancyGuard, Pausable, IVRFCallback {
         uint256 requiredPayment = platformFee * _quantity;
         require(msg.value >= requiredPayment, "Hero: Insufficient value for vault mint");
         
-        // 從金庫扣除 SoulShard
-        IPlayerVault(dungeonCore.playerVaultAddress()).spendForGame(msg.sender, requiredAmount);
+        // Deduct SoulShard from vault - using query mode
+        IPlayerVault(_getPlayerVault()).spendForGame(msg.sender, requiredAmount);
         
-        // 預先鑄造 NFT
+        // Pre-mint NFTs
         uint256[] memory tokenIds = new uint256[](_quantity);
         for (uint256 i = 0; i < _quantity; i++) {
             uint256 tokenId = _nextTokenId++;
@@ -148,24 +152,24 @@ contract Hero is ERC721, Ownable, ReentrancyGuard, Pausable, IVRFCallback {
             
             heroData[tokenId] = HeroData({
                 rarity: 0,
-                power: 0,
-                isRevealed: false
+                power: 0
             });
         }
         
         bytes32 requestData = keccak256(abi.encodePacked(msg.sender, _quantity));
         
-        require(vrfManager != address(0), "VRF not configured");
+        address vrfManagerAddr = _getVRFManager();
+        require(vrfManagerAddr != address(0), "VRF not configured");
         
-        // 🎯 調用 VRF（明確指定 value: 0）
-        uint256 requestId = IVRFManager(vrfManager).requestRandomForUser{value: 0}(
+        // Call VRF (explicitly specify value: 0)
+        uint256 requestId = IVRFManager(vrfManagerAddr).requestRandomForUser{value: 0}(
             msg.sender,
-            1,  // 🎯 優化：只請求 1 個隨機數（足夠生成所有 NFT 的種子）
+            _quantity,  // Pass the actual quantity to calculate correct gas limit
             maxRarity,
             requestData
         );
         
-        // 🎯 重要：記錄 requestId 對應關係
+        // Important: Record requestId mapping
         requestIdToUser[requestId] = msg.sender;
         
         userRequests[msg.sender] = MintRequest({
@@ -174,34 +178,34 @@ contract Hero is ERC721, Ownable, ReentrancyGuard, Pausable, IVRFCallback {
             fulfilled: false,
             maxRarity: maxRarity,
             fromVault: true,
-            pendingTokenIds: tokenIds
+            pendingTokenIds: tokenIds,
+            requestId: requestId,  // Store requestId for later use
+            timestamp: block.timestamp  // Record when request was created
         });
         
         emit MintRequested(msg.sender, _quantity, true);
     }
 
-    // === 🎯 修復版本：優化 fulfilled 設置時機 ===
     function onVRFFulfilled(uint256 requestId, uint256[] memory randomWords) external override {
-        // 🎯 重要：使用 return 而非 require（避免卡死 VRF）
-        if (msg.sender != vrfManager) return;
+        // Important: Use return instead of require (avoid VRF deadlock)
+        if (msg.sender != _getVRFManager()) return;
         if (randomWords.length == 0) return;
         
-        // 🎯 使用 requestId 映射找到用戶
+        // Use requestId mapping to find user
         address user = requestIdToUser[requestId];
         if (user == address(0)) return;
         
         MintRequest storage request = userRequests[user];
         if (request.fulfilled) return;
         
-        // 🔧 最小修復：直接處理，先完成所有邏輯再設置 fulfilled
+        // Minimal fix: Process directly, complete all logic before setting fulfilled
         _processHeroMintWithVRF(user, request, randomWords[0]);
         
-        // 🎯 清理數據（始終在處理邏輯之後執行）
+        // Cleanup data (always executed after processing logic)
         delete requestIdToUser[requestId];
         delete userRequests[user];
     }
 
-    // === VRF 結果處理（優化版本）===
     function _processHeroMintWithVRF(
         address user, 
         MintRequest storage request, 
@@ -210,12 +214,12 @@ contract Hero is ERC721, Ownable, ReentrancyGuard, Pausable, IVRFCallback {
         uint256[] memory tokenIds = request.pendingTokenIds;
         bool allProcessedSuccessfully = true;
         
-        // 🎯 使用單一隨機數為所有 NFT 生成種子
-        // 揭示每個 NFT
+        // Use single random number to generate seeds for all NFTs
+        // Reveal each NFT
         for (uint256 i = 0; i < request.quantity; i++) {
             uint256 tokenId = tokenIds[i];
             
-            // 確保 NFT 仍屬於用戶（防護措施） - 使用安全檢查
+            // Ensure NFT still belongs to user (safety measure) - using security check
             address tokenOwner = address(0);
             try this.ownerOf(tokenId) returns (address owner) {
                 tokenOwner = owner;
@@ -229,31 +233,39 @@ contract Hero is ERC721, Ownable, ReentrancyGuard, Pausable, IVRFCallback {
                 continue;
             }
             
-            // 🎯 為每個 NFT 生成唯一的種子（使用 tokenId 和 index 確保唯一性）
-            uint256 uniqueSeed = uint256(keccak256(abi.encodePacked(baseRandomWord, tokenId, i)));
-            uint8 rarity = _determineRarityFromSeed(uniqueSeed, user, request.quantity);
+            // Generate unique seed for each NFT (hybrid approach: efficiency + security)
+            uint256 mixed = baseRandomWord ^ (tokenId << 8) ^ i;
+            uint256 uniqueSeed = uint256(keccak256(abi.encode(mixed)));
+            
+            // Inline rarity determination for gas optimization
+            uint256 rarityRoll = uniqueSeed % 100;
+            uint8 rarity;
+            if (rarityRoll < 44) rarity = 1;
+            else if (rarityRoll < 79) rarity = 2;
+            else if (rarityRoll < 94) rarity = 3;
+            else if (rarityRoll < 99) rarity = 4;
+            else rarity = 5;
+            
             uint256 power = _generateHeroPowerByRarity(rarity, uniqueSeed);
             
             heroData[tokenId] = HeroData({
                 rarity: rarity,
-                power: power,
-                isRevealed: true  // 永遠為 true
+                power: power
             });
             
             emit HeroMinted(tokenId, user, rarity, power);
         }
         
-        // 🔧 關鍵修復：所有處理完成後才設置 fulfilled
+        // Critical fix: Set fulfilled only after all processing is complete
         request.fulfilled = true;
         
-        // 如果處理成功，發出完成事件
+        // If processing successful, emit completion event with requestId
         if (allProcessedSuccessfully) {
-            emit BatchMintCompleted(user, request.quantity, request.maxRarity, tokenIds);
+            emit BatchMintCompleted(user, request.requestId, request.quantity, request.maxRarity, tokenIds);
         }
     }
 
-    // === VRF 稀有度計算 ===
-    function _determineRarityFromSeed(uint256 randomValue, address user, uint256 quantity) internal pure returns (uint8) {
+    function _determineRarityFromSeed(uint256 randomValue) internal pure returns (uint8) {
         uint256 rarityRoll = randomValue % 100;
         uint8 rarity;
         
@@ -270,8 +282,7 @@ contract Hero is ERC721, Ownable, ReentrancyGuard, Pausable, IVRFCallback {
         uint256 tokenId = _nextTokenId;
         heroData[tokenId] = HeroData({
             rarity: _rarity,
-            power: _power,
-            isRevealed: true  // 祭壇鑄造直接為 true
+            power: _power
         });
         _safeMint(_to, tokenId);
         _nextTokenId++;
@@ -286,7 +297,6 @@ contract Hero is ERC721, Ownable, ReentrancyGuard, Pausable, IVRFCallback {
     function burnFromAltar(uint256 _tokenId) external onlyAltar {
         address owner = ownerOf(_tokenId);
         HeroData memory data = heroData[_tokenId];
-        // 移除 isRevealed 檢查（永遠為 true）
         emit HeroBurned(_tokenId, owner, data.rarity, data.power);
         _burn(_tokenId);
     }
@@ -303,7 +313,7 @@ contract Hero is ERC721, Ownable, ReentrancyGuard, Pausable, IVRFCallback {
     function tokenURI(uint256 tokenId) public view override returns (string memory) {
         _requireOwned(tokenId);
         
-        // 簡化：直接返回 baseURI（移除未揭示檢查）
+        // Simplified: directly return baseURI (removed unrevealed check)
         require(bytes(baseURI).length > 0, "Hero: Base URI not configured");
         return string(abi.encodePacked(baseURI, tokenId.toString()));
     }
@@ -318,7 +328,6 @@ contract Hero is ERC721, Ownable, ReentrancyGuard, Pausable, IVRFCallback {
     function getHeroProperties(uint256 tokenId) external view returns (uint8 rarity, uint256 power) {
         _requireOwned(tokenId);
         HeroData memory data = heroData[tokenId];
-        // 移除 isRevealed 檢查（永遠為 true）
         return (data.rarity, data.power);
     }
 
@@ -326,21 +335,31 @@ contract Hero is ERC721, Ownable, ReentrancyGuard, Pausable, IVRFCallback {
         return userRequests[_user];
     }
 
-    // === VRF 管理函數 ===
-    function setVRFManager(address _vrfManager) external onlyOwner {
-        vrfManager = _vrfManager;
-        emit VRFManagerSet(_vrfManager);
+    function totalSupply() public view returns (uint256) {
+        return _nextTokenId > 0 ? _nextTokenId - 1 : 0;
     }
 
-    // --- Owner 管理函式 ---
+    function _getSoulShardToken() internal view returns (address) {
+        return dungeonCore.soulShardTokenAddress();
+    }
+    
+    function _getVRFManager() internal view returns (address) {
+        return dungeonCore.getVRFManager();
+    }
+
+    function _getAscensionAltar() internal view returns (address) {
+        return dungeonCore.altarOfAscensionAddress();
+    }
+    
+    function _getPlayerVault() internal view returns (address) {
+        return dungeonCore.playerVaultAddress();
+    }
+    
+
     function setDungeonCore(address _address) public onlyOwner {
+        require(_address != address(0), "DungeonCore cannot be zero");
         dungeonCore = IDungeonCore(_address);
-        emit ContractsSet(_address, address(soulShardToken));
-    }
-
-    function setSoulShardToken(address _address) public onlyOwner {
-        soulShardToken = IERC20(_address);
-        emit ContractsSet(address(dungeonCore), _address);
+        emit ContractsSet(_address, _getSoulShardToken());
     }
 
     function setBaseURI(string memory _newBaseURI) external onlyOwner {
@@ -348,18 +367,15 @@ contract Hero is ERC721, Ownable, ReentrancyGuard, Pausable, IVRFCallback {
         emit BaseURISet(_newBaseURI);
     }
 
-    function contractURI() public view returns (string memory) {
-        return _contractURI;
-    }
-
     function setContractURI(string memory newContractURI) external onlyOwner {
         _contractURI = newContractURI;
         emit ContractURIUpdated(newContractURI);
     }
-
-    function setAscensionAltarAddress(address _address) public onlyOwner {
-        ascensionAltarAddress = _address;
-        emit AscensionAltarSet(_address);
+    
+    /// @notice Returns the contract URI for collection-level metadata (OpenSea/OKX compatibility)
+    /// @dev This enables NFT marketplaces to read collection logo, description, and other metadata
+    function contractURI() public view returns (string memory) {
+        return _contractURI;
     }
 
     function setMintPriceUSD(uint256 _newPrice) external onlyOwner {
@@ -370,17 +386,79 @@ contract Hero is ERC721, Ownable, ReentrancyGuard, Pausable, IVRFCallback {
     function unpause() external onlyOwner { _unpause(); }
 
     function withdrawSoulShard() public onlyOwner {
-        uint256 balance = soulShardToken.balanceOf(address(this));
-        if (balance > 0) soulShardToken.safeTransfer(owner(), balance);
+        IERC20 token = IERC20(_getSoulShardToken());
+        uint256 balance = token.balanceOf(address(this));
+        if (balance > 0) token.safeTransfer(owner(), balance);
     }
 
-    function withdrawNativeFunding() external onlyOwner {
+    function withdrawNative() external onlyOwner {
         (bool success, ) = owner().call{value: address(this).balance}("");
         require(success, "Hero: ETH transfer failed");
     }
 
     function setPlatformFee(uint256 _newFee) external onlyOwner {
         platformFee = _newFee;
+    }
+    
+    /**
+     * @notice Emergency reset user request with refund (Admin only)
+     * @dev Admin function to clear stuck VRF requests and refund BNB fees
+     * @param user Address of the stuck user
+     */
+    function emergencyResetUserRequest(address user) external onlyOwner {
+        MintRequest storage request = userRequests[user];
+        
+        // Check if user has pending request
+        require(request.quantity > 0 && !request.fulfilled, "Hero: No pending request to reset");
+        
+        // Store payment amount before deletion
+        uint256 refundAmount = request.payment;
+        
+        // Force reset request
+        delete userRequests[user];
+        
+        // Refund BNB platform fee if payment was made
+        if (refundAmount > 0) {
+            (bool success, ) = user.call{value: refundAmount}("");
+            require(success, "Hero: Refund failed");
+        }
+        
+        emit EmergencyReset(user, refundAmount);
+    }
+    
+    /**
+     * @notice Self emergency reset - user can reset their own stuck request after timeout
+     * @dev Allows users to reset their own request after 5 minutes, with refund
+     */
+    function selfEmergencyReset() external nonReentrant {
+        MintRequest storage request = userRequests[msg.sender];
+        
+        // Check if user has pending request
+        require(request.quantity > 0 && !request.fulfilled, "Hero: No pending request to reset");
+        
+        // Check if enough time has passed (5 minutes = 300 seconds)
+        require(
+            block.timestamp >= request.timestamp + 300,
+            "Hero: Must wait 5 minutes before emergency reset"
+        );
+        
+        // Store payment amount before deletion
+        uint256 refundAmount = request.payment;
+        
+        // Force reset request
+        delete userRequests[msg.sender];
+        
+        // Refund BNB platform fee if payment was made
+        if (refundAmount > 0) {
+            (bool success, ) = msg.sender.call{value: refundAmount}("");
+            require(success, "Hero: Refund failed");
+        }
+        
+        emit EmergencyReset(msg.sender, refundAmount);
+    }
+    
+    function canMint(address user) external view returns (bool) {
+        return userRequests[user].quantity == 0 || userRequests[user].fulfilled;
     }
 
     receive() external payable {}

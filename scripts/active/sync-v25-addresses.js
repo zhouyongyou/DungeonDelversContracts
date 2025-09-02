@@ -38,8 +38,8 @@ async function main() {
   console.log(`   VRFMANAGER: ${contracts.VRFMANAGER_ADDRESS}`);
   
   // 項目路徑
-  const frontendPath = '/Users/sotadic/Documents/GitHub/DungeonDelvers';
-  const subgraphPath = '/Users/sotadic/Documents/GitHub/DungeonDelversSubgraph';
+  const frontendPath = '/Users/sotadic/Documents/GitHub/SoulboundSaga';
+  const subgraphPath = '/Users/sotadic/Documents/GitHub/SoulboundSaga/DDgraphql/dungeon-delvers';
   
   console.log('\n🎯 目標項目:');
   

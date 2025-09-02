@@ -11,8 +11,8 @@ async function checkOwner() {
   try {
     const owner = await contract.owner();
     console.log("Hero 合約 Owner:", owner);
-    console.log("當前錢包地址:", "0x10925A7138649C7E1794CE646182eeb5BF8ba647");
-    console.log("是否匹配:", owner.toLowerCase() === "0x10925A7138649C7E1794CE646182eeb5BF8ba647".toLowerCase());
+    console.log("當前錢包地址:", "0xEbCF4A36Ad1485A9737025e9d72186b604487274");
+    console.log("是否匹配:", owner.toLowerCase() === "0xEbCF4A36Ad1485A9737025e9d72186b604487274".toLowerCase());
   } catch (e) {
     console.log("Error:", e.message);
   }

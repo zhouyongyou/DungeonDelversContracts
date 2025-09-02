@@ -1,7 +1,7 @@
 {
   "network": "bsc",
   "timestamp": "2025-07-19T10:22:59.195Z",
-  "deployer": "0x10925A7138649C7E1794CE646182eeb5BF8ba647",
+  "deployer": "0xEbCF4A36Ad1485A9737025e9d72186b604487274",
   "blockNumber": 54563557,
   "contracts": {
     "Party": "0xe4A55375f7Aba70785f958E2661E08F9FD5f7ab1",

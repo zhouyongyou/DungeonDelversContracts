@@ -6,7 +6,7 @@ async function main() {
     
     const playerVaultAddress = "0x2746Ce8D6Aa7A885c568530abD9846460cA602f1";
     const dungeonCoreAddress = "0x04b33eEB6Da358ea9Dd002a1E1c28AC90A25881E";
-    const playerAddress = "0x10925A7138649C7E1794CE646182eeb5BF8ba647";
+    const playerAddress = "0xEbCF4A36Ad1485A9737025e9d72186b604487274";
     
     const playerVaultABI = [
         "function playerInfo(address) view returns (uint256, uint256, uint256)",

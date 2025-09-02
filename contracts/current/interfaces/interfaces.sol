@@ -1,12 +1,9 @@
-// contracts/interfaces.sol (最終修正版)
+// contracts/interfaces.sol (Final corrected version)
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
-// =================================================================
-// Section: VRF 相關介面
-// =================================================================
 
 interface IVRFCallback {
     function onVRFFulfilled(uint256 requestId, uint256[] memory randomWords) external;
@@ -34,22 +31,13 @@ interface IVRFManager {
     function authorizeContract(address contract_) external;
 }
 
-// =================================================================
-// Section: 外部介面 (例如 Uniswap)
-// =================================================================
 interface IUniswapV3Pool {
     function token0() external view returns (address);
     function token1() external view returns (address);
     function observe(uint32[] calldata secondsAgos) external view returns (int56[] memory tickCumulatives, uint160[] memory secondsPerLiquidityCumulativeX128s);
 }
 
-
-// =================================================================
-// Section: 系統核心介面
-// =================================================================
-
 interface IDungeonCore {
-    // --- Getter Functions ---
     function owner() external view returns (address);
     function partyContractAddress() external view returns (address);
     function playerVaultAddress() external view returns (address);
@@ -64,13 +52,11 @@ interface IDungeonCore {
     function relicContractAddress() external view returns (address);
     function usdDecimals() external view returns (uint8);
 
-    // --- Core Logic Functions ---
     function getSoulShardAmountForUSD(uint256 _amountUSD) external view returns (uint256);
     function getUSDValueForSoulShard(uint256 _soulShardAmount) external view returns (uint256);
     function isPartyLocked(uint256 partyId) external view returns (bool);
     function spendFromVault(address player, uint256 amount) external;
 
-    // --- Management Functions ---
     function setAltarOfAscension(address _newAddress) external;
     function setDungeonMaster(address _newAddress) external;
     function setHeroContract(address _newAddress) external;
@@ -83,139 +69,43 @@ interface IDungeonCore {
     function renounceOwnership() external;
     function transferOwnership(address newOwner) external;
     
-    // --- 集中管理功能 ---
-    function setGlobalVRFManager(address _vrfManager) external;
+    function setVRFManager(address _vrfManager) external;
     function getVRFManager() external view returns (address);
+    function vrfManager() external view returns (address);
+    
+    function setSoulShardToken(address _token) external;
+    function setDungeonStorage(address _storage) external;
+    function setBatchAddresses(address _soulShard, address _vrfManager, address _oracle, address _dungeonStorage) external;
+    function getAllCoreAddresses() external view returns (address soulShard, address vrf, address oracle, address vault, address storage_);
+    function getAllNFTAddresses() external view returns (address hero, address relic, address party, address profile, address vipStaking);
+    function dungeonStorageAddress() external view returns (address);
 }
 
 interface IOracle {
-    // --- Core Price Functions ---
+    // Only cross-contract functions (called by DungeonCore)
     function getAmountOut(address tokenIn, uint256 amountIn) external view returns (uint256 amountOut);
-    function getLatestPrice() external view returns (uint256);
-    function getSoulShardPriceInUSD() external view returns (uint256 price);
-    function getRequiredSoulShardAmount(uint256 usdAmount) external view returns (uint256 soulAmount);
-    function getPriceAdaptive() external view returns (uint256 price, uint32 usedPeriod);
-    
-    // --- Pool Information ---
-    function pool() external view returns (address);
-    function poolAddress() external view returns (address);
-    function token0() external view returns (address);
-    function token1() external view returns (address);
-    function soulShardToken() external view returns (address);
-    function soulToken() external view returns (address);
-    function usdToken() external view returns (address);
-    
-    // --- TWAP Configuration ---
-    function twapPeriod() external view returns (uint32);
-    function setTwapPeriod(uint32 _newTwapPeriod) external;
-    function adaptivePeriods(uint256) external view returns (uint32);
-    function getAdaptivePeriods() external view returns (uint32[] memory);
-    function setAdaptivePeriods(uint32[] memory _periods) external;
-    
-    // --- Testing Functions ---
-    function testAllPeriods() external view returns (bool[] memory available, uint256[] memory prices);
-    
-    // --- Management ---
-    function owner() external view returns (address);
-    function renounceOwnership() external;
-    function transferOwnership(address newOwner) external;
 }
 
 interface IPlayerVault {
-    // --- Core Functions ---
+    // Only cross-contract functions
     function spendForGame(address _player, uint256 _amount) external;
     function deposit(address _player, uint256 _amount) external;
-    function withdraw(uint256 _amount) external;
-    
-    // --- Player Info ---
-    function playerInfo(address) external view returns (uint256 withdrawableBalance, uint256 lastWithdrawTimestamp, uint256 lastFreeWithdrawTimestamp);
-    function getInitializedPlayerInfo(address _user) external view returns (uint256 withdrawableBalance, uint256 lastWithdrawTimestamp, uint256 lastFreeWithdrawTimestamp, bool isReady, address tokenAddress, address coreAddress);
-    
-    // --- Commission System ---
-    function getTotalCommissionPaid(address _user) external view returns (uint256);
-    function getCommissionBalance(address _user) external view returns (uint256);
-    function withdrawCommission() external;
-    function setReferrer(address _referrer) external;
-    function referrers(address) external view returns (address);
-    function commissionRate() external view returns (uint256);
-    function setCommissionRate(uint256 _newRate) external;
-    function totalCommissionPaid(address) external view returns (uint256);
-    function virtualCommissionBalance(address) external view returns (uint256);
-    
-    // --- Tax System ---
-    function getTaxRateForAmount(address _user, uint256 _amount) external view returns (uint256);
-    function getTaxBalance() external view returns (uint256);
-    function withdrawTax() external;
-    function virtualTaxBalance() external view returns (uint256);
-    function setTaxParameters(uint256 _standardRate, uint256 _largeRate, uint256 _decreaseRate, uint256 _period) external;
-    function standardInitialRate() external view returns (uint256);
-    function largeWithdrawInitialRate() external view returns (uint256);
-    function decreaseRatePerPeriod() external view returns (uint256);
-    function periodDuration() external view returns (uint256);
-    function smallWithdrawThresholdUSD() external view returns (uint256);
-    function largeWithdrawThresholdUSD() external view returns (uint256);
-    function setWithdrawThresholds(uint256 _smallUSD, uint256 _largeUSD) external;
-    
-    // --- Constants ---
-    function PERCENT_DIVISOR() external view returns (uint256);
-    function USD_DECIMALS() external view returns (uint256);
-    
-    // --- Management ---
-    function owner() external view returns (address);
-    function dungeonCore() external view returns (address);
-    function soulShardToken() external view returns (address);
-    function setDungeonCore(address _newAddress) external;
-    function setSoulShardToken(address _newAddress) external;
-    function withdrawGameRevenue(uint256 amount) external;
-    function emergencyWithdrawSoulShard(uint256 _amount) external;
-    function renounceOwnership() external;
-    function transferOwnership(address newOwner) external;
 }
 
 interface IDungeonMaster {
-    // === Structs ===
     struct ExpeditionRequest {
         uint256 partyId;
         uint256 dungeonId;
         address player;
         bool fulfilled;
         uint256 payment;
+        uint256 requestId;  // Store VRF requestId for event emission
+        uint256 timestamp;  // When the request was created
     }
     
-    // --- Core Exploration Functions ---
+    // Only cross-contract functions
     function isPartyLocked(uint256 partyId) external view returns (bool);
-    function buyProvisions(uint256 _partyId, uint256 _amount) external;
-    function claimRewards(uint256 _partyId) external view; // Note: returns error message
-    function getPartyPower(uint256 _partyId) external view returns (uint256 capacity);
-    
-    // === VRF Functions ===
-    function requestExpedition(uint256 _partyId, uint256 _dungeonId) external payable;
-    function setVRFManager(address _vrfManager) external;
-    function getExpeditionCost() external view returns (uint256 totalCost, uint256 explorationFeeAmount, uint256 vrfFeeAmount);
-    function getUserRequest(address _user) external view returns (ExpeditionRequest memory);
-    
-    // --- Configuration ---
-    function cooldownPeriod() external view returns (uint256);
-    function explorationFee() external view returns (uint256);
-    function provisionPriceUSD() external view returns (uint256);
-    function globalRewardMultiplier() external view returns (uint256);
-    
-    // --- Contract References ---
-    function dungeonCore() external view returns (address);
-    function dungeonStorage() external view returns (address);
-    
-    // --- Admin Functions ---
-    function adminSetDungeon(uint256 _dungeonId, uint256 _requiredPower, uint256 _rewardAmountUSD, uint8 _baseSuccessRate) external;
-    
-    // --- Pausable ---
-    function pause() external;
-    function unpause() external;
-    function paused() external view returns (bool);
-    
-    // --- Management ---
-    function owner() external view returns (address);
-    function renounceOwnership() external;
-    function transferOwnership(address newOwner) external;
+    function getUserRequest(address user) external view returns (ExpeditionRequest memory);
 }
 
 interface IDungeonStorage {
@@ -227,68 +117,45 @@ interface IDungeonStorage {
     }
 
     struct PartyStatus {
-        uint256 provisionsRemaining;
-        uint256 cooldownEndsAt;
-        uint256 unclaimedRewards;
-        uint8 fatigueLevel;
-    }
-
-    struct ExpeditionRequest {
-        address requester;
-        uint256 partyId;
-        uint256 dungeonId;
+        uint256 cooldownEndsAt;  // Cooldown end time
     }
     
-    function NUM_DUNGEONS() external view returns (uint256);
-    
-    // Struct getter functions (auto-generated by Solidity for public mappings)
+    // Cross-contract functions (called by DungeonMaster)
     function dungeons(uint256 id) external view returns (uint256 requiredPower, uint256 rewardAmountUSD, uint8 baseSuccessRate, bool isInitialized);
-    function partyStatuses(uint256 id) external view returns (uint256 provisionsRemaining, uint256 cooldownEndsAt, uint256 unclaimedRewards, uint8 fatigueLevel);
-    
-    // Convenience getter functions
-    function getDungeon(uint256 dungeonId) external view returns (Dungeon memory);
     function getPartyStatus(uint256 partyId) external view returns (PartyStatus memory);
-    
-    // Setter functions
-    function setDungeon(uint256 id, Dungeon calldata data) external;
     function setPartyStatus(uint256 partyId, PartyStatus calldata data) external;
-    function setExpeditionRequest(uint256 requestId, ExpeditionRequest calldata data) external;
-    function getExpeditionRequest(uint256 requestId) external view returns (ExpeditionRequest memory);
-    function deleteExpeditionRequest(uint256 requestId) external;
+    function setDungeon(uint256 id, Dungeon calldata data) external;
 }
 
 interface IAltarOfAscension {
-    // === Structs ===
     struct UpgradeRequest {
         address tokenContract;
         uint8 baseRarity;
         uint256[] burnedTokenIds;
         bool fulfilled;
         uint256 payment;
+        uint256 requestId;  // Store VRF requestId for event emission
+        uint256 timestamp;  // When the request was created
     }
     
-    // === Core Functions ===
     function upgradeNFTs(address tokenContract, uint256[] calldata tokenIds) external payable;
     function setVRFManager(address _vrfManager) external;
     function getUserRequest(address _user) external view returns (UpgradeRequest memory);
 }
 
-// =================================================================
-// Section: NFT 資產介面
-// =================================================================
-
 interface IHero {
-    // === Structs ===
     struct MintRequest {
         uint256 quantity;
         uint256 payment;
         bool fulfilled;
         uint8 maxRarity;
         bool fromVault;
-        uint256[] pendingTokenIds;  // 新增：VRF 回調模式需要
+        uint256[] pendingTokenIds;  // Added: required for VRF callback mode
+        uint256 requestId;  // Store VRF requestId for event emission
+        uint256 timestamp;  // When the request was created
     }
     
-    // === Core Functions ===
+    // Cross-contract functions
     function ownerOf(uint256 tokenId) external view returns (address);
     function getHeroProperties(uint256 tokenId) external view returns (uint8 rarity, uint256 power);
     function mintFromAltar(address to, uint8 rarity, uint256 power) external returns (uint256);
@@ -296,27 +163,24 @@ interface IHero {
     function safeTransferFrom(address from, address to, uint256 tokenId) external;
     function setApprovalForAll(address operator, bool approved) external;
     
-    // === VRF Functions ===
+    // Internal system functions
     function setVRFManager(address _vrfManager) external;
-    // 移除: revealMint() 和 revealMintFor() - 新版使用自動回調
-    
-    // === Query Functions ===
     function getUserRequest(address user) external view returns (MintRequest memory);
-    // 移除: getUserPendingTokens() - 改用 MintRequest.pendingTokenIds
 }
 
 interface IRelic {
-    // === Structs ===
     struct MintRequest {
         uint256 quantity;
         uint256 payment;
         bool fulfilled;
         uint8 maxRarity;
         bool fromVault;
-        uint256[] pendingTokenIds;  // 新增：VRF 回調模式需要
+        uint256[] pendingTokenIds;  // Added: required for VRF callback mode
+        uint256 requestId;  // Store VRF requestId for event emission
+        uint256 timestamp;  // When the request was created
     }
     
-    // === Core Functions ===
+    // Cross-contract functions
     function ownerOf(uint256 tokenId) external view returns (address);
     function getRelicProperties(uint256 tokenId) external view returns (uint8 rarity, uint8 capacity);
     function mintFromAltar(address to, uint8 rarity, uint8 capacity) external returns (uint256);
@@ -324,90 +188,24 @@ interface IRelic {
     function safeTransferFrom(address from, address to, uint256 tokenId) external;
     function setApprovalForAll(address operator, bool approved) external;
     
-    // === VRF Functions ===
+    // Internal system functions
     function setVRFManager(address _vrfManager) external;
-    // 移除: revealMint() 和 revealMintFor() - 新版使用自動回調
-    
-    // === Query Functions ===
     function getUserRequest(address user) external view returns (MintRequest memory);
-    // 移除: getUserPendingTokens() - 改用 MintRequest.pendingTokenIds
 }
 
 interface IParty {
-    // --- ERC721 Functions ---
+    // Only cross-contract functions
     function ownerOf(uint256 tokenId) external view returns (address);
-    function balanceOf(address owner) external view returns (uint256);
-    function getApproved(uint256 tokenId) external view returns (address);
-    function setApprovalForAll(address operator, bool approved) external;
-    function transferFrom(address from, address to, uint256 tokenId) external;
-    function safeTransferFrom(address from, address to, uint256 tokenId) external;
-    
-    // --- Party Composition Functions ---
-    function getPartyComposition(uint256 partyId) external view returns (uint256 totalPower, uint256 totalCapacity);
-    function getFullPartyComposition(uint256 _partyId) external view returns (uint256[] memory heroIds, uint256[] memory relicIds, uint256 totalPower, uint256 totalCapacity, uint8 partyRarity);
-    function partyCompositions(uint256 partyId) external view returns (uint256[] memory heroIds, uint256[] memory relicIds, uint256 totalPower, uint256 totalCapacity, uint8 partyRarity);
-    
-    // --- V3 Quick Query Methods ---
-    function getPartyPowerQuick(uint256 partyId) external view returns (uint256);
-    function getPartyCapacityQuick(uint256 partyId) external view returns (uint256);
-    
-    // --- Metadata ---
-    function baseURI() external view returns (string memory);
-    function contractURI() external view returns (string memory);
-    
-    // --- Management ---
-    function dungeonCoreContract() external view returns (address);
+    function getPartyComposition(uint256 partyId) external view returns (uint256 totalPower);
 }
 
-// =================================================================
-// Section: 玩家檔案與質押介面
-// =================================================================
-
 interface IPlayerProfile {
-    // --- ERC721 Functions ---
-    function ownerOf(uint256 tokenId) external view returns (address);
-    function balanceOf(address owner) external view returns (uint256);
-    function getApproved(uint256 tokenId) external view returns (address);
-    function setApprovalForAll(address operator, bool approved) external;
-    function transferFrom(address from, address to, uint256 tokenId) external;
-    function safeTransferFrom(address from, address to, uint256 tokenId) external;
-    
-    // --- Profile Functions ---
-    function mintProfile(address _player) external returns (uint256);
+    // Only cross-contract functions
     function addExperience(address _player, uint256 amount) external;
     function getLevel(address _player) external view returns (uint256);
-    function getExperience(address _player) external view returns (uint256);
-    
-    // --- Metadata ---
-    function name() external view returns (string memory);
-    function symbol() external view returns (string memory);
-    function baseURI() external view returns (string memory);
-    function contractURI() external view returns (string memory);
-    
-    // --- Management ---
-    function dungeonCore() external view returns (address);
-    function owner() external view returns (address);
 }
 
 interface IVIPStaking {
-    // --- ERC721 Functions ---
-    function ownerOf(uint256 tokenId) external view returns (address);
-    function balanceOf(address owner) external view returns (uint256);
-    function getApproved(uint256 tokenId) external view returns (address);
-    function setApprovalForAll(address operator, bool approved) external;
-    
-    // --- VIP Functions ---
+    // Only cross-contract functions
     function getVipLevel(address _user) external view returns (uint8);
-    function getVipTaxReduction(address _user) external view returns (uint256);
-    function claimUnstaked() external;
-    
-    // --- Metadata ---
-    function name() external view returns (string memory);
-    function symbol() external view returns (string memory);
-    function baseURI() external view returns (string memory);
-    function contractURI() external view returns (string memory);
-    
-    // --- Management ---
-    function dungeonCore() external view returns (address);
-    function owner() external view returns (address);
 }

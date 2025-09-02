@@ -9,7 +9,7 @@ async function main() {
   // BSC 主網 VRF V2.5 官方地址
   const addresses = {
     vrfWrapper: "0x471506e6ADED0b9811D05B8cAc8Db25eE839Ac94",
-    vrfCoordinator: "0xd691f04bc0C9d2d4b7CAbDdaF00296aAC5d9bcB8", // V2.5 Coordinator
+    vrfCoordinator: "0xd691f04bc0C9a24Edb78af9E005Cf85768F694C9", // 正確的 BSC VRF Coordinator
     linkToken: "0x404460C6A5EdE2D891e8297795264fDe62ADBB75",
     linkNativeFeed: "0xca236E327F629f9Fc2c30A4E95775EbF0B89fac8" // LINK/BNB feed
   };

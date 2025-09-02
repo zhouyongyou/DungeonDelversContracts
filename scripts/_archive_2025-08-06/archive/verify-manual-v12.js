@@ -8,7 +8,7 @@ async function main() {
   console.log("1. DungeonCore:");
   console.log("   地址: 0x2CB2Bd1b18CDd0cbF37cD6F7FF672D03E7a038a5");
   console.log("   構造函數參數:");
-  console.log("   - initialOwner: 0x10925A7138649C7E1794CE646182eeb5BF8ba647");
+  console.log("   - initialOwner: 0xEbCF4A36Ad1485A9737025e9d72186b604487274");
   console.log("   - usdToken: 0x55d398326f99059fF775485246999027B3197955");
   console.log("   - soulShardToken: 0xc88dAD283Ac209D77Bfe452807d378615AB8B94a");
   
@@ -16,7 +16,7 @@ async function main() {
   const dungeonCoreArgs = ethers.AbiCoder.defaultAbiCoder().encode(
     ["address", "address", "address"],
     [
-      "0x10925A7138649C7E1794CE646182eeb5BF8ba647",
+      "0xEbCF4A36Ad1485A9737025e9d72186b604487274",
       "0x55d398326f99059fF775485246999027B3197955",
       "0xc88dAD283Ac209D77Bfe452807d378615AB8B94a"
     ]

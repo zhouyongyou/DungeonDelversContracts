@@ -44,7 +44,7 @@ module.exports = {
       url: bscMainnetRpcUrl,
       chainId: 56,
       accounts: privateKey !== '' ? [privateKey] : [],
-      gasPrice: 3000000000, // 3 gwei
+      gasPrice: 110000000, // 0.11 gwei
     },
     hardhat: {
       chainId: 1337,

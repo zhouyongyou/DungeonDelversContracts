@@ -29,48 +29,48 @@ const contracts = {
   },
   DungeonStorage: {
     address: "0x1E5f011D9eF295aef7e6bA54e760b73976547b4b",
-    constructorArgs: ["0x10925A7138649C7E1794CE646182eeb5BF8ba647"],
+    constructorArgs: ["0xEbCF4A36Ad1485A9737025e9d72186b604487274"],
     contractPath: "contracts/core/DungeonStorage.sol:DungeonStorage"
   },
   Hero: {
     address: "0xAA3734B376eDf4E92402Df4328AA6C1B8254144e",
-    constructorArgs: ["0x10925A7138649C7E1794CE646182eeb5BF8ba647"],
+    constructorArgs: ["0xEbCF4A36Ad1485A9737025e9d72186b604487274"],
     contractPath: "contracts/nft/Hero.sol:Hero"
   },
   Relic: {
     address: "0xD73D7D5D279ac033c9D8639A15CcEa6B6BE2C786",
-    constructorArgs: ["0x10925A7138649C7E1794CE646182eeb5BF8ba647"],
+    constructorArgs: ["0xEbCF4A36Ad1485A9737025e9d72186b604487274"],
     contractPath: "contracts/nft/Relic.sol:Relic"
   },
   Party: {
     address: "0x54025749950137d64469fb11263B475F6A346b83",
-    constructorArgs: ["0x10925A7138649C7E1794CE646182eeb5BF8ba647"],
+    constructorArgs: ["0xEbCF4A36Ad1485A9737025e9d72186b604487274"],
     contractPath: "contracts/nft/Party_V3.sol:Party"
   },
   PlayerVault: {
     address: "0xe7f2B5C1544a7C2530F4094AF1E492574B66bAa2",
-    constructorArgs: ["0x10925A7138649C7E1794CE646182eeb5BF8ba647"],
+    constructorArgs: ["0xEbCF4A36Ad1485A9737025e9d72186b604487274"],
     contractPath: "contracts/defi/PlayerVault.sol:PlayerVault"
   },
   PlayerProfile: {
     address: "0x0dEf83dbD501fC7D96Bb24FcA2eAAc06c6DD5db9",
-    constructorArgs: ["0x10925A7138649C7E1794CE646182eeb5BF8ba647"],
+    constructorArgs: ["0xEbCF4A36Ad1485A9737025e9d72186b604487274"],
     contractPath: "contracts/nft/PlayerProfile.sol:PlayerProfile"
   },
   AltarOfAscension: {
     address: "0xc598B642aA41e5286aC9e2F64d5a2CBBbc35288b",
-    constructorArgs: ["0x10925A7138649C7E1794CE646182eeb5BF8ba647"],
+    constructorArgs: ["0xEbCF4A36Ad1485A9737025e9d72186b604487274"],
     contractPath: "contracts/defi/AltarOfAscension.sol:AltarOfAscension"
   },
   VIPStaking: {
     address: "0x56350F90a26A844B3248F55dbd5043C3B3F27927",
-    constructorArgs: ["0x10925A7138649C7E1794CE646182eeb5BF8ba647"],
+    constructorArgs: ["0xEbCF4A36Ad1485A9737025e9d72186b604487274"],
     contractPath: "contracts/nft/VIPStaking.sol:VIPStaking"
   },
   DungeonCore: {
     address: "0xC880c8253A617FaBe83bACd010E9E26369e12aDB",
     constructorArgs: [
-      "0x10925A7138649C7E1794CE646182eeb5BF8ba647", // initialOwner
+      "0xEbCF4A36Ad1485A9737025e9d72186b604487274", // initialOwner
       "0x55d398326f99059fF775485246999027B3197955", // usdToken (USDT)
       "0xc88dAD283Ac209D77Bfe452807d378615AB8B94a"  // soulShardToken
     ],
@@ -78,7 +78,7 @@ const contracts = {
   },
   DungeonMasterV8: {
     address: "0xA54104946c08E78fC9df1dB6db01f8C38a0a0fF6",
-    constructorArgs: ["0x10925A7138649C7E1794CE646182eeb5BF8ba647"],
+    constructorArgs: ["0xEbCF4A36Ad1485A9737025e9d72186b604487274"],
     contractPath: "contracts/core/DungeonMaster_V8.sol:DungeonMasterV8"
   }
 };

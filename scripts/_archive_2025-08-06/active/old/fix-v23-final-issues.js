@@ -103,7 +103,7 @@ async function fixFinalIssues() {
       // 嘗試設置
       try {
         const dmWithSigner = new ethers.Contract(v23Config.contracts.DUNGEONMASTER.address, dmABI, deployer);
-        const tx = await dmWithSigner.setDungeonMasterWallet('0x10925A7138649C7E1794CE646182eeb5BF8ba647');
+        const tx = await dmWithSigner.setDungeonMasterWallet('0xEbCF4A36Ad1485A9737025e9d72186b604487274');
         console.log(`  交易: ${tx.hash}`);
         await tx.wait();
         console.log('  ✅ 設置成功');

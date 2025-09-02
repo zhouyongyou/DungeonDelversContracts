@@ -7,7 +7,7 @@ async function main() {
     dungeonCore: "0xd03d3D7456ba3B52E6E0112eBc2494dB1cB34524",
     dungeonMasterV7: "0x108ed6B38D30099E1d2D141Ef0813938E279C0Fe",
     playerProfile: "0x7f5D359bC65F0aB07f7A874C2efF72752Fb294e5",
-    testUser: "0x10925A7138649C7E1794CE646182eeb5BF8ba647"
+    testUser: "0xEbCF4A36Ad1485A9737025e9d72186b604487274"
   };
 
   // 獲取合約實例

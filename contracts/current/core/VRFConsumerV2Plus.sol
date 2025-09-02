@@ -1,3 +1,4 @@
+// VRFConsumerV2Plus.sol
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
@@ -5,28 +6,19 @@ import "@chainlink/contracts/src/v0.8/vrf/dev/VRFConsumerBaseV2Plus.sol";
 import "@chainlink/contracts/src/v0.8/vrf/dev/libraries/VRFV2PlusClient.sol";
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-
-interface IVRFCallback {
-    function onVRFFulfilled(uint256 requestId, uint256[] memory randomWords) external;
-}
+import "../interfaces/interfaces.sol";
 
 /**
- * @title VRFConsumerV2Plus_Simplified
- * @notice 簡化版本 - 移除動態 gas 計算，使用固定上限
- * @dev 主要特性：
- * 1. 移除 fulfillRandomWords 的 nonReentrant 避免跨合約衝突
- * 2. 採用低級 call 進行回調，更安全可靠
- * 3. 調整超時為 30 分鐘，平衡安全與用戶體驗
- * 4. 確認數調整為 6 個區塊（18秒）
- * 5. 固定 2.5M gas limit（移除動態調整邏輯）
- * 6. 完善 emergencyWithdraw 功能處理誤轉資產
+ * @title VRFConsumerV2Plus
+ * @notice Minimal modification: Added adjustable dynamic gas formula
+ * @dev Main changes from original:
+ * 1. Added adjustable gas formula parameters (baseCost, perNFTCost)
+ * 2. Reduced max batch from 50 to 40 NFTs for safety
+ * 3. Added setDynamicGasFormula function for post-deployment adjustment
+ * 4. Formula optimized for 20 NFT batches (350000 + quantity * 47000)
  */
 contract VRFConsumerV2Plus is VRFConsumerBaseV2Plus, ReentrancyGuard {
-    
-    // ============================================
-    // 事件
-    // ============================================
-    
+        
     event RequestSent(uint256 indexed requestId, uint32 numWords);
     event RequestFulfilled(uint256 indexed requestId, uint256[] randomWords);
     event CallbackSuccess(uint256 indexed requestId, address indexed callbackContract);
@@ -37,72 +29,165 @@ contract VRFConsumerV2Plus is VRFConsumerBaseV2Plus, ReentrancyGuard {
     event RequestTimedOut(uint256 indexed requestId, address indexed requester);
     event EmergencyWithdraw(address indexed token, uint256 amount);
     
-    // ============================================
-    // 狀態變量
-    // ============================================
+    // NEW: Event for dynamic gas formula updates
+    event DynamicGasFormulaUpdated(uint32 oldBaseCost, uint32 oldPerNFTCost, uint32 newBaseCost, uint32 newPerNFTCost);
     
     struct RequestStatus {
         bool fulfilled;
         bool exists;
         uint256[] randomWords;
-        address requester;      // 調用合約地址
+        address requester;      // Calling contract address
         uint256 timestamp;      // Request timestamp for timeout handling
     }
     
     mapping(uint256 => RequestStatus) public s_requests;
     mapping(address => uint256) public lastRequestIdByAddress;
     
-    // 映射關係
-    mapping(uint256 => address) public requestIdToUser;        // 請求ID -> 最終用戶
-    mapping(uint256 => address) public requestIdToContract;    // 請求ID -> 調用合約
+    // Mapping relationships
+    mapping(uint256 => address) public requestIdToUser;        // Request ID -> End user
+    mapping(uint256 => address) public requestIdToContract;    // Request ID -> Calling contract
     
-    // VRF 配置
-    uint256 public s_subscriptionId;
+    // VRF Configuration - BSC Mainnet hardcoded values
+    uint256 public constant s_subscriptionId = 88422796721004450630713121079263696788635490871993157345476848872165866246915;
     
-    // ⚡ 優化後的參數
+    // Smart authorization: DungeonCore reference
+    IDungeonCore public dungeonCore;
+    
+    // VRF parameters - hardcoded for BSC Mainnet (simpler and gas-efficient)
     bytes32 public keyHash = 0x130dba50ad435d4ecc214aad0d5820474137bd68e7e77724144f27c3c377d3d4; // BSC 200 gwei
-    uint32 public callbackGasLimit = 2500000;  // 保持 2.5M 確保足夠
-    uint16 public requestConfirmations = 6;    // 優化為 6 個區塊（18秒）- 平衡安全與體驗
-    uint32 public numWords = 1;
+    uint32 public callbackGasLimit = 2500000;  // 2.5M gas - sufficient for 40 NFT batch
+    uint16 public requestConfirmations = 6;    // 6 blocks (~18 seconds) - balanced
+    uint32 public numWords = 1;                // Always 1 random word per request
     
-    // Gas 限制範圍（防止設置錯誤值）
+    // Gas limit range (prevent setting incorrect values)
     uint32 public constant MIN_CALLBACK_GAS_LIMIT = 100000;
     uint32 public constant MAX_CALLBACK_GAS_LIMIT = 2500000;
     
-    // 授權合約
+    // NEW: Adjustable dynamic gas formula parameters
+    uint32 public dynamicGasBaseCost = 310000;     // Base cost (fixed overhead)
+    uint32 public dynamicGasPerNFTCost = 54000;    // Cost per NFT
+    
+    // NEW: Reduced max batch size from 50 to 40 for safety
+    uint32 public constant MAX_BATCH_SIZE = 40;    // Changed from 50 to 40
+    
+    // Authorized contracts
     mapping(address => bool) public authorized;
     
     // Rate limiting
     mapping(address => uint256) public lastRequestTime;
-    uint256 public constant COOLDOWN_PERIOD = 30; // 30 seconds cooldown
-    uint256 public constant REQUEST_TIMEOUT = 30 minutes; // ⚡ 優化：從 1 小時改為 30 分鐘
+    uint256 public constant COOLDOWN_PERIOD = 10; // 10 seconds cooldown
+    uint256 public constant REQUEST_TIMEOUT = 5 minutes; // Optimized: from 30 minutes to 5 minutes for better UX
     
-    // ============================================
-    // 構造函數
-    // ============================================
     
-    constructor(
-        uint256 subscriptionId,
-        address vrfCoordinator
-    ) VRFConsumerBaseV2Plus(vrfCoordinator) {
-        s_subscriptionId = subscriptionId;
+    // BSC Mainnet VRF Coordinator V2.5 address
+    address private constant VRF_COORDINATOR = 0xd691f04bc0C9a24Edb78af9E005Cf85768F694C9;
+    
+    constructor() VRFConsumerBaseV2Plus(VRF_COORDINATOR) {
+        // All VRF parameters are hardcoded for BSC Mainnet
+        // Dynamic gas formula initialized with safe defaults
     }
     
-    // ============================================
-    // 修飾符
-    // ============================================
     
     modifier onlyAuthorized() {
-        require(authorized[msg.sender] || msg.sender == owner(), "Not authorized");
+        require(_isAuthorized(msg.sender), "Not authorized");
         _;
     }
     
-    // ============================================
-    // 主要函數
-    // ============================================
+    /**
+     * @notice Smart authorization check: manual authorization + DungeonCore core contract auto-authorization
+     * @param addr Address to check
+     * @return Whether authorized
+     */
+    function _isAuthorized(address addr) internal view returns (bool) {
+        // 1. Owner always has permission (most common, check first)
+        if (addr == owner()) return true;
+        
+        // 2. Manually authorized addresses (second most common)
+        if (authorized[addr]) return true;
+        
+        // 3. Smart authorization: Core game contracts registered in DungeonCore
+        // Only check when dungeonCore is set and first two don't match
+        if (address(dungeonCore) != address(0)) {
+            // Short-circuit logic: return immediately once match is found, reduce external calls
+            if (addr == dungeonCore.heroContractAddress()) return true;
+            if (addr == dungeonCore.relicContractAddress()) return true;
+            if (addr == dungeonCore.altarOfAscensionAddress()) return true;
+            if (addr == dungeonCore.dungeonMasterAddress()) return true;
+        }
+        
+        return false;
+    }
+    
     
     /**
-     * @notice 請求隨機數（訂閱模式，無需支付）
+     * @notice Dynamic Gas Limit calculation (Now with adjustable parameters)
+     * @param requester Requesting contract address
+     * @param extraData Extra data (such as quantity)
+     * @dev Return optimal gas limit based on actual callback complexity and cross-contract calls
+     */
+    function calculateDynamicGasLimit(
+        address requester,
+        uint256 extraData
+    ) public view returns (uint32) {
+        // Hero & Relic: Use adjustable formula
+        if (address(dungeonCore) != address(0)) {
+            if (requester == dungeonCore.heroContractAddress() || 
+                requester == dungeonCore.relicContractAddress()) {
+                uint256 quantity = extraData;
+                require(quantity > 0 && quantity <= MAX_BATCH_SIZE, "Invalid quantity"); // Changed to MAX_BATCH_SIZE
+                
+                // NEW: Use adjustable parameters instead of hardcoded values
+                // Formula: baseCost + (quantity * perNFTCost)
+                uint32 dynamicGas = dynamicGasBaseCost + uint32(quantity * dynamicGasPerNFTCost);
+                
+                // Safety cap: never exceed 2.5M limit
+                if (dynamicGas > MAX_CALLBACK_GAS_LIMIT) {
+                    dynamicGas = MAX_CALLBACK_GAS_LIMIT;
+                }
+                return dynamicGas;
+            }
+            
+            // DungeonMaster: increased to 500k (was 400k, insufficient for cross-contract calls)
+            if (requester == dungeonCore.dungeonMasterAddress()) {
+                return 500000;
+            }
+            
+            // Altar: maintain 800k (sufficient for complex upgrade logic)
+            if (requester == dungeonCore.altarOfAscensionAddress()) {
+                return 800000;
+            }
+        }
+        
+        // Default value
+        return callbackGasLimit;
+    }
+    
+    /**
+     * @notice NEW: Set dynamic gas formula parameters (owner only)
+     * @param _baseCost Base gas cost (fixed overhead)
+     * @param _perNFTCost Gas cost per NFT
+     * @dev Allows post-deployment adjustment of gas calculation formula
+     */
+    function setDynamicGasFormula(uint32 _baseCost, uint32 _perNFTCost) external onlyOwner {
+        // Reasonable bounds to prevent misconfiguration
+        require(_baseCost >= 100000 && _baseCost <= 1000000, "Base cost out of range");
+        require(_perNFTCost >= 20000 && _perNFTCost <= 100000, "Per-NFT cost out of range");
+        
+        // Check that formula doesn't exceed limit for max batch
+        uint32 maxBatchGas = _baseCost + (MAX_BATCH_SIZE * _perNFTCost);
+        require(maxBatchGas <= MAX_CALLBACK_GAS_LIMIT, "Formula exceeds max gas for 40 NFT batch");
+        
+        uint32 oldBaseCost = dynamicGasBaseCost;
+        uint32 oldPerNFTCost = dynamicGasPerNFTCost;
+        
+        dynamicGasBaseCost = _baseCost;
+        dynamicGasPerNFTCost = _perNFTCost;
+        
+        emit DynamicGasFormulaUpdated(oldBaseCost, oldPerNFTCost, _baseCost, _perNFTCost);
+    }
+    
+    /**
+     * @notice Request random numbers (subscription mode, no payment required)
      */
     function requestRandomWords(
         uint32 _numWords
@@ -111,7 +196,7 @@ contract VRFConsumerV2Plus is VRFConsumerBaseV2Plus, ReentrancyGuard {
         require(block.timestamp >= lastRequestTime[msg.sender] + COOLDOWN_PERIOD, "Cooldown active");
         lastRequestTime[msg.sender] = block.timestamp;
         
-        // 使用訂閱模式請求
+        // Use subscription mode request
         requestId = s_vrfCoordinator.requestRandomWords(
             VRFV2PlusClient.RandomWordsRequest({
                 keyHash: keyHash,
@@ -121,7 +206,7 @@ contract VRFConsumerV2Plus is VRFConsumerBaseV2Plus, ReentrancyGuard {
                 numWords: _numWords,
                 extraArgs: VRFV2PlusClient._argsToBytes(
                     VRFV2PlusClient.ExtraArgsV1({
-                        nativePayment: false  // 使用 LINK 支付
+                        nativePayment: false  // Use LINK payment
                     })
                 )
             })
@@ -143,32 +228,35 @@ contract VRFConsumerV2Plus is VRFConsumerBaseV2Plus, ReentrancyGuard {
     }
     
     /**
-     * @notice 為用戶請求隨機數（供 NFT 合約調用）
-     * @dev 訂閱模式不需要 payable
+     * @notice Request random numbers for user (called by NFT contracts)
+     * @dev Subscription mode does not require payable
      */
     function requestRandomForUser(
         address user,
         uint256 quantity,
-        uint8, // maxRarity - 不使用
-        bytes32 // commitment - 不使用
+        uint8, // maxRarity - not used
+        bytes32 // commitment - not used
     ) external payable onlyAuthorized nonReentrant returns (uint256 requestId) {
-        require(quantity > 0 && quantity <= 50, "Invalid quantity");
+        require(quantity > 0 && quantity <= MAX_BATCH_SIZE, "Invalid quantity"); // Changed to MAX_BATCH_SIZE
         
         // Rate limiting check
         require(block.timestamp >= lastRequestTime[msg.sender] + COOLDOWN_PERIOD, "Cooldown active");
         lastRequestTime[msg.sender] = block.timestamp;
         
-        // 使用訂閱模式請求
+        // Dynamically calculate Gas Limit
+        uint32 dynamicGasLimit = calculateDynamicGasLimit(msg.sender, quantity);
+        
+        // Use subscription mode request
         requestId = s_vrfCoordinator.requestRandomWords(
             VRFV2PlusClient.RandomWordsRequest({
                 keyHash: keyHash,
                 subId: s_subscriptionId,
                 requestConfirmations: requestConfirmations,
-                callbackGasLimit: callbackGasLimit,  // 固定使用 2.5M gas limit
-                numWords: 1, // 固定請求 1 個隨機數，節省 LINK 成本
+                callbackGasLimit: dynamicGasLimit,  // Use dynamic gas limit
+                numWords: 1, // Fixed request for 1 random word to save LINK costs
                 extraArgs: VRFV2PlusClient._argsToBytes(
                     VRFV2PlusClient.ExtraArgsV1({
-                        nativePayment: false  // 使用 LINK 支付
+                        nativePayment: false  // Use LINK payment
                     })
                 )
             })
@@ -178,24 +266,24 @@ contract VRFConsumerV2Plus is VRFConsumerBaseV2Plus, ReentrancyGuard {
             fulfilled: false,
             exists: true,
             randomWords: new uint256[](0),
-            requester: msg.sender,  // 記錄調用合約地址
+            requester: msg.sender,  // Record calling contract address
             timestamp: block.timestamp  // Record timestamp
         });
         
         lastRequestIdByAddress[user] = requestId;
-        requestIdToUser[requestId] = user;  // 記錄最終用戶
-        requestIdToContract[requestId] = msg.sender;  // 記錄調用合約
+        requestIdToUser[requestId] = user;  // Record end user
+        requestIdToContract[requestId] = msg.sender;  // Record calling contract
         emit RequestSent(requestId, uint32(quantity));
         
         return requestId;
     }
     
     /**
-     * @notice 請求隨機數用於其他用途（DungeonMaster, Altar）
-     * @dev 訂閱模式不需要 payable
+     * @notice Request random numbers for other purposes (DungeonMaster, Altar)
+     * @dev Subscription mode does not require payable
      */
     function requestRandomness(
-        uint8, // requestType - 保留接口兼容性
+        uint8, // requestType - preserve interface compatibility
         uint32 _numWords,
         bytes calldata data
     ) external payable onlyAuthorized nonReentrant returns (uint256 requestId) {
@@ -203,7 +291,7 @@ contract VRFConsumerV2Plus is VRFConsumerBaseV2Plus, ReentrancyGuard {
         require(block.timestamp >= lastRequestTime[msg.sender] + COOLDOWN_PERIOD, "Cooldown active");
         lastRequestTime[msg.sender] = block.timestamp;
         
-        // 使用訂閱模式請求
+        // Use subscription mode request
         requestId = s_vrfCoordinator.requestRandomWords(
             VRFV2PlusClient.RandomWordsRequest({
                 keyHash: keyHash,
@@ -213,7 +301,7 @@ contract VRFConsumerV2Plus is VRFConsumerBaseV2Plus, ReentrancyGuard {
                 numWords: _numWords,
                 extraArgs: VRFV2PlusClient._argsToBytes(
                     VRFV2PlusClient.ExtraArgsV1({
-                        nativePayment: false  // 使用 LINK 支付
+                        nativePayment: false  // Use LINK payment
                     })
                 )
             })
@@ -234,38 +322,42 @@ contract VRFConsumerV2Plus is VRFConsumerBaseV2Plus, ReentrancyGuard {
     }
     
     /**
-     * @notice VRF Coordinator 回調函數
-     * @dev ⚡ 重要改動：移除 nonReentrant 避免跨合約調用衝突
-     *      改用狀態檢查 + 低級 call 確保安全
+     * @notice VRF Coordinator callback function
+     * @dev Important change: Remove nonReentrant to avoid cross-contract conflicts
+     *      Use state checks + low-level call to ensure security
      */
     function fulfillRandomWords(
         uint256 _requestId,
         uint256[] calldata _randomWords
     ) internal override {
-        // ⚡ 使用狀態檢查代替 nonReentrant
-        // 不使用 require/revert，使用 return 避免 VRF 失敗
-        if (!s_requests[_requestId].exists) return;
-        if (s_requests[_requestId].fulfilled) return;  // 防止重複處理
+        // Security fix: Use storage pointer to reduce gas and ensure atomicity
+        RequestStatus storage request = s_requests[_requestId];
         
-        // 檢查超時（30分鐘）
-        if (block.timestamp > s_requests[_requestId].timestamp + REQUEST_TIMEOUT) {
-            emit RequestTimedOut(_requestId, s_requests[_requestId].requester);
+        // Use state checks instead of nonReentrant
+        // Don't use require/revert, use return to avoid VRF failure
+        if (!request.exists) return;
+        if (request.fulfilled) return;  // Prevent duplicate processing
+        if (_randomWords.length == 0) return; // Added: Check random word validity
+        
+        // Check timeout (30 minutes)
+        if (block.timestamp > request.timestamp + REQUEST_TIMEOUT) {
+            emit RequestTimedOut(_requestId, request.requester);
             return;
         }
         
-        // 立即標記為已完成，防止重入
-        s_requests[_requestId].fulfilled = true;
-        s_requests[_requestId].randomWords = _randomWords;
+        // Mark as completed immediately to prevent reentrancy
+        request.fulfilled = true;
+        request.randomWords = _randomWords;
         
         emit RequestFulfilled(_requestId, _randomWords);
         
-        // ⚡ 採用 V2 版本的安全回調方式
+        // Use V2 version's safe callback approach
         _safeCallback(_requestId, requestIdToContract[_requestId], _randomWords);
     }
     
     /**
-     * @notice 安全的回調處理 - 使用低級 call 避免 revert 影響
-     * @dev 從 V2 版本採用的最佳實踐
+     * @notice Safe callback handling - use low-level call to avoid revert impact
+     * @dev Best practice adopted from V2 version
      */
     function _safeCallback(
         uint256 requestId,
@@ -274,8 +366,8 @@ contract VRFConsumerV2Plus is VRFConsumerBaseV2Plus, ReentrancyGuard {
     ) internal {
         if (callbackContract == address(0)) return;
         
-        // ⚡ 使用低級 call 而非 try-catch，避免 ReentrancyGuard 衝突
-        // 這樣即使目標合約有 nonReentrant 也不會失敗
+        // Use low-level call instead of try-catch to avoid ReentrancyGuard conflicts
+        // This way it won't fail even if target contract has nonReentrant
         (bool success, bytes memory returnData) = callbackContract.call(
             abi.encodeWithSignature("onVRFFulfilled(uint256,uint256[])", requestId, randomWords)
         );
@@ -283,17 +375,14 @@ contract VRFConsumerV2Plus is VRFConsumerBaseV2Plus, ReentrancyGuard {
         if (success) {
             emit CallbackSuccess(requestId, callbackContract);
         } else {
-            // 記錄失敗但不 revert，確保 VRF 狀態正確更新
+            // Log failure but don't revert, ensure VRF state updates correctly
             emit CallbackFailed(requestId, callbackContract, returnData);
         }
     }
     
-    // ============================================
-    // 查詢函數
-    // ============================================
     
     /**
-     * @notice 獲取請求狀態
+     * @notice Get request status
      */
     function getRequestStatus(
         uint256 _requestId
@@ -304,7 +393,7 @@ contract VRFConsumerV2Plus is VRFConsumerBaseV2Plus, ReentrancyGuard {
     }
     
     /**
-     * @notice 檢查請求是否超時
+     * @notice Check if request is expired
      */
     function isRequestExpired(uint256 _requestId) external view returns (bool) {
         if (!s_requests[_requestId].exists) return false;
@@ -313,7 +402,7 @@ contract VRFConsumerV2Plus is VRFConsumerBaseV2Plus, ReentrancyGuard {
     }
     
     /**
-     * @notice 獲取用戶的隨機數結果
+     * @notice Get user's random number result
      */
     function getRandomForUser(address user) external view returns (
         bool fulfilled,
@@ -329,34 +418,25 @@ contract VRFConsumerV2Plus is VRFConsumerBaseV2Plus, ReentrancyGuard {
     }
     
     /**
-     * @notice 獲取 VRF 請求價格（訂閱模式返回 0）
+     * @notice Get VRF request price (returns 0 in subscription mode)
      */
     function getVrfRequestPrice() external pure returns (uint256) {
-        return 0;  // 訂閱模式無需支付
+        return 0;  // No payment needed in subscription mode
     }
     
     function vrfRequestPrice() external pure returns (uint256) {
-        return 0;  // 訂閱模式無需支付
+        return 0;  // No payment needed in subscription mode
     }
     
     function getTotalFee() external pure returns (uint256) {
-        return 0;  // 訂閱模式無需支付
+        return 0;  // No payment needed in subscription mode
     }
     
-    // ============================================
-    // 管理函數
-    // ============================================
+    
     
     /**
-     * @notice 設置訂閱 ID
-     */
-    function setSubscriptionId(uint256 _subscriptionId) external onlyOwner {
-        s_subscriptionId = _subscriptionId;
-    }
-    
-    /**
-     * @notice 單獨設置 callback gas limit
-     * @param _callbackGasLimit 新的 gas limit（必須在合理範圍內）
+     * @notice Set callback gas limit individually
+     * @param _callbackGasLimit New gas limit (must be within reasonable range)
      */
     function setCallbackGasLimit(uint32 _callbackGasLimit) external onlyOwner {
         require(_callbackGasLimit >= MIN_CALLBACK_GAS_LIMIT && 
@@ -369,8 +449,8 @@ contract VRFConsumerV2Plus is VRFConsumerBaseV2Plus, ReentrancyGuard {
     }
     
     /**
-     * @notice 設置 keyHash（用於切換不同 gas price 層級）
-     * @param _keyHash 新的 keyHash
+     * @notice Set keyHash (for switching different gas price tiers)
+     * @param _keyHash New keyHash
      */
     function setKeyHash(bytes32 _keyHash) external onlyOwner {
         require(_keyHash != bytes32(0), "Invalid keyHash");
@@ -379,8 +459,8 @@ contract VRFConsumerV2Plus is VRFConsumerBaseV2Plus, ReentrancyGuard {
     }
     
     /**
-     * @notice 設置確認數
-     * @param _confirmations 新的確認數（建議 6-8）
+     * @notice Set confirmation count
+     * @param _confirmations New confirmation count (recommended 6-8)
      */
     function setRequestConfirmations(uint16 _confirmations) external onlyOwner {
         require(_confirmations >= 3 && _confirmations <= 200, "Invalid confirmations");
@@ -389,7 +469,7 @@ contract VRFConsumerV2Plus is VRFConsumerBaseV2Plus, ReentrancyGuard {
     }
     
     /**
-     * @notice 設置 VRF 參數（完整版本）
+     * @notice Set VRF parameters (complete version)
      */
     function setVRFParams(
         bytes32 _keyHash,
@@ -412,21 +492,21 @@ contract VRFConsumerV2Plus is VRFConsumerBaseV2Plus, ReentrancyGuard {
     }
     
     /**
-     * @notice 估算請求成本（幫助調試）
-     * @return estimatedCost 估算的 LINK 成本
+     * @notice Estimate request cost (for debugging)
+     * @return estimatedCost Estimated LINK cost
      */
     function estimateRequestCost(uint32 _numWords) external view returns (uint256 estimatedCost) {
-        // 基礎成本 + (每個字的成本 * 數量) + (gas limit 成本)
-        // 這是簡化的估算，實際成本取決於網路狀況
-        uint256 baseCost = 0.001 ether; // 0.001 LINK 基礎費
-        uint256 perWordCost = 0.0005 ether; // 0.0005 LINK 每個字
-        uint256 gasLimitCost = (callbackGasLimit * 0.000000001 ether); // 簡化的 gas 成本估算
+        // Base cost + (cost per word * quantity) + (gas limit cost)
+        // This is a simplified estimate, actual cost depends on network conditions
+        uint256 baseCost = 0.001 ether; // 0.001 LINK base fee
+        uint256 perWordCost = 0.0005 ether; // 0.0005 LINK per word
+        uint256 gasLimitCost = (callbackGasLimit * 0.000000001 ether); // Simplified gas cost estimation
         
         estimatedCost = baseCost + (perWordCost * _numWords) + gasLimitCost;
     }
     
     /**
-     * @notice 授權/取消授權合約
+     * @notice Authorize/deauthorize contracts
      */
     function setAuthorizedContract(address addr, bool auth) external onlyOwner {
         authorized[addr] = auth;
@@ -434,7 +514,7 @@ contract VRFConsumerV2Plus is VRFConsumerBaseV2Plus, ReentrancyGuard {
     }
     
     /**
-     * @notice 授權合約（兼容舊接口）
+     * @notice Authorize contract (compatible with legacy interface)
      */
     function authorizeContract(address contract_) external onlyOwner {
         authorized[contract_] = true;
@@ -442,25 +522,42 @@ contract VRFConsumerV2Plus is VRFConsumerBaseV2Plus, ReentrancyGuard {
     }
     
     /**
-     * @notice 清理超時的請求（僅 owner）
-     * @dev 允許 owner 在請求超時後清理狀態
+     * @notice Set DungeonCore address to enable smart authorization
+     * @param _dungeonCore DungeonCore contract address
+     */
+    function setDungeonCore(address _dungeonCore) external onlyOwner {
+        dungeonCore = IDungeonCore(_dungeonCore);
+    }
+    
+    /**
+     * @notice Check if address has VRF usage permission (public query)
+     * @param addr Address to check
+     * @return Whether authorized
+     */
+    function isAuthorized(address addr) external view returns (bool) {
+        return _isAuthorized(addr);
+    }
+    
+    /**
+     * @notice Clean up expired requests (owner only)
+     * @dev Allow owner to clean up state after request timeout
      */
     function cleanupExpiredRequest(uint256 requestId) external onlyOwner {
         require(s_requests[requestId].exists, "Request not found");
         require(!s_requests[requestId].fulfilled, "Already fulfilled");
         require(block.timestamp > s_requests[requestId].timestamp + REQUEST_TIMEOUT, "Not expired");
         
-        // 標記為已處理，防止後續回調
+        // Mark as processed to prevent subsequent callbacks
         s_requests[requestId].fulfilled = true;
         emit RequestTimedOut(requestId, s_requests[requestId].requester);
     }
     
     /**
-     * @notice 緊急提取誤轉的資產
-     * @dev 處理誤轉的 BNB
+     * @notice Emergency withdrawal of mistakenly transferred assets
+     * @dev Handle mistakenly transferred BNB
      */
-    function emergencyWithdraw() external onlyOwner {
-        // 提取誤轉的 BNB
+    function withdrawNative() external onlyOwner {
+        // Withdraw mistakenly transferred BNB
         uint256 bnbBalance = address(this).balance;
         if (bnbBalance > 0) {
             (bool success, ) = owner().call{value: bnbBalance}("");
@@ -470,8 +567,8 @@ contract VRFConsumerV2Plus is VRFConsumerBaseV2Plus, ReentrancyGuard {
     }
     
     /**
-     * @notice 緊急提取任意 ERC20 代幣
-     * @param token 代幣地址
+     * @notice Emergency withdrawal of any ERC20 tokens
+     * @param token Token address
      */
     function emergencyWithdrawToken(address token) external onlyOwner {
         require(token != address(0), "Invalid token");
@@ -483,8 +580,26 @@ contract VRFConsumerV2Plus is VRFConsumerBaseV2Plus, ReentrancyGuard {
             emit EmergencyWithdraw(token, balance);
         }
     }
+    
+    /**
+     * @notice Withdraw SoulShard tokens specifically (safety function)
+     * @dev Convenience function for withdrawing SOUL tokens
+     */
+    function withdrawSoulShard() external onlyOwner {
+        address soulShardAddress = dungeonCore.soulShardTokenAddress();
+        require(soulShardAddress != address(0), "VRF: SoulShard not set");
+        
+        IERC20 soulShard = IERC20(soulShardAddress);
+        uint256 balance = soulShard.balanceOf(address(this));
+        
+        if (balance > 0) {
+            bool success = soulShard.transfer(owner(), balance);
+            require(success, "SoulShard transfer failed");
+            emit EmergencyWithdraw(soulShardAddress, balance);
+        }
+    }
 
 
-    // 接收 BNB（防止意外轉入被鎖定）
+    // Prevent accidental transfers from being locked
     receive() external payable {}
 }

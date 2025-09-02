@@ -26,7 +26,7 @@ function log(message, color = 'reset') {
 
 // 專案路徑
 const PROJECTS = {
-  frontend: '/Users/sotadic/Documents/GitHub/DungeonDelvers',
+  frontend: '/Users/sotadic/Documents/GitHub/SoulboundSaga',
   backend: '/Users/sotadic/Documents/dungeon-delvers-metadata-server',
   contracts: '/Users/sotadic/Documents/DungeonDelversContracts'
 };

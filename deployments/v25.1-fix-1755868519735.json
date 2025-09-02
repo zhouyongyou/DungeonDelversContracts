@@ -1,0 +1,14 @@
+{
+  "timestamp": "2025-08-22T13:15:19.735Z",
+  "network": "BSC Mainnet",
+  "contracts": {
+    "Hero": "0x27E3A73a4d7DDD8Dea6cBF9e152173CcC04b7505",
+    "Relic": "0x8676174F82A9e5006B33976430D91d752fa90E3e",
+    "DungeonCore": "0x5B64A5939735Ff762493D9B9666b3e13118c5722",
+    "VRFManager": "0x0497108f4734BbC0381DF82e95A41e1425C53981"
+  },
+  "oldContracts": {
+    "Hero": "0x60bdCE3d1412C1aA8F18a58801895Bb0C3D45357",
+    "Relic": "0xE80d9c0E6dA24f1C71C3A77E0565abc8bb139817"
+  }
+}

@@ -12,7 +12,7 @@ const CONTRACTS = {
   DUNGEONMASTER: "0x446f80c6562a9b0A33b48F74F7Dbf10b53Fe2703"
 };
 
-const PLAYER_ADDRESS = "0x10925A7138649C7E1794CE646182eeb5BF8ba647";
+const PLAYER_ADDRESS = "0xEbCF4A36Ad1485A9737025e9d72186b604487274";
 
 async function main() {
   console.log("🔍 調試 addExperience 調用問題...\n");

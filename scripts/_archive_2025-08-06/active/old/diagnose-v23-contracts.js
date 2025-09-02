@@ -23,8 +23,8 @@ async function diagnoseContracts() {
     const dungeonCore = new ethers.Contract(contracts.DUNGEONCORE.address, ownerABI, provider);
     const owner = await dungeonCore.owner();
     console.log(`Owner: ${owner}`);
-    console.log(`Expected: 0x10925A7138649C7E1794CE646182eeb5BF8ba647`);
-    console.log(`Match: ${owner.toLowerCase() === '0x10925A7138649C7E1794CE646182eeb5BF8ba647'.toLowerCase() ? '✅' : '❌'}`);
+    console.log(`Expected: 0xEbCF4A36Ad1485A9737025e9d72186b604487274`);
+    console.log(`Match: ${owner.toLowerCase() === '0xEbCF4A36Ad1485A9737025e9d72186b604487274'.toLowerCase() ? '✅' : '❌'}`);
   } catch (error) {
     console.log('❌ 無法獲取 owner，可能需要初始化');
   }

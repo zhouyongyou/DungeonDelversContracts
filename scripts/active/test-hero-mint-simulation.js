@@ -4,7 +4,7 @@ async function main() {
   console.log('🧪 模擬 Hero 合約鑄造流程');
   console.log('========================\n');
   
-  const userAddress = '0x10925A7138649C7E1794CE646182eeb5BF8ba647';
+  const userAddress = '0xEbCF4A36Ad1485A9737025e9d72186b604487274';
   const heroAddress = '0xD48867dbac5f1c1351421726B6544f847D9486af';
   const vrfManagerAddress = '0xFac10cd51981ED3aE85a05c5CFF6ab5b8e145038';
   const soulShardAddress = '0x97B2C2a9A11C7b6A020b4bAEaAd349865eaD0bcF';

@@ -1,189 +1,245 @@
-const { ethers } = require("hardhat");
-require('dotenv').config();
+const hre = require("hardhat");
 
 async function main() {
-    console.log("🔧 修復 V25 合約互連設定...\n");
+    console.log("🔧 修復 V25.0.4 合約互連...\n");
     
-    const [deployer] = await ethers.getSigners();
-    console.log("🔑 執行者:", deployer.address);
-    console.log("💰 餘額:", ethers.formatEther(await ethers.provider.getBalance(deployer.address)), "BNB\n");
-    
-    // V25 合約地址
-    const addresses = {
-        DUNGEONCORE: "0x8a2D2b1961135127228EdD71Ff98d6B097915a13",
-        HERO: "0x05Cbb0DbdA4B66c4CC6f60CdADFDb4C4995D9BFD",
-        RELIC: "0x9B36DA9584d8170bAA1693F14E898f44eBFc77F4",
-        DUNGEONMASTER: "0xE391261741Fad5FCC2D298d00e8c684767021253",
-        DUNGEONSTORAGE: "0x539AC926C6daE898f2C843aF8C59Ff92B4b3B468",
-        ALTAROFASCENSION: "0x095559778C0BAA2d8FA040Ab0f8752cF07779D33",
-        VRFMANAGER: "0xE1D1c53e2e467BFF3d6e4EffB7b89C0C10711ad1"
+    // V25.0.4 合約地址
+    const CONTRACTS = {
+        DungeonCore: "0x5B64A5939735Ff762493D9B9666b3e13118c5722",
+        Oracle: "0xEE322Eff70320759487f67875113C062AC1F4cfB", 
+        Hero: "0xE44A7CA10bAC8B1042EeBd66ccF24c5b1D734b19",
+        Relic: "0x91Bf924E9CEF490F7C999C1F083eE1636595220D",
+        Party: "0x495bcE2D9561E0f7623fF244e4BA28DCFfEe71d9",
+        DungeonMaster: "0xAAdE1919B2EA95cBBFcDEa41CBf9D48ae0d44cdF",
+        DungeonStorage: "0xCE75345A01dB5c40E443624F86BDC45BabF7B6ec",
+        AltarOfAscension: "0x56B62168734827b9b3D750ac1aB9F249e0a0EEd3",
+        PlayerVault: "0x446a82f2003484Bdc83f29e094fcb66D01094db0",
+        PlayerProfile: "0x3509d0f0cD6f7b518860f945128205ac4F426090",
+        VIPStaking: "0x18d13f4FdE3245ABa6D0fb91597291e1F46b0661",
+        SoulShard: "0xB73FE158689EAB3396B64794b573D4BEc7113412",
+        USD: "0x9DC0b768533222fddbe6A9Bd71eAD96a7c612C61",
+        VRFManager: "0xa94555C309Dd83d9fB0531852d209c46Fa50637f"
     };
     
-    // 簡化 ABI
-    const heroABI = [
-        "function setDungeonCore(address _dungeonCore) external",
-        "function setVrfManager(address _vrfManager) external",
-        "function setPlatformFee(uint256 _platformFee) external",
-        "function dungeonCore() external view returns (address)",
-        "function vrfManager() external view returns (address)",
-        "function owner() external view returns (address)"
-    ];
+    const [signer] = await hre.ethers.getSigners();
+    console.log("執行地址:", signer.address);
+    console.log("=" .repeat(60));
+    
+    let txCount = 0;
+    const transactions = [];
+    
+    // ===========================================
+    // 1. 設定 DungeonCore 的模組地址
+    // ===========================================
+    console.log("\n🏛️ 設定 DungeonCore 模組地址...");
+    console.log("-".repeat(60));
     
     const dungeonCoreABI = [
-        "function setHeroContract(address _heroContract) external",
-        "function setRelicContract(address _relicContract) external", 
-        "function setDungeonMasterContract(address _dungeonMaster) external",
-        "function heroContract() external view returns (address)",
-        "function relicContract() external view returns (address)",
-        "function owner() external view returns (address)"
-    ];
-    
-    const vrfManagerABI = [
-        "function setVrfRequestPrice(uint256 _price) external",
-        "function setPlatformFee(uint256 _fee) external",
-        "function authorizeContract(address _contract) external",
-        "function owner() external view returns (address)"
+        "function setHeroAddress(address)",
+        "function setRelicAddress(address)",  
+        "function setPartyAddress(address)",
+        "function setSoulShardAddress(address)",
+        "function heroAddress() view returns (address)",
+        "function relicAddress() view returns (address)",
+        "function partyAddress() view returns (address)",
+        "function soulShardAddress() view returns (address)"
     ];
     
     try {
-        console.log("🔧 開始修復合約連接...\n");
+        const dungeonCore = new hre.ethers.Contract(CONTRACTS.DungeonCore, dungeonCoreABI, signer);
         
-        // 1. 設定 HERO 合約的連接
-        console.log("1️⃣ 設定 HERO 合約連接:");
-        const hero = new ethers.Contract(addresses.HERO, heroABI, deployer);
-        
-        const heroOwner = await hero.owner();
-        console.log("- HERO 擁有者:", heroOwner);
-        
-        if (heroOwner.toLowerCase() !== deployer.address.toLowerCase()) {
-            console.log("❌ 無法修改 HERO 合約 - 不是擁有者");
-        } else {
-            // 設定 VRF Manager (如果需要)
-            const currentVrfManager = await hero.vrfManager();
-            if (currentVrfManager.toLowerCase() !== addresses.VRFMANAGER.toLowerCase()) {
-                console.log("- 更新 VRF Manager...");
-                const tx1 = await hero.setVrfManager(addresses.VRFMANAGER, { gasLimit: 100000 });
-                await tx1.wait();
-                console.log("✅ HERO -> VRF Manager 連接已修復");
-            } else {
-                console.log("✅ HERO -> VRF Manager 連接正常");
-            }
-            
-            // 設定平台費為 0
-            console.log("- 設定平台費為 0...");
-            const tx2 = await hero.setPlatformFee(0, { gasLimit: 100000 });
-            await tx2.wait();
-            console.log("✅ HERO 平台費已設為 0");
-        }
-        
-        // 2. 設定 DungeonCore 連接
-        console.log("\n2️⃣ 設定 DungeonCore 連接:");
-        const dungeonCore = new ethers.Contract(addresses.DUNGEONCORE, dungeonCoreABI, deployer);
-        
+        // 設定 Hero 地址
         try {
-            const dcOwner = await dungeonCore.owner();
-            console.log("- DungeonCore 擁有者:", dcOwner);
-            
-            if (dcOwner.toLowerCase() !== deployer.address.toLowerCase()) {
-                console.log("❌ 無法修改 DungeonCore 合約 - 不是擁有者");
-            } else {
-                // 設定 HERO 合約
-                try {
-                    const currentHero = await dungeonCore.heroContract();
-                    if (currentHero.toLowerCase() !== addresses.HERO.toLowerCase()) {
-                        console.log("- 更新 Hero 合約地址...");
-                        const tx3 = await dungeonCore.setHeroContract(addresses.HERO, { gasLimit: 100000 });
-                        await tx3.wait();
-                        console.log("✅ DungeonCore -> HERO 連接已修復");
-                    } else {
-                        console.log("✅ DungeonCore -> HERO 連接正常");
-                    }
-                } catch (error) {
-                    console.log("⚠️ 無法讀取或設定 Hero 合約:", error.message);
-                }
-                
-                // 設定 RELIC 合約
-                try {
-                    const currentRelic = await dungeonCore.relicContract();
-                    if (currentRelic.toLowerCase() !== addresses.RELIC.toLowerCase()) {
-                        console.log("- 更新 Relic 合約地址...");
-                        const tx4 = await dungeonCore.setRelicContract(addresses.RELIC, { gasLimit: 100000 });
-                        await tx4.wait();
-                        console.log("✅ DungeonCore -> RELIC 連接已修復");
-                    } else {
-                        console.log("✅ DungeonCore -> RELIC 連接正常");
-                    }
-                } catch (error) {
-                    console.log("⚠️ 無法讀取或設定 Relic 合約:", error.message);
-                }
-            }
-        } catch (error) {
-            console.log("❌ DungeonCore 連接檢查失敗:", error.message);
-            console.log("💡 可能原因: DungeonCore 合約 ABI 不匹配或合約暫停");
+            console.log(`設定 Hero 地址: ${CONTRACTS.Hero}`);
+            const tx = await dungeonCore.setHeroAddress(CONTRACTS.Hero, { gasLimit: 200000 });
+            transactions.push({ name: "DungeonCore.setHeroAddress", hash: tx.hash });
+            txCount++;
+            await tx.wait();
+            console.log("✅ Hero 地址設定完成");
+        } catch (e) {
+            console.log("❌ 設定 Hero 地址失敗:", e.message);
         }
         
-        // 3. 設定 VRF Manager
-        console.log("\n3️⃣ 設定 VRF Manager:");
-        const vrfManager = new ethers.Contract(addresses.VRFMANAGER, vrfManagerABI, deployer);
-        
+        // 設定 Relic 地址
         try {
-            const vrfOwner = await vrfManager.owner();
-            console.log("- VRF Manager 擁有者:", vrfOwner);
-            
-            if (vrfOwner.toLowerCase() !== deployer.address.toLowerCase()) {
-                console.log("❌ 無法修改 VRF Manager 合約 - 不是擁有者");
-            } else {
-                // 設定合理的 VRF 費用
-                console.log("- 設定 VRF 費用為 0.0005 BNB...");
-                const vrfFee = ethers.parseEther("0.0005");
-                const tx5 = await vrfManager.setVrfRequestPrice(vrfFee, { gasLimit: 100000 });
-                await tx5.wait();
-                console.log("✅ VRF 請求費用已設為 0.0005 BNB");
-                
-                // 設定平台費為 0
-                console.log("- 設定 VRF 平台費為 0...");
-                const tx6 = await vrfManager.setPlatformFee(0, { gasLimit: 100000 });
-                await tx6.wait();
-                console.log("✅ VRF 平台費已設為 0");
-                
-                // 授權 HERO 合約
-                console.log("- 授權 HERO 合約使用 VRF...");
-                const tx7 = await vrfManager.authorizeContract(addresses.HERO, { gasLimit: 100000 });
-                await tx7.wait();
-                console.log("✅ HERO 合約已授權使用 VRF");
-                
-                // 授權 RELIC 合約
-                console.log("- 授權 RELIC 合約使用 VRF...");
-                const tx8 = await vrfManager.authorizeContract(addresses.RELIC, { gasLimit: 100000 });
-                await tx8.wait();
-                console.log("✅ RELIC 合約已授權使用 VRF");
-            }
-        } catch (error) {
-            console.log("❌ VRF Manager 設定失敗:", error.message);
-            console.log("💡 可能原因: VRF Manager 合約函數名稱不匹配");
+            console.log(`設定 Relic 地址: ${CONTRACTS.Relic}`);
+            const tx = await dungeonCore.setRelicAddress(CONTRACTS.Relic, { gasLimit: 200000 });
+            transactions.push({ name: "DungeonCore.setRelicAddress", hash: tx.hash });
+            txCount++;
+            await tx.wait();
+            console.log("✅ Relic 地址設定完成");
+        } catch (e) {
+            console.log("❌ 設定 Relic 地址失敗:", e.message);
         }
         
-        console.log("\n🎉 V25 合約互連修復完成！");
-        console.log("\n💡 接下來的步驟:");
-        console.log("1. 運行 check-v25-connections.js 驗證修復結果");
-        console.log("2. 測試前端鑄造功能");
-        console.log("3. 確認費用計算正確");
+        // 設定 Party 地址
+        try {
+            console.log(`設定 Party 地址: ${CONTRACTS.Party}`);
+            const tx = await dungeonCore.setPartyAddress(CONTRACTS.Party, { gasLimit: 200000 });
+            transactions.push({ name: "DungeonCore.setPartyAddress", hash: tx.hash });
+            txCount++;
+            await tx.wait();
+            console.log("✅ Party 地址設定完成");
+        } catch (e) {
+            console.log("❌ 設定 Party 地址失敗:", e.message);
+        }
         
-        // 顯示最終費用設定
-        console.log("\n💰 最終費用設定:");
-        console.log("- HERO 平台費: 0 BNB");
-        console.log("- VRF 請求費用: 0.0005 BNB (~$0.3)");
-        console.log("- VRF 平台費: 0 BNB");
-        console.log("- 總鑄造費用: 0.0005 BNB (~$0.3)");
+        // 設定 SoulShard 地址
+        try {
+            console.log(`設定 SoulShard 地址: ${CONTRACTS.SoulShard}`);
+            const tx = await dungeonCore.setSoulShardAddress(CONTRACTS.SoulShard, { gasLimit: 200000 });
+            transactions.push({ name: "DungeonCore.setSoulShardAddress", hash: tx.hash });
+            txCount++;
+            await tx.wait();
+            console.log("✅ SoulShard 地址設定完成");
+        } catch (e) {
+            console.log("❌ 設定 SoulShard 地址失敗:", e.message);
+        }
         
     } catch (error) {
-        console.error("❌ 修復失敗:", error.message);
-        
-        if (error.message.includes("Ownable: caller is not the owner")) {
-            console.log("💡 解決方案: 請使用合約擁有者地址執行此腳本");
-        } else if (error.message.includes("insufficient funds")) {
-            console.log("💡 解決方案: 請確保錢包有足夠的 BNB");
+        console.log("❌ DungeonCore 設定失敗:", error.message);
+    }
+    
+    // ===========================================
+    // 2. 設定各合約的 DungeonCore 地址
+    // ===========================================
+    console.log("\n🔄 設定各合約的 DungeonCore 地址...");
+    console.log("-".repeat(60));
+    
+    const coreSetterABI = [
+        "function setDungeonCoreAddress(address)"
+    ];
+    
+    const contractsToSetCore = [
+        "Hero", "Relic", "Party", "DungeonMaster", 
+        "PlayerVault", "PlayerProfile", "VIPStaking"
+    ];
+    
+    for (const contractName of contractsToSetCore) {
+        try {
+            const contract = new hre.ethers.Contract(CONTRACTS[contractName], coreSetterABI, signer);
+            console.log(`設定 ${contractName} 的 DungeonCore 地址`);
+            const tx = await contract.setDungeonCoreAddress(CONTRACTS.DungeonCore, { gasLimit: 200000 });
+            transactions.push({ name: `${contractName}.setDungeonCoreAddress`, hash: tx.hash });
+            txCount++;
+            await tx.wait();
+            console.log(`✅ ${contractName} DungeonCore 地址設定完成`);
+        } catch (e) {
+            console.log(`❌ ${contractName} DungeonCore 地址設定失敗:`, e.message);
         }
+    }
+    
+    // ===========================================
+    // 3. 設定 DungeonMaster 的 DungeonStorage 地址
+    // ===========================================
+    console.log("\n🗄️ 設定 DungeonMaster 的 DungeonStorage 地址...");
+    console.log("-".repeat(60));
+    
+    const dmStorageABI = [
+        "function setDungeonStorageAddress(address)"
+    ];
+    
+    try {
+        const dungeonMaster = new hre.ethers.Contract(CONTRACTS.DungeonMaster, dmStorageABI, signer);
+        console.log(`設定 DungeonStorage 地址: ${CONTRACTS.DungeonStorage}`);
+        const tx = await dungeonMaster.setDungeonStorageAddress(CONTRACTS.DungeonStorage, { gasLimit: 200000 });
+        transactions.push({ name: "DungeonMaster.setDungeonStorageAddress", hash: tx.hash });
+        txCount++;
+        await tx.wait();
+        console.log("✅ DungeonStorage 地址設定完成");
+    } catch (e) {
+        console.log("❌ DungeonStorage 地址設定失敗:", e.message);
+    }
+    
+    // ===========================================
+    // 4. 設定 Oracle 的 Token 地址
+    // ===========================================
+    console.log("\n💰 設定 Oracle 的 Token 地址...");
+    console.log("-".repeat(60));
+    
+    const oracleABI = [
+        "function setSoulShardAddress(address)",
+        "function setUsdAddress(address)"
+    ];
+    
+    try {
+        const oracle = new hre.ethers.Contract(CONTRACTS.Oracle, oracleABI, signer);
+        
+        // 設定 SoulShard 地址
+        try {
+            console.log(`設定 Oracle SoulShard 地址: ${CONTRACTS.SoulShard}`);
+            const tx = await oracle.setSoulShardAddress(CONTRACTS.SoulShard, { gasLimit: 200000 });
+            transactions.push({ name: "Oracle.setSoulShardAddress", hash: tx.hash });
+            txCount++;
+            await tx.wait();
+            console.log("✅ Oracle SoulShard 地址設定完成");
+        } catch (e) {
+            console.log("❌ Oracle SoulShard 地址設定失敗:", e.message);
+        }
+        
+        // 設定 USD 地址
+        try {
+            console.log(`設定 Oracle USD 地址: ${CONTRACTS.USD}`);
+            const tx = await oracle.setUsdAddress(CONTRACTS.USD, { gasLimit: 200000 });
+            transactions.push({ name: "Oracle.setUsdAddress", hash: tx.hash });
+            txCount++;
+            await tx.wait();
+            console.log("✅ Oracle USD 地址設定完成");
+        } catch (e) {
+            console.log("❌ Oracle USD 地址設定失敗:", e.message);
+        }
+    } catch (error) {
+        console.log("❌ Oracle 合約連接失敗:", error.message);
+    }
+    
+    // ===========================================
+    // 5. 授權 VRF Manager
+    // ===========================================
+    console.log("\n📡 授權 VRF Manager...");
+    console.log("-".repeat(60));
+    
+    const vrfManagerABI = [
+        "function authorize(address)"
+    ];
+    
+    try {
+        const vrfManager = new hre.ethers.Contract(CONTRACTS.VRFManager, vrfManagerABI, signer);
+        
+        const vrfClients = ["DungeonMaster", "Hero", "Relic", "AltarOfAscension"];
+        for (const clientName of vrfClients) {
+            try {
+                console.log(`授權 ${clientName} 使用 VRF`);
+                const tx = await vrfManager.authorize(CONTRACTS[clientName], { gasLimit: 200000 });
+                transactions.push({ name: `VRFManager.authorize(${clientName})`, hash: tx.hash });
+                txCount++;
+                await tx.wait();
+                console.log(`✅ ${clientName} VRF 授權完成`);
+            } catch (e) {
+                console.log(`❌ ${clientName} VRF 授權失敗:`, e.message);
+            }
+        }
+    } catch (error) {
+        console.log("❌ VRF Manager 連接失敗:", error.message);
+    }
+    
+    // ===========================================
+    // 總結
+    // ===========================================
+    console.log("\n" + "=".repeat(60));
+    console.log("📊 修復結果總結");
+    console.log("=".repeat(60));
+    
+    console.log(`\n執行了 ${txCount} 個交易:`);
+    transactions.forEach((tx, index) => {
+        console.log(`${index + 1}. ${tx.name}`);
+        console.log(`   Hash: ${tx.hash}`);
+    });
+    
+    if (txCount > 0) {
+        console.log("\n✅ 合約互連修復完成！");
+        console.log("建議運行 check-all-connections.js 驗證結果");
+    } else {
+        console.log("\n✅ 所有連接都已正確，無需修復！");
     }
 }
 

@@ -67,7 +67,7 @@ async function debugExpeditionError() {
   );
 
   // 測試參數 (從失敗交易獲取)
-  const userAddress = '0x10925A7138649C7E1794CE646182eeb5BF8ba647';
+  const userAddress = '0xEbCF4A36Ad1485A9737025e9d72186b604487274';
   const partyId = 1;
   const dungeonId = 10;
   

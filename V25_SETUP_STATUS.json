@@ -1,0 +1,14 @@
+{
+  "timestamp": "2025-08-19T14:42:12.474Z",
+  "success": 1,
+  "failed": 14,
+  "contracts": {
+    "Relic": "0x0B030a01682b2871950C9994a1f4274da96edBB1",
+    "Party": "0x5196631AB636a0C951c56943f84029a909540B9E",
+    "AltarOfAscension": "0xe75dd1b6aDE42d7bbDB287da571b5A35E12d744B",
+    "DungeonStorage": "0x5d8513681506540338d3A1669243144F68eC16a3",
+    "DungeonCore": "0xca52d328d846EE69f3f889C8ecE1C3C1f05bf826",
+    "DungeonMaster": "0xA2e6a50190412693fBD2B3c6A95eF9A95c17f1B9"
+  },
+  "completed": false
+}

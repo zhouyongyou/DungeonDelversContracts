@@ -1,4 +1,4 @@
-// contracts/DungeonCore_Secured.sol (安全加固版)
+// contracts/DungeonCore.sol
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
@@ -11,13 +11,12 @@ import "../interfaces/interfaces.sol";
 import {IERC20Metadata} from "@openzeppelin/contracts/token/ERC20/extensions/IERC20Metadata.sol";
 
 /**
- * @title DungeonCore_Secured (安全加固版)
- * @notice 系統的中心樞紐，負責註冊和管理所有衛星合約，並作為它們之間溝通的橋樑。
- * @dev 安全加固版本：添加了 ReentrancyGuard 防止跨合約重入攻擊
+ * @title DungeonCore
+ * @notice Central hub for registering and managing all satellite contracts, acting as a bridge for communication between them
+ * @dev Security-hardened version with ReentrancyGuard to prevent cross-contract reentrancy attacks
  */
 contract DungeonCore is Ownable, ReentrancyGuard, Pausable {
 
-    // --- 狀態變數 ---
     address public usdTokenAddress;
     address public soulShardTokenAddress;
     address public oracleAddress;
@@ -30,12 +29,12 @@ contract DungeonCore is Ownable, ReentrancyGuard, Pausable {
     address public playerProfileAddress;
     address public vipStakingAddress;
     
-    // === 🎯 集中管理新增 ===
+    // Centralized management additions
     address public vrfManager;
+    address public dungeonStorageAddress;
 
     uint8 public usdDecimals;
 
-    // --- 事件 ---
     event OracleSet(address indexed newAddress);
     event PlayerVaultSet(address indexed newAddress);
     event DungeonMasterSet(address indexed newAddress);
@@ -46,9 +45,11 @@ contract DungeonCore is Ownable, ReentrancyGuard, Pausable {
     event PlayerProfileSet(address indexed newAddress);
     event VipStakingSet(address indexed newAddress);
     
-    // === 🎯 集中管理事件 ===
+    // Unified management events
     event VRFManagerSet(address indexed newAddress);
-    event GlobalVRFManagerUpdated(address indexed vrfManager, uint256 contractsUpdated);
+    event SoulShardTokenSet(address indexed token);
+    event DungeonStorageSet(address indexed storage_);
+    event BatchAddressesSet(address soulShard, address vrfManager, address oracle, address storage_);
 
     constructor(
         address _initialOwner,
@@ -75,9 +76,9 @@ contract DungeonCore is Ownable, ReentrancyGuard, Pausable {
     }
 
     /**
-     * @notice 根據 SoulShard 數量計算其 USD 價值 (VIP功能需要)
-     * @param _soulShardAmount SoulShard 的數量 (18位小數)
-     * @return USD 價值 (18位小數)
+     * @notice Calculate USD value based on SoulShard amount (needed for VIP functionality)
+     * @param _soulShardAmount Amount of SoulShard (18 decimals)
+     * @return USD value (18 decimals)
      */
     function getUSDValueForSoulShard(uint256 _soulShardAmount) external view returns (uint256) {
         require(oracleAddress != address(0), "Oracle not set");
@@ -102,7 +103,6 @@ contract DungeonCore is Ownable, ReentrancyGuard, Pausable {
         return IDungeonMaster(dungeonMasterAddress).isPartyLocked(partyId);
     }
 
-    // --- Owner 管理函式 ---
     
     function setOracle(address _newAddress) external onlyOwner {
         oracleAddress = _newAddress;
@@ -149,55 +149,115 @@ contract DungeonCore is Ownable, ReentrancyGuard, Pausable {
         emit VipStakingSet(_newAddress);
     }
     
-    // === 🎯 VRF Manager 集中管理 ===
     
     /**
-     * @notice 設置 VRF Manager 並自動更新所有使用 VRF 的合約
-     * @param _vrfManager VRF Manager 合約地址
+     * @notice Set VRF Manager address
+     * @param _vrfManager VRF Manager contract address
+     * @dev Simplified version: only responsible for storing address, other contracts query via getVRFManager()
      */
-    function setGlobalVRFManager(address _vrfManager) external onlyOwner {
+    function setVRFManager(address _vrfManager) external onlyOwner {
         require(_vrfManager != address(0), "DungeonCore: VRF Manager cannot be zero address");
-        
         vrfManager = _vrfManager;
-        uint256 contractsUpdated = 0;
-        
-        // 自動更新所有使用 VRF 的合約
-        if (heroContractAddress != address(0)) {
-            try IHero(heroContractAddress).setVRFManager(_vrfManager) {
-                contractsUpdated++;
-            } catch {}
-        }
-        
-        if (relicContractAddress != address(0)) {
-            try IRelic(relicContractAddress).setVRFManager(_vrfManager) {
-                contractsUpdated++;
-            } catch {}
-        }
-        
-        if (dungeonMasterAddress != address(0)) {
-            try IDungeonMaster(dungeonMasterAddress).setVRFManager(_vrfManager) {
-                contractsUpdated++;
-            } catch {}
-        }
-        
-        if (altarOfAscensionAddress != address(0)) {
-            try IAltarOfAscension(altarOfAscensionAddress).setVRFManager(_vrfManager) {
-                contractsUpdated++;
-            } catch {}
-        }
-        
         emit VRFManagerSet(_vrfManager);
-        emit GlobalVRFManagerUpdated(_vrfManager, contractsUpdated);
     }
     
     /**
-     * @notice 獲取當前 VRF Manager 地址
+     * @notice Get current VRF Manager address
      */
     function getVRFManager() external view returns (address) {
         return vrfManager;
     }
+    
+    
+    /**
+     * @notice Set SoulShard Token address
+     * @param _token SoulShard Token contract address
+     */
+    function setSoulShardToken(address _token) external onlyOwner {
+        require(_token != address(0), "DungeonCore: Token cannot be zero address");
+        soulShardTokenAddress = _token;
+        emit SoulShardTokenSet(_token);
+    }
+    
+    /**
+     * @notice Set DungeonStorage address
+     * @param _storage DungeonStorage contract address
+     */
+    function setDungeonStorage(address _storage) external onlyOwner {
+        require(_storage != address(0), "DungeonCore: Storage cannot be zero address");
+        dungeonStorageAddress = _storage;
+        emit DungeonStorageSet(_storage);
+    }
+    
+    /**
+     * @notice Batch set core addresses (used during deployment)
+     * @param _soulShard SoulShard Token address
+     * @param _vrfManager VRF Manager address
+     * @param _oracle Oracle address
+     * @param _dungeonStorage DungeonStorage address
+     */
+    function setBatchAddresses(
+        address _soulShard,
+        address _vrfManager,
+        address _oracle,
+        address _dungeonStorage
+    ) external onlyOwner {
+        if (_soulShard != address(0)) soulShardTokenAddress = _soulShard;
+        if (_vrfManager != address(0)) vrfManager = _vrfManager;
+        if (_oracle != address(0)) oracleAddress = _oracle;
+        if (_dungeonStorage != address(0)) dungeonStorageAddress = _dungeonStorage;
+        
+        emit BatchAddressesSet(_soulShard, _vrfManager, _oracle, _dungeonStorage);
+    }
+    
+    /**
+     * @notice Get all core addresses (batch query to save gas)
+     * @return soulShard SoulShard Token address
+     * @return vrf VRF Manager address
+     * @return oracle Oracle address
+     * @return vault PlayerVault address
+     * @return storage_ DungeonStorage address
+     */
+    function getAllCoreAddresses() external view returns (
+        address soulShard,
+        address vrf,
+        address oracle,
+        address vault,
+        address storage_
+    ) {
+        return (
+            soulShardTokenAddress,
+            vrfManager,
+            oracleAddress,
+            playerVaultAddress,
+            dungeonStorageAddress
+        );
+    }
+    
+    /**
+     * @notice Get all NFT contract addresses
+     * @return hero Hero contract address
+     * @return relic Relic contract address
+     * @return party Party contract address
+     * @return profile PlayerProfile contract address
+     * @return vipStaking VIPStaking contract address
+     */
+    function getAllNFTAddresses() external view returns (
+        address hero,
+        address relic,
+        address party,
+        address profile,
+        address vipStaking
+    ) {
+        return (
+            heroContractAddress,
+            relicContractAddress,
+            partyContractAddress,
+            playerProfileAddress,
+            vipStakingAddress
+        );
+    }
 
-    // --- 暫停功能 ---
     function pause() external onlyOwner {
         _pause();
     }

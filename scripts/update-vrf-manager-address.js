@@ -98,7 +98,7 @@ async function main() {
   
   console.log("\n⚠️ 重要提醒：");
   console.log("1. 請確認已在 Chainlink 網站添加 Consumer");
-  console.log("2. 訪問: https://vrf.chain.link/bsc/114131353280130458891383141995968474440293173552039681622016393393251650814328");
+  console.log("2. 訪問: https://vrf.chain.link/bsc/88422796721004450630713121079263696788635490871993157345476848872165866246915");
   console.log("3. 添加 Consumer:", NEW_VRF_MANAGER);
   console.log("\n完成後執行: node scripts/test-vrf-subscription.js 測試");
 }

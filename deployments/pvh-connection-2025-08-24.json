@@ -1,0 +1,66 @@
+{
+  "timestamp": 1756056403626,
+  "date": "2025-08-24T17:26:43.626Z",
+  "deployer": "0xEbCF4A36Ad1485A9737025e9d72186b604487274",
+  "results": {
+    "playerVaultToDungeonCore": "success",
+    "heroToDungeonCore": "success",
+    "relicToDungeonCore": "success",
+    "dungeonCoreToPlayerVault": "success",
+    "dungeonCoreToHero": "success",
+    "dungeonCoreToRelic": "success"
+  },
+  "verificationResults": {
+    "playerVault": {
+      "toCore": true,
+      "fromCore": true
+    },
+    "hero": {
+      "toCore": true,
+      "fromCore": true
+    },
+    "relic": {
+      "toCore": true,
+      "fromCore": true
+    }
+  },
+  "transactions": [
+    {
+      "contract": "PlayerVault",
+      "method": "setDungeonCore",
+      "tx": "0xf8c3d4f1e5989cbd2bdc3554c705442971293acf139d31f9f6a000a1daf5e5ae"
+    },
+    {
+      "contract": "Hero",
+      "method": "setDungeonCore",
+      "tx": "0xfdfca3cc500f5fc824fce3b4a3df2a00ce28e2f9106bf9c4b8a7288dd78ea491"
+    },
+    {
+      "contract": "Relic",
+      "method": "setDungeonCore",
+      "tx": "0xe3c3bdddf8ec17a48cc53e1539720e420bd888de6c3671c8fb7ac5713ad1a28d"
+    },
+    {
+      "contract": "DungeonCore",
+      "method": "setPlayerVault",
+      "tx": "0x1580b64cc1802858de2440971f266826aa416a6490ae6ef7f4c157519a851fd1"
+    },
+    {
+      "contract": "DungeonCore",
+      "method": "setHeroContract",
+      "tx": "0xffc3ef38fd0a1e47e539a6faed9a281c247c58bb710c1f6ccaede13d59e63945"
+    },
+    {
+      "contract": "DungeonCore",
+      "method": "setRelicContract",
+      "tx": "0x7195d31ee096cf3c83a913e6ff4d1b7fd13972075e38e0799c26e47d2a66f2d5"
+    }
+  ],
+  "contracts": {
+    "playerVault": "0x030F34B673941Aeff293CbF89504A2E33b9FC17f",
+    "hero": "0x48150A69E7494F278A7AdCB6F7dF8ab26ae09b84",
+    "relic": "0xAC850c628FD3919135fF812681567791b22Fd06c",
+    "dungeonCore": "0x5B64A5939735Ff762493D9B9666b3e13118c5722"
+  },
+  "notes": "PlayerVault、Hero、Relic 與 DungeonCore 連接配置"
+}
