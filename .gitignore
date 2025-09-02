@@ -4,8 +4,9 @@ artifacts
 typechain
 typechain-types
 
-# Node modules
-node_modules
+# Node modules (all subdirectories)
+node_modules/
+**/node_modules/
 
 # Environment variables - CRITICAL SECURITY
 .env
@@ -52,11 +53,20 @@ coverage.json
 ignition/deployments/chain-31337
 
 # Logs
-logs
+logs/
 *.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# Large generated files
+standard-input.json
+VRFManagerV2PlusFixed_*.sol
+
+# Documentation archives (keep essential docs only)
+**/archive/
+**/legacy/
+**/*backup*/
 
 # Temporary files
 *.tmp
