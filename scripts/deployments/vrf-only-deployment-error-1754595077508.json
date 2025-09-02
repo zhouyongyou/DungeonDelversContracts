@@ -1,6 +1,0 @@
-{
-  "timestamp": 1754595077508,
-  "error": "incorrect number of arguments to constructor",
-  "stack": "Error: incorrect number of arguments to constructor\n    at ContractFactory.getDeployTransaction (/Users/sotadic/Documents/DungeonDelversContracts/node_modules/ethers/src.ts/contract/factory.ts:87:19)\n    at ContractFactory.deploy (/Users/sotadic/Documents/DungeonDelversContracts/node_modules/ethers/src.ts/contract/factory.ts:105:31)\n    at main (/Users/sotadic/Documents/DungeonDelversContracts/scripts/deploy-vrf-only-contracts.js:70:44)",
-  "deployedContracts": {}
-}

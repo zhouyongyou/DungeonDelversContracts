@@ -21,6 +21,16 @@
     "type": "constructor"
   },
   {
+    "inputs": [],
+    "name": "EnforcedPause",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "ExpectedPause",
+    "type": "error"
+  },
+  {
     "inputs": [
       {
         "internalType": "address",
@@ -43,6 +53,11 @@
     "type": "error"
   },
   {
+    "inputs": [],
+    "name": "ReentrancyGuardReentrantCall",
+    "type": "error"
+  },
+  {
     "anonymous": false,
     "inputs": [
       {
@@ -59,6 +74,37 @@
     "anonymous": false,
     "inputs": [
       {
+        "indexed": false,
+        "internalType": "address",
+        "name": "soulShard",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "vrfManager",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "oracle",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "storage_",
+        "type": "address"
+      }
+    ],
+    "name": "BatchAddressesSet",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
         "indexed": true,
         "internalType": "address",
         "name": "newAddress",
@@ -66,6 +112,19 @@
       }
     ],
     "name": "DungeonMasterSet",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "storage_",
+        "type": "address"
+      }
+    ],
+    "name": "DungeonStorageSet",
     "type": "event"
   },
   {
@@ -130,6 +189,19 @@
     "anonymous": false,
     "inputs": [
       {
+        "indexed": false,
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      }
+    ],
+    "name": "Paused",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
         "indexed": true,
         "internalType": "address",
         "name": "newAddress",
@@ -163,6 +235,45 @@
       }
     ],
     "name": "RelicContractSet",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "token",
+        "type": "address"
+      }
+    ],
+    "name": "SoulShardTokenSet",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      }
+    ],
+    "name": "Unpaused",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "newAddress",
+        "type": "address"
+      }
+    ],
+    "name": "VRFManagerSet",
     "type": "event"
   },
   {
@@ -205,6 +316,85 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "dungeonStorageAddress",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getAllCoreAddresses",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "soulShard",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "vrf",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "oracle",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "vault",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "storage_",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getAllNFTAddresses",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "hero",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "relic",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "party",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "profile",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "vipStaking",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "uint256",
@@ -237,6 +427,19 @@
         "internalType": "uint256",
         "name": "",
         "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getVRFManager",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
       }
     ],
     "stateMutability": "view",
@@ -315,6 +518,26 @@
   },
   {
     "inputs": [],
+    "name": "pause",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "paused",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
     "name": "playerProfileAddress",
     "outputs": [
       {
@@ -376,11 +599,52 @@
     "inputs": [
       {
         "internalType": "address",
+        "name": "_soulShard",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_vrfManager",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_oracle",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_dungeonStorage",
+        "type": "address"
+      }
+    ],
+    "name": "setBatchAddresses",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
         "name": "_newAddress",
         "type": "address"
       }
     ],
     "name": "setDungeonMaster",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_storage",
+        "type": "address"
+      }
+    ],
+    "name": "setDungeonStorage",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -467,6 +731,32 @@
     "inputs": [
       {
         "internalType": "address",
+        "name": "_token",
+        "type": "address"
+      }
+    ],
+    "name": "setSoulShardToken",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_vrfManager",
+        "type": "address"
+      }
+    ],
+    "name": "setVRFManager",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
         "name": "_newAddress",
         "type": "address"
       }
@@ -522,6 +812,13 @@
   },
   {
     "inputs": [],
+    "name": "unpause",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
     "name": "usdDecimals",
     "outputs": [
       {
@@ -549,6 +846,19 @@
   {
     "inputs": [],
     "name": "vipStakingAddress",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "vrfManager",
     "outputs": [
       {
         "internalType": "address",

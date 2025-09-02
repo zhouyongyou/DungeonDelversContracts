@@ -1,12 +1,6 @@
 [
   {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "initialOwner",
-        "type": "address"
-      }
-    ],
+    "inputs": [],
     "stateMutability": "nonpayable",
     "type": "constructor"
   },
@@ -245,19 +239,6 @@
       {
         "indexed": true,
         "internalType": "address",
-        "name": "newAddress",
-        "type": "address"
-      }
-    ],
-    "name": "HeroContractSet",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "address",
         "name": "operator",
         "type": "address"
       },
@@ -325,112 +306,12 @@
       },
       {
         "indexed": false,
-        "internalType": "uint256",
-        "name": "totalCapacity",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
         "internalType": "uint8",
         "name": "partyRarity",
         "type": "uint8"
       }
     ],
     "name": "PartyCreated",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "uint256",
-        "name": "partyId",
-        "type": "uint256"
-      },
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "owner",
-        "type": "address"
-      }
-    ],
-    "name": "PartyDisbanded",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "uint256",
-        "name": "partyId",
-        "type": "uint256"
-      },
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "owner",
-        "type": "address"
-      },
-      {
-        "indexed": true,
-        "internalType": "uint256",
-        "name": "heroId",
-        "type": "uint256"
-      }
-    ],
-    "name": "PartyMemberAdded",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "uint256",
-        "name": "partyId",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256[]",
-        "name": "heroIds",
-        "type": "uint256[]"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256[]",
-        "name": "relicIds",
-        "type": "uint256[]"
-      }
-    ],
-    "name": "PartyMemberChanged",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "uint256",
-        "name": "partyId",
-        "type": "uint256"
-      },
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "owner",
-        "type": "address"
-      },
-      {
-        "indexed": true,
-        "internalType": "uint256",
-        "name": "heroId",
-        "type": "uint256"
-      }
-    ],
-    "name": "PartyMemberRemoved",
     "type": "event"
   },
   {
@@ -457,19 +338,6 @@
       }
     ],
     "name": "PlatformFeeSet",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "newAddress",
-        "type": "address"
-      }
-    ],
-    "name": "RelicContractSet",
     "type": "event"
   },
   {
@@ -657,11 +525,6 @@
             "type": "uint256"
           },
           {
-            "internalType": "uint256",
-            "name": "totalCapacity",
-            "type": "uint256"
-          },
-          {
             "internalType": "uint8",
             "name": "partyRarity",
             "type": "uint8"
@@ -683,35 +546,11 @@
         "type": "uint256"
       }
     ],
-    "name": "getPartyCapacityQuick",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_partyId",
-        "type": "uint256"
-      }
-    ],
     "name": "getPartyComposition",
     "outputs": [
       {
         "internalType": "uint256",
         "name": "totalPower",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "totalCapacity",
         "type": "uint256"
       }
     ],
@@ -732,19 +571,6 @@
         "internalType": "uint256",
         "name": "",
         "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "heroContract",
-    "outputs": [
-      {
-        "internalType": "contract IHero",
-        "name": "",
-        "type": "address"
       }
     ],
     "stateMutability": "view",
@@ -861,35 +687,11 @@
         "type": "uint256"
       }
     ],
-    "name": "partyCapacityDirect",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
     "name": "partyCompositions",
     "outputs": [
       {
         "internalType": "uint256",
         "name": "totalPower",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "totalCapacity",
         "type": "uint256"
       },
       {
@@ -948,19 +750,6 @@
         "internalType": "uint256",
         "name": "",
         "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "relicContract",
-    "outputs": [
-      {
-        "internalType": "contract IRelic",
-        "name": "",
-        "type": "address"
       }
     ],
     "stateMutability": "view",
@@ -1085,19 +874,6 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "_heroAddress",
-        "type": "address"
-      }
-    ],
-    "name": "setHeroContract",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
         "name": "operator",
         "type": "address"
       },
@@ -1121,19 +897,6 @@
       }
     ],
     "name": "setPlatformFee",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_relicAddress",
-        "type": "address"
-      }
-    ],
-    "name": "setRelicContract",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -1190,6 +953,19 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "totalSupply",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "address",
@@ -1235,6 +1011,13 @@
   {
     "inputs": [],
     "name": "withdrawNative",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "withdrawSoulShard",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

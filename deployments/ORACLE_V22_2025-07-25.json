@@ -1,9 +1,0 @@
-{
-  "version": "V22",
-  "oracle": "0xb9317179466fd7fb253669538dE1c4635E81eAc4",
-  "deployer": "0xEbCF4A36Ad1485A9737025e9d72186b604487274",
-  "timestamp": "2025-07-25T08:56:41.452Z",
-  "features": "Adaptive TWAP (30/15/5/1 min)",
-  "network": "BSC Mainnet",
-  "previousOracle": "0xcE3c98891B90c6c1cb2b121dFf5c44Db6183317B"
-}

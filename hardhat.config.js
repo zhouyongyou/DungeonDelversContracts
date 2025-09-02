@@ -1,63 +1,35 @@
 require("@nomicfoundation/hardhat-toolbox");
 require("dotenv").config();
 
-// 從 .env 檔案讀取環境變數
-const privateKey = process.env.PRIVATE_KEY || "";
-const bscscanApiKey = process.env.BSCSCAN_API_KEY || "";
-
-// RPC URLs
-const bscTestnetRpcUrl = process.env.BSC_TESTNET_RPC_URL || process.env.VITE_ALCHEMY_BSC_TESTNET_RPC_URL || "https://data-seed-prebsc-1-s1.binance.org:8545/";
-const bscMainnetRpcUrl = process.env.BSC_MAINNET_RPC_URL || process.env.VITE_ALCHEMY_BSC_MAINNET_RPC_URL || "https://bsc-dataseed1.binance.org/";
-
-if (!privateKey) {
-  console.warn("⚠️ 警告：找不到 PRIVATE_KEY，請在 .env 檔案中設定。");
-}
-
 /** @type import('hardhat/config').HardhatUserConfig */
 module.exports = {
   solidity: {
-    version: "0.8.20",
+    version: "0.8.28",
     settings: {
       optimizer: {
         enabled: true,
-        runs: 200,
-      },
-      viaIR: true,
-      metadata: {
-        bytecodeHash: "ipfs"
+        runs: 200
       }
     }
   },
-  paths: {
-    sources: "./contracts/current", // 只編譯 current 目錄
-    tests: "./test",
-    cache: "./cache",
-    artifacts: "./artifacts"
-  },
   networks: {
-    bscTestnet: {
-      url: bscTestnetRpcUrl,
-      chainId: 97,
-      accounts: privateKey !== '' ? [privateKey] : [],
-    },
     bsc: {
-      url: bscMainnetRpcUrl,
+      url: "https://bsc-dataseed1.binance.org/",
       chainId: 56,
-      accounts: privateKey !== '' ? [privateKey] : [],
-      gasPrice: 110000000, // 0.11 gwei
+      accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : [],
+      gasPrice: 110000000, // 0.11 gwei in wei
     },
-    hardhat: {
-      chainId: 1337,
+    bscTestnet: {
+      url: "https://data-seed-prebsc-1-s1.binance.org:8545/",
+      chainId: 97,
+      accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : [],
+      gasPrice: 110000000, // 0.11 gwei in wei
     }
   },
   etherscan: {
     apiKey: {
-      bsc: bscscanApiKey,
-      bscTestnet: bscscanApiKey
+      bsc: process.env.BSCSCAN_API_KEY,
+      bscTestnet: process.env.BSCSCAN_API_KEY,
     }
-  },
-  gasReporter: {
-    enabled: process.env.REPORT_GAS !== undefined,
-    currency: "USD",
-  },
+  }
 };
