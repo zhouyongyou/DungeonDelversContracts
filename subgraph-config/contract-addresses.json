@@ -7,7 +7,7 @@
   "contracts": {
     "dungeonCore": "0xa94b609310f8fe9a6db5cd66faaf64cd0189581f",
     "oracle": "0x21928de992cb31ede864b62bc94002fb449c2738",
-    "playerVault": "0xe3c03d3e270d7eb3f8e27017790135f5a885a66f",
+    "playerVault": "0xb8807c99ade19e4e2db5cf48650474f10ff874a3",
     "hero": "0xdb40cb3a1ba6fd3e8e6323c296f3f17cc7ec9c0e",
     "relic": "0xb6038db5c6a168c74995dc9a0c8a6ab1910198fd",
     "party": "0xb393e482495bacde5aaf08d25323146cc5b9567f",

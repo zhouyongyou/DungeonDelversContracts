@@ -52,7 +52,7 @@ contract Relic is ERC721, Ownable, ReentrancyGuard, Pausable, IVRFCallback {
     event BaseURISet(string newBaseURI);
     event ContractURIUpdated(string newContractURI);
     event RelicBurned(uint256 indexed tokenId, address indexed owner, uint8 rarity, uint8 capacity);
-    event MintRequested(address indexed player, uint256 quantity, bool fromVault);
+    event MintRequested(address indexed player, uint256 quantity, bool fromVault, uint256[] tokenIds);
     
     modifier onlyAltar() {
         require(msg.sender == _getAscensionAltar(), "Relic: Not authorized - only Altar of Ascension can call");
@@ -125,7 +125,7 @@ contract Relic is ERC721, Ownable, ReentrancyGuard, Pausable, IVRFCallback {
             timestamp: block.timestamp  // Record when request was created
         });
         
-        emit MintRequested(msg.sender, _quantity, false);
+        emit MintRequested(msg.sender, _quantity, false, tokenIds);
     }
 
     function mintFromVault(uint256 _quantity) external payable nonReentrant whenNotPaused {
@@ -183,7 +183,7 @@ contract Relic is ERC721, Ownable, ReentrancyGuard, Pausable, IVRFCallback {
             timestamp: block.timestamp  // Record when request was created
         });
         
-        emit MintRequested(msg.sender, _quantity, true);
+        emit MintRequested(msg.sender, _quantity, true, tokenIds);
     }
 
     function onVRFFulfilled(uint256 requestId, uint256[] memory randomWords) external override {

@@ -51,7 +51,7 @@ contract Hero is ERC721, Ownable, ReentrancyGuard, Pausable, IVRFCallback {
     event BaseURISet(string newBaseURI);
     event ContractURIUpdated(string newContractURI);
     event HeroBurned(uint256 indexed tokenId, address indexed owner, uint8 rarity, uint256 power);
-    event MintRequested(address indexed player, uint256 quantity, bool fromVault);
+    event MintRequested(address indexed player, uint256 quantity, bool fromVault, uint256[] tokenIds);
     event EmergencyReset(address indexed user, uint256 refundAmount);
     
     modifier onlyAltar() {
@@ -125,7 +125,7 @@ contract Hero is ERC721, Ownable, ReentrancyGuard, Pausable, IVRFCallback {
             timestamp: block.timestamp  // Record when request was created
         });
         
-        emit MintRequested(msg.sender, _quantity, false);
+        emit MintRequested(msg.sender, _quantity, false, tokenIds);
     }
 
     function mintFromVault(uint256 _quantity) external payable nonReentrant whenNotPaused {
@@ -183,7 +183,7 @@ contract Hero is ERC721, Ownable, ReentrancyGuard, Pausable, IVRFCallback {
             timestamp: block.timestamp  // Record when request was created
         });
         
-        emit MintRequested(msg.sender, _quantity, true);
+        emit MintRequested(msg.sender, _quantity, true, tokenIds);
     }
 
     function onVRFFulfilled(uint256 requestId, uint256[] memory randomWords) external override {

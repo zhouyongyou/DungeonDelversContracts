@@ -61,6 +61,9 @@ contract PlayerVault is Ownable, ReentrancyGuard {
     event ReferralSet(address indexed user, address indexed referrer);
     event CommissionPaid(address indexed user, address indexed referrer, uint256 amount);
     event VirtualCommissionAdded(address indexed referrer, uint256 amount);
+    
+    // Commission-specific withdrawal event
+    event CommissionWithdrawn(address indexed player, uint256 amount);
     event VirtualTaxCollected(uint256 amount);
     event DungeonCoreSet(address indexed newAddress);
     event TaxParametersUpdated(uint256 standardRate, uint256 largeRate, uint256 decreaseRate, uint256 period);
@@ -268,7 +271,8 @@ contract PlayerVault is Ownable, ReentrancyGuard {
         virtualCommissionBalance[msg.sender] = 0;
         IERC20(_getSoulShardToken()).safeTransfer(msg.sender, commission);
         
-        emit Withdrawn(msg.sender, commission, 0);
+        emit CommissionWithdrawn(msg.sender, commission);
+        // Note: Removed duplicate Withdrawn event for cleaner event distinction
     }
 
     function deposit(address _player, uint256 _amount) external onlyDungeonMaster {
