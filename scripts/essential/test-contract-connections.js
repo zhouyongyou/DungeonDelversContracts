@@ -4,20 +4,20 @@ const { ethers } = require("hardhat");
 
 // Contract addresses - ENV-ONLY mode (no hardcoded fallbacks)
 const addresses = {
-  testUSD1: process.env.VITE_USD_ADDRESS,
-  soulShard: process.env.VITE_SOULSHARD_ADDRESS,
-  oracle: process.env.VITE_ORACLE_ADDRESS,
-  dungeonCore: process.env.VITE_DUNGEONCORE_ADDRESS,
-  playerVault: process.env.VITE_PLAYERVAULT_ADDRESS,
-  hero: process.env.VITE_HERO_ADDRESS,
-  relic: process.env.VITE_RELIC_ADDRESS,
-  party: process.env.VITE_PARTY_ADDRESS,
-  playerProfile: process.env.VITE_PLAYERPROFILE_ADDRESS,
-  vipStaking: process.env.VITE_VIPSTAKING_ADDRESS,
-  vrfConsumer: process.env.VITE_VRF_MANAGER_V2PLUS_ADDRESS,
-  altarOfAscension: process.env.VITE_ALTAROFASCENSION_ADDRESS,
-  dungeonMaster: process.env.VITE_DUNGEONMASTER_ADDRESS,
-  dungeonStorage: process.env.VITE_DUNGEONSTORAGE_ADDRESS
+  testUSD1: process.env.USD_ADDRESS,
+  soulShard: process.env.SOULSHARD_ADDRESS,
+  oracle: process.env.ORACLE_ADDRESS,
+  dungeonCore: process.env.DUNGEONCORE_ADDRESS,
+  playerVault: process.env.PLAYERVAULT_ADDRESS,
+  hero: process.env.HERO_ADDRESS,
+  relic: process.env.RELIC_ADDRESS,
+  party: process.env.PARTY_ADDRESS,
+  playerProfile: process.env.PLAYERPROFILE_ADDRESS,
+  vipStaking: process.env.VIPSTAKING_ADDRESS,
+  vrfConsumer: process.env.VRF_MANAGER_V2PLUS_ADDRESS,
+  altarOfAscension: process.env.ALTAROFASCENSION_ADDRESS,
+  dungeonMaster: process.env.DUNGEONMASTER_ADDRESS,
+  dungeonStorage: process.env.DUNGEONSTORAGE_ADDRESS
 };
 
 // Validate all addresses are provided

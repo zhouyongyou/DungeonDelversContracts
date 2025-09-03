@@ -21,6 +21,7 @@ function checkFrontendEnv() {
   const lines = envContent.split('\n');
   
   // 檢查關鍵合約地址 - 從 ENV 讀取（避免硬編碼）
+  // 檢查前端需要的 VITE_ 環境變數（從無前綴版本映射）
   const expectedAddresses = {
     'VITE_DUNGEONCORE_ADDRESS': process.env.DUNGEONCORE_ADDRESS,
     'VITE_ORACLE_ADDRESS': process.env.ORACLE_ADDRESS,
@@ -127,6 +128,7 @@ function generateVercelEnvList() {
   console.log("=".repeat(50));
   
   // 從環境變數產生 Vercel 環境變數清單（避免硬編碼）
+  // 產生 Vercel 部署用的 VITE_ 環境變數清單
   const contractEnvVars = {
     'VITE_DUNGEONCORE_ADDRESS': process.env.DUNGEONCORE_ADDRESS,
     'VITE_ORACLE_ADDRESS': process.env.ORACLE_ADDRESS,
