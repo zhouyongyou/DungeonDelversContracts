@@ -20,13 +20,30 @@ function checkFrontendEnv() {
   const envContent = fs.readFileSync(frontendEnvPath, 'utf-8');
   const lines = envContent.split('\n');
   
-  // 檢查關鍵合約地址
+  // 檢查關鍵合約地址 - 從 ENV 讀取（避免硬編碼）
   const expectedAddresses = {
-    'VITE_DUNGEONCORE_ADDRESS': '0xa94b609310f8fe9a6db5cd66faaf64cd0189581f',
-    'VITE_ORACLE_ADDRESS': '0x21928de992cb31ede864b62bc94002fb449c2738',
-    'VITE_HERO_ADDRESS': '0xdb40cb3a1ba6fd3e8e6323c296f3f17cc7ec9c0e',
-    'VITE_SOULSHARD_ADDRESS': '0x1a98769b8034d400745cc658dc204cd079de36fa'
+    'VITE_DUNGEONCORE_ADDRESS': process.env.DUNGEONCORE_ADDRESS,
+    'VITE_ORACLE_ADDRESS': process.env.ORACLE_ADDRESS,
+    'VITE_HERO_ADDRESS': process.env.HERO_ADDRESS,
+    'VITE_SOULSHARD_ADDRESS': process.env.SOULSHARD_ADDRESS,
+    'VITE_RELIC_ADDRESS': process.env.RELIC_ADDRESS,
+    'VITE_PARTY_ADDRESS': process.env.PARTY_ADDRESS,
+    'VITE_PLAYERPROFILE_ADDRESS': process.env.PLAYERPROFILE_ADDRESS,
+    'VITE_VIPSTAKING_ADDRESS': process.env.VIPSTAKING_ADDRESS,
+    'VITE_PLAYERVAULT_ADDRESS': process.env.PLAYERVAULT_ADDRESS,
+    'VITE_USD_ADDRESS': process.env.USD_ADDRESS
   };
+  
+  // 驗證所有必要地址都存在
+  const missingEnvVars = Object.entries(expectedAddresses)
+    .filter(([key, value]) => !value)
+    .map(([key]) => key);
+  
+  if (missingEnvVars.length > 0) {
+    console.log('❌ 缺少以下環境變數:');
+    missingEnvVars.forEach(envVar => console.log(`   - ${envVar.replace('VITE_', '')}`))
+    return false;
+  }
   
   const foundAddresses = {};
   lines.forEach(line => {
@@ -109,19 +126,31 @@ function generateVercelEnvList() {
   console.log("\n🌐 Vercel 環境變數建議");
   console.log("=".repeat(50));
   
+  // 從環境變數產生 Vercel 環境變數清單（避免硬編碼）
   const contractEnvVars = {
-    'VITE_DUNGEONCORE_ADDRESS': '0xa94b609310f8fe9a6db5cd66faaf64cd0189581f',
-    'VITE_ORACLE_ADDRESS': '0x21928de992cb31ede864b62bc94002fb449c2738',
-    'VITE_HERO_ADDRESS': '0xdb40cb3a1ba6fd3e8e6323c296f3f17cc7ec9c0e',
-    'VITE_RELIC_ADDRESS': '0xb6038db5c6a168c74995dc9a0c8a6ab1910198fd',
-    'VITE_PARTY_ADDRESS': '0xb393e482495bacde5aaf08d25323146cc5b9567f',
-    'VITE_PLAYERPROFILE_ADDRESS': '0xd32d3ab232cd2d13a80217c0f05a9f3bdc51b44b',
-    'VITE_VIPSTAKING_ADDRESS': '0x409d964675235a5a00f375053535fce9f6e79882',
-    'VITE_PLAYERVAULT_ADDRESS': '0xe3c03d3e270d7eb3f8e27017790135f5a885a66f',
-    'VITE_SOULSHARD_ADDRESS': '0x1a98769b8034d400745cc658dc204cd079de36fa',
-    'VITE_USD_ADDRESS': '0x916a2a1eb605e88561139c56af0698de241169f2',
+    'VITE_DUNGEONCORE_ADDRESS': process.env.DUNGEONCORE_ADDRESS,
+    'VITE_ORACLE_ADDRESS': process.env.ORACLE_ADDRESS,
+    'VITE_HERO_ADDRESS': process.env.HERO_ADDRESS,
+    'VITE_RELIC_ADDRESS': process.env.RELIC_ADDRESS,
+    'VITE_PARTY_ADDRESS': process.env.PARTY_ADDRESS,
+    'VITE_PLAYERPROFILE_ADDRESS': process.env.PLAYERPROFILE_ADDRESS,
+    'VITE_VIPSTAKING_ADDRESS': process.env.VIPSTAKING_ADDRESS,
+    'VITE_PLAYERVAULT_ADDRESS': process.env.PLAYERVAULT_ADDRESS,
+    'VITE_SOULSHARD_ADDRESS': process.env.SOULSHARD_ADDRESS,
+    'VITE_USD_ADDRESS': process.env.USD_ADDRESS,
     'VITE_CONTRACT_VERSION': 'v1.3.3'
   };
+  
+  // 檢查環境變數是否存在
+  const missingForVercel = Object.entries(contractEnvVars)
+    .filter(([key, value]) => !value && key !== 'VITE_CONTRACT_VERSION')
+    .map(([key]) => key);
+  
+  if (missingForVercel.length > 0) {
+    console.log('❌ 無法產生 Vercel 清單，缺少環境變數:');
+    missingForVercel.forEach(envVar => console.log(`   - ${envVar.replace('VITE_', '')}`))
+    return;
+  }
   
   console.log("請確認以下環境變數在 Vercel 中已正確設置：");
   console.log("");

@@ -1,33 +1,35 @@
 // setup-contract-connections.js - Setup contract interconnections
 const { ethers } = require("hardhat");
 
-// All deployed contract addresses
+// All deployed contract addresses - ENV-ONLY mode
 const addresses = {
-  // Phase 1: Tokens
-  testUSD1: "0x916a2a1eb605e88561139c56af0698de241169f2",
-  soulShard: "0x1a98769b8034d400745cc658dc204cd079de36fa",
-  
-  // Phase 2: Oracle  
-  oracle: "0x21928de992cb31ede864b62bc94002fb449c2738",
-  
-  // Phase 3: Core
-  dungeonCore: "0xa94b609310f8fe9a6db5cd66faaf64cd0189581f",
-  
-  // Phase 4: Remaining
-  playerVault: "0xe3c03d3e270d7eb3f8e27017790135f5a885a66f",
-  hero: "0xdb40cb3a1ba6fd3e8e6323c296f3f17cc7ec9c0e",
-  relic: "0xb6038db5c6a168c74995dc9a0c8a6ab1910198fd",
-  party: "0xb393e482495bacde5aaf08d25323146cc5b9567f",
-  playerProfile: "0xd32d3ab232cd2d13a80217c0f05a9f3bdc51b44b",
-  vipStaking: "0x409d964675235a5a00f375053535fce9f6e79882",
-  vrfConsumer: "0x601f0a1e5a0cacfa39b502fd7a9ac5024f53ae40",
-  altarOfAscension: "0x7f4b3d0ff2994182200fc3b306fb5b035680de3c",
-  dungeonMaster: "0xdbee76d1c6e94f93ceecf743a0a0132c57371254",
-  dungeonStorage: "0x30dcbe703b258fa1e421d22c8ada643da51ceb4c",
-  
-  // Infrastructure
-  v3Pool: "0x2733f7e7e95d22e7691e5aa5abb6210cf81ebdba"
+  testUSD1: process.env.USD_ADDRESS,
+  soulShard: process.env.SOULSHARD_ADDRESS,
+  oracle: process.env.ORACLE_ADDRESS,
+  dungeonCore: process.env.DUNGEONCORE_ADDRESS,
+  playerVault: process.env.PLAYERVAULT_ADDRESS,
+  hero: process.env.HERO_ADDRESS,
+  relic: process.env.RELIC_ADDRESS,
+  party: process.env.PARTY_ADDRESS,
+  playerProfile: process.env.PLAYERPROFILE_ADDRESS,
+  vipStaking: process.env.VIPSTAKING_ADDRESS,
+  vrfConsumer: process.env.VRF_MANAGER_V2PLUS_ADDRESS,
+  altarOfAscension: process.env.ALTAROFASCENSION_ADDRESS,
+  dungeonMaster: process.env.DUNGEONMASTER_ADDRESS,
+  dungeonStorage: process.env.DUNGEONSTORAGE_ADDRESS,
+  v3Pool: process.env.V3_POOL_ADDRESS
 };
+
+// Validate all addresses are provided
+const missingAddresses = Object.entries(addresses)
+  .filter(([key, value]) => !value)
+  .map(([key]) => key);
+
+if (missingAddresses.length > 0) {
+  console.error('❌ Missing required environment variables:');
+  missingAddresses.forEach(addr => console.error(`   - ${addr.toUpperCase()}_ADDRESS`));
+  process.exit(1);
+}
 
 const GAS_PRICE = ethers.parseUnits("0.11", "gwei");
 const GAS_LIMIT = 8000000;
