@@ -57,7 +57,7 @@ function checkAbiFiles() {
   console.log("\n🔧 檢查 ABI 文件同步狀態");
   console.log("=".repeat(50));
   
-  const abiPath = path.join(frontendPath, 'src', 'contracts');
+  const abiPath = path.join(frontendPath, 'src', 'contracts', 'abi');
   
   if (!fs.existsSync(abiPath)) {
     console.log("❌ contracts 目錄不存在");
