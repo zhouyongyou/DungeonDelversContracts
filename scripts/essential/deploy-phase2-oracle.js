@@ -10,10 +10,19 @@ async function main() {
   console.log("🔮 Phase 2: Deploying Oracle");
   console.log("=" .repeat(60));
 
-  // Oracle constructor parameters (from Phase 1 deployment)
-  const poolAddress = process.env.V3_POOL_ADDRESS || process.argv[2] || "0x2733f7e7e95d22e7691e5aa5abb6210cf81ebdba";
-  const soulShardAddress = process.env.SOUL_SHARD_ADDRESS || "0x1A98769B8034d400745cC658DC204CD079De36Fa";
-  const testUSD1Address = process.env.TEST_USD1_ADDRESS || "0x916a2a1eb605e88561139c56Af0698DE241169F2";
+  // Oracle constructor parameters - ENV-ONLY mode
+  const poolAddress = process.env.V3_POOL_ADDRESS || process.argv[2];
+  const soulShardAddress = process.env.SOUL_SHARD_ADDRESS;
+  const testUSD1Address = process.env.TEST_USD1_ADDRESS;
+  
+  // Validate required parameters
+  if (!poolAddress || !soulShardAddress || !testUSD1Address) {
+    console.error('❌ Missing required parameters:');
+    if (!poolAddress) console.error('   - V3_POOL_ADDRESS');
+    if (!soulShardAddress) console.error('   - SOUL_SHARD_ADDRESS');
+    if (!testUSD1Address) console.error('   - TEST_USD1_ADDRESS');
+    process.exit(1);
+  }
   
   console.log(`🏊 V3 Pool Address: ${poolAddress}`);
   console.log(`💎 SoulShard Address: ${soulShardAddress}`);
