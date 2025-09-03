@@ -5,9 +5,9 @@ const fs = require("fs").promises;
 const path = require("path");
 
 // Project paths for ABI distribution
-const FRONTEND_PROJECT = "/Users/sotadic/Documents/GitHub/DungeonDelvers";
+const FRONTEND_PROJECT = "/Users/sotadic/Documents/GitHub/SoulboundSaga";
 const BACKEND_PROJECT = "/Users/sotadic/Documents/dungeon-delvers-metadata-server";
-const SUBGRAPH_PROJECT = "/Users/sotadic/Documents/GitHub/DungeonDelvers/DDgraphql/dungeon-delvers";
+const SUBGRAPH_PROJECT = "/Users/sotadic/Documents/GitHub/DDgraphql/dungeon-delvers";
 
 // Core contracts that need ABI distribution
 const CORE_CONTRACTS = [

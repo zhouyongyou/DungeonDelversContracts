@@ -1,0 +1,289 @@
+# DungeonDelvers V1.3.3 Subgraph Manifest
+# 自動生成於: 2025-09-03T08:27:06.122Z
+
+{
+  specVersion: 0.0.5
+  description: DungeonDelvers V1.3.3 - Complete Game Ecosystem
+  repository: https://github.com/your-repo/dungeon-delvers-subgraph
+  schema: {
+    file: ./schema.graphql
+  }
+  dataSources: [
+    {
+      kind: ethereum
+      name: Hero
+      network: bsc
+      source: {
+        address: 0xdb40cb3a1ba6fd3e8e6323c296f3f17cc7ec9c0e
+        abi: Hero
+        startBlock: 59848829
+      }
+      mapping: {
+        kind: ethereum/events
+        apiVersion: 0.0.7
+        language: wasm/assemblyscript
+        entities: [
+          Hero
+          Player
+          HeroMinted
+          HeroTransfer
+        ]
+        abis: [
+          {
+            name: Hero
+            file: ./abis/Hero.json
+          }
+        ]
+        eventHandlers: [
+          {
+            event: Transfer(indexed addressindexed addressindexed uint256)
+            handler: handleHeroTransfer
+          }
+        ]
+        file: ./src/hero.ts
+      }
+    }
+    {
+      kind: ethereum
+      name: Relic
+      network: bsc
+      source: {
+        address: 0xb6038db5c6a168c74995dc9a0c8a6ab1910198fd
+        abi: Relic
+        startBlock: 59848829
+      }
+      mapping: {
+        kind: ethereum/events
+        apiVersion: 0.0.7
+        language: wasm/assemblyscript
+        entities: [
+          Relic
+          Player
+          RelicMinted
+          RelicTransfer
+        ]
+        abis: [
+          {
+            name: Relic
+            file: ./abis/Relic.json
+          }
+        ]
+        eventHandlers: [
+          {
+            event: Transfer(indexed addressindexed addressindexed uint256)
+            handler: handleRelicTransfer
+          }
+        ]
+        file: ./src/relic.ts
+      }
+    }
+    {
+      kind: ethereum
+      name: Party
+      network: bsc
+      source: {
+        address: 0xb393e482495bacde5aaf08d25323146cc5b9567f
+        abi: Party
+        startBlock: 59848829
+      }
+      mapping: {
+        kind: ethereum/events
+        apiVersion: 0.0.7
+        language: wasm/assemblyscript
+        entities: [
+          Party
+          Player
+          PartyCreated
+          PartyTransfer
+        ]
+        abis: [
+          {
+            name: Party
+            file: ./abis/Party.json
+          }
+        ]
+        eventHandlers: [
+          {
+            event: Transfer(indexed addressindexed addressindexed uint256)
+            handler: handlePartyTransfer
+          }
+        ]
+        file: ./src/party.ts
+      }
+    }
+    {
+      kind: ethereum
+      name: PlayerProfile
+      network: bsc
+      source: {
+        address: 0xd32d3ab232cd2d13a80217c0f05a9f3bdc51b44b
+        abi: PlayerProfile
+        startBlock: 59848829
+      }
+      mapping: {
+        kind: ethereum/events
+        apiVersion: 0.0.7
+        language: wasm/assemblyscript
+        entities: [
+          PlayerProfile
+          Player
+        ]
+        abis: [
+          {
+            name: PlayerProfile
+            file: ./abis/PlayerProfile.json
+          }
+        ]
+        eventHandlers: [
+          {
+            event: Transfer(indexed addressindexed addressindexed uint256)
+            handler: handlePlayerProfileTransfer
+          }
+        ]
+        file: ./src/playerProfile.ts
+      }
+    }
+    {
+      kind: ethereum
+      name: VIPStaking
+      network: bsc
+      source: {
+        address: 0x409d964675235a5a00f375053535fce9f6e79882
+        abi: VIPStaking
+        startBlock: 59848829
+      }
+      mapping: {
+        kind: ethereum/events
+        apiVersion: 0.0.7
+        language: wasm/assemblyscript
+        entities: [
+          VIPStake
+          Player
+          StakeEvent
+        ]
+        abis: [
+          {
+            name: VIPStaking
+            file: ./abis/VIPStaking.json
+          }
+        ]
+        eventHandlers: [
+          {
+            event: Transfer(indexed addressindexed addressindexed uint256)
+            handler: handleVIPStakingTransfer
+          }
+        ]
+        file: ./src/vipStaking.ts
+      }
+    }
+    {
+      kind: ethereum
+      name: DungeonMaster
+      network: bsc
+      source: {
+        address: 0xdbee76d1c6e94f93ceecf743a0a0132c57371254
+        abi: DungeonMaster
+        startBlock: 59848829
+      }
+      mapping: {
+        kind: ethereum/events
+        apiVersion: 0.0.7
+        language: wasm/assemblyscript
+        entities: [
+          Expedition
+          Player
+          ExpeditionStarted
+          ExpeditionCompleted
+        ]
+        abis: [
+          {
+            name: DungeonMaster
+            file: ./abis/DungeonMaster.json
+          }
+        ]
+        eventHandlers: [
+          {
+            event: ExpeditionStarted(indexed addressindexed uint256uint256uint256)
+            handler: handleExpeditionStarted
+          }
+          {
+            event: ExpeditionCompleted(indexed addressindexed uint256booluint256)
+            handler: handleExpeditionCompleted
+          }
+        ]
+        file: ./src/dungeonMaster.ts
+      }
+    }
+    {
+      kind: ethereum
+      name: AltarOfAscension
+      network: bsc
+      source: {
+        address: 0x7f4b3d0ff2994182200fc3b306fb5b035680de3c
+        abi: AltarOfAscension
+        startBlock: 59848829
+      }
+      mapping: {
+        kind: ethereum/events
+        apiVersion: 0.0.7
+        language: wasm/assemblyscript
+        entities: [
+          Ascension
+          Player
+          AscensionEvent
+        ]
+        abis: [
+          {
+            name: AltarOfAscension
+            file: ./abis/AltarOfAscension.json
+          }
+        ]
+        eventHandlers: [
+          {
+            event: AscensionCompleted(indexed addressindexed uint256uint256)
+            handler: handleAscensionCompleted
+          }
+        ]
+        file: ./src/altarOfAscension.ts
+      }
+    }
+    {
+      kind: ethereum
+      name: PlayerVault
+      network: bsc
+      source: {
+        address: 0xe3c03d3e270d7eb3f8e27017790135f5a885a66f
+        abi: PlayerVault
+        startBlock: 59848829
+      }
+      mapping: {
+        kind: ethereum/events
+        apiVersion: 0.0.7
+        language: wasm/assemblyscript
+        entities: [
+          VaultTransaction
+          Player
+          Deposit
+          Withdrawal
+        ]
+        abis: [
+          {
+            name: PlayerVault
+            file: ./abis/PlayerVault.json
+          }
+        ]
+        eventHandlers: [
+          {
+            event: Deposit(indexed addressuint256)
+            handler: handleDeposit
+          }
+          {
+            event: Withdrawal(indexed addressuint256)
+            handler: handleWithdrawal
+          }
+        ]
+        file: ./src/playerVault.ts
+      }
+    }
+  ]
+}

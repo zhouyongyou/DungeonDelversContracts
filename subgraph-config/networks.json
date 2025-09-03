@@ -1,0 +1,28 @@
+{
+  "bsc": {
+    "0xdb40cb3a1ba6fd3e8e6323c296f3f17cc7ec9c0e": {
+      "startBlock": 59848829
+    },
+    "0xb6038db5c6a168c74995dc9a0c8a6ab1910198fd": {
+      "startBlock": 59848829
+    },
+    "0xb393e482495bacde5aaf08d25323146cc5b9567f": {
+      "startBlock": 59848829
+    },
+    "0xd32d3ab232cd2d13a80217c0f05a9f3bdc51b44b": {
+      "startBlock": 59848829
+    },
+    "0x409d964675235a5a00f375053535fce9f6e79882": {
+      "startBlock": 59848829
+    },
+    "0xdbee76d1c6e94f93ceecf743a0a0132c57371254": {
+      "startBlock": 59848829
+    },
+    "0x7f4b3d0ff2994182200fc3b306fb5b035680de3c": {
+      "startBlock": 59848829
+    },
+    "0xe3c03d3e270d7eb3f8e27017790135f5a885a66f": {
+      "startBlock": 59848829
+    }
+  }
+}

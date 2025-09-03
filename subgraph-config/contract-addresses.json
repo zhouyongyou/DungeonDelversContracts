@@ -1,0 +1,24 @@
+{
+  "version": "v1.3.3",
+  "deploymentDate": "2025-09-03T16:00:00.000Z",
+  "startBlock": 59848829,
+  "network": "bsc",
+  "chainId": 56,
+  "contracts": {
+    "dungeonCore": "0xa94b609310f8fe9a6db5cd66faaf64cd0189581f",
+    "oracle": "0x21928de992cb31ede864b62bc94002fb449c2738",
+    "playerVault": "0xe3c03d3e270d7eb3f8e27017790135f5a885a66f",
+    "hero": "0xdb40cb3a1ba6fd3e8e6323c296f3f17cc7ec9c0e",
+    "relic": "0xb6038db5c6a168c74995dc9a0c8a6ab1910198fd",
+    "party": "0xb393e482495bacde5aaf08d25323146cc5b9567f",
+    "playerProfile": "0xd32d3ab232cd2d13a80217c0f05a9f3bdc51b44b",
+    "vipStaking": "0x409d964675235a5a00f375053535fce9f6e79882",
+    "altarOfAscension": "0x7f4b3d0ff2994182200fc3b306fb5b035680de3c",
+    "dungeonMaster": "0xdbee76d1c6e94f93ceecf743a0a0132c57371254",
+    "dungeonStorage": "0x30dcbe703b258fa1e421d22c8ada643da51ceb4c",
+    "vrfManager": "0x601f0a1e5a0cacfa39b502fd7a9ac5024f53ae40",
+    "soulShard": "0x1a98769b8034d400745cc658dc204cd079de36fa",
+    "testUSD1": "0x916a2a1eb605e88561139c56af0698de241169f2",
+    "v3Pool": "0x2733f7e7e95d22e7691e5aa5abb6210cf81ebdba"
+  }
+}
