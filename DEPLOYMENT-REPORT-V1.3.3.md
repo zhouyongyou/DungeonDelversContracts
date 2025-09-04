@@ -1,9 +1,9 @@
-# 🏰 DungeonDelvers V1.3.3 部署完成報告
+# 🏰 DungeonDelvers V1.3.4 部署完成報告
 
-**部署日期**: 2025-09-03 16:00 UTC  
+**部署日期**: 2025-09-04 04:00 UTC  
 **網路**: BSC Mainnet (Chain ID: 56)  
 **部署者**: 0x84Cd63a840274d267aCb19e708d7f6298c315E75  
-**版本**: V1.3.3 (全系統重新部署)
+**版本**: V1.3.4 (全系統重新部署)
 
 ---
 
@@ -39,13 +39,13 @@
 |------|------|---------|
 | Oracle | `0x21928de992cb31ede864b62bc94002fb449c2738` | [查看](https://bscscan.com/address/0x21928de992cb31ede864b62bc94002fb449c2738#code) |
 | DungeonCore | `0xa94b609310f8fe9a6db5cd66faaf64cd0189581f` | [查看](https://bscscan.com/address/0xa94b609310f8fe9a6db5cd66faaf64cd0189581f#code) |
-| PlayerVault | `0xe3c03d3e270d7eb3f8e27017790135f5a885a66f` | [查看](https://bscscan.com/address/0xe3c03d3e270d7eb3f8e27017790135f5a885a66f#code) |
+| PlayerVault | `0xb8807c99ade19e4e2db5cf48650474f10ff874a3` | [查看](https://bscscan.com/address/0xb8807c99ade19e4e2db5cf48650474f10ff874a3#code) |
 
 ### 🖼️ NFT 合約
 | 合約 | 地址 | BSCScan |
 |------|------|---------|
-| Hero | `0xdb40cb3a1ba6fd3e8e6323c296f3f17cc7ec9c0e` | [查看](https://bscscan.com/address/0xdb40cb3a1ba6fd3e8e6323c296f3f17cc7ec9c0e#code) |
-| Relic | `0xb6038db5c6a168c74995dc9a0c8a6ab1910198fd` | [查看](https://bscscan.com/address/0xb6038db5c6a168c74995dc9a0c8a6ab1910198fd#code) |
+| Hero | `0x1723b67ef81c4d2c5dd2027776ae8bdbdd61636b` | [查看](https://bscscan.com/address/0x1723b67ef81c4d2c5dd2027776ae8bdbdd61636b#code) |
+| Relic | `0x7a78a54010b0d201c026ef0f4a9456b464dfce11` | [查看](https://bscscan.com/address/0x7a78a54010b0d201c026ef0f4a9456b464dfce11#code) |
 | Party | `0xb393e482495bacde5aaf08d25323146cc5b9567f` | [查看](https://bscscan.com/address/0xb393e482495bacde5aaf08d25323146cc5b9567f#code) |
 | PlayerProfile | `0xd32d3ab232cd2d13a80217c0f05a9f3bdc51b44b` | [查看](https://bscscan.com/address/0xd32d3ab232cd2d13a80217c0f05a9f3bdc51b44b#code) |
 | VIPStaking | `0x409d964675235a5a00f375053535fce9f6e79882` | [查看](https://bscscan.com/address/0x409d964675235a5a00f375053535fce9f6e79882#code) |
@@ -94,9 +94,9 @@
 
 ### ✅ 前端配置 (.env)
 - 所有合約地址已更新為小寫格式
-- 版本已更新至 V1.3.3
-- 部署日期設定為 2025-09-03T16:00:00.000Z
-- 起始區塊更新為 59848829
+- 版本已更新至 V1.3.4
+- 部署日期設定為 2025-09-04T04:00:00.000Z
+- 起始區塊更新為 59911082
 
 ### ✅ ABI 分發狀況
 - **本地**: 12 個 ABI 已提取到 ./abis/

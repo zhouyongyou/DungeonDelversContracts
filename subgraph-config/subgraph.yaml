@@ -1,9 +1,9 @@
-# DungeonDelvers V1.3.3 Subgraph Manifest
-# 自動生成於: 2025-09-03T08:27:06.122Z
+# DungeonDelvers V1.3.4 Subgraph Manifest
+# 自動生成於: 2025-09-04T04:00:00.000Z
 
 {
   specVersion: 0.0.5
-  description: DungeonDelvers V1.3.3 - Complete Game Ecosystem
+  description: DungeonDelvers V1.3.4 - Complete Game Ecosystem
   repository: https://github.com/your-repo/dungeon-delvers-subgraph
   schema: {
     file: ./schema.graphql
@@ -14,9 +14,9 @@
       name: Hero
       network: bsc
       source: {
-        address: 0xdb40cb3a1ba6fd3e8e6323c296f3f17cc7ec9c0e
+        address: 0x1723b67ef81c4d2c5dd2027776ae8bdbdd61636b
         abi: Hero
-        startBlock: 59848829
+        startBlock: 59911082
       }
       mapping: {
         kind: ethereum/events
@@ -48,9 +48,9 @@
       name: Relic
       network: bsc
       source: {
-        address: 0xb6038db5c6a168c74995dc9a0c8a6ab1910198fd
+        address: 0x7a78a54010b0d201c026ef0f4a9456b464dfce11
         abi: Relic
-        startBlock: 59848829
+        startBlock: 59911082
       }
       mapping: {
         kind: ethereum/events
@@ -84,7 +84,7 @@
       source: {
         address: 0xb393e482495bacde5aaf08d25323146cc5b9567f
         abi: Party
-        startBlock: 59848829
+        startBlock: 59911082
       }
       mapping: {
         kind: ethereum/events
@@ -118,7 +118,7 @@
       source: {
         address: 0xd32d3ab232cd2d13a80217c0f05a9f3bdc51b44b
         abi: PlayerProfile
-        startBlock: 59848829
+        startBlock: 59911082
       }
       mapping: {
         kind: ethereum/events
@@ -150,7 +150,7 @@
       source: {
         address: 0x409d964675235a5a00f375053535fce9f6e79882
         abi: VIPStaking
-        startBlock: 59848829
+        startBlock: 59911082
       }
       mapping: {
         kind: ethereum/events
@@ -183,7 +183,7 @@
       source: {
         address: 0xdbee76d1c6e94f93ceecf743a0a0132c57371254
         abi: DungeonMaster
-        startBlock: 59848829
+        startBlock: 59911082
       }
       mapping: {
         kind: ethereum/events
@@ -221,7 +221,7 @@
       source: {
         address: 0x7f4b3d0ff2994182200fc3b306fb5b035680de3c
         abi: AltarOfAscension
-        startBlock: 59848829
+        startBlock: 59911082
       }
       mapping: {
         kind: ethereum/events
@@ -252,9 +252,9 @@
       name: PlayerVault
       network: bsc
       source: {
-        address: 0xe3c03d3e270d7eb3f8e27017790135f5a885a66f
+        address: 0xb8807c99ade19e4e2db5cf48650474f10ff874a3
         abi: PlayerVault
-        startBlock: 59848829
+        startBlock: 59911082
       }
       mapping: {
         kind: ethereum/events

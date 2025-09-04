@@ -7,7 +7,7 @@
 # 添加到 subgraph.yaml
 - DungeonCore: 0xa94b609310f8fe9a6db5cd66faaf64cd0189581f
 - Oracle: 0x21928de992cb31ede864b62bc94002fb449c2738  
-- PlayerVault: 0xe3c03d3e270d7eb3f8e27017790135f5a885a66f
+- PlayerVault: 0xb8807c99ade19e4e2db5cf48650474f10ff874a3
 - SoulShard: 0x1a98769b8034d400745cc658dc204cd079de36fa
 ```
 

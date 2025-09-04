@@ -38,7 +38,7 @@ const contractsToVerify = [
   },
   {
     name: "PlayerVault",
-    address: "0xe3c03d3e270d7eb3f8e27017790135f5a885a66f", 
+    address: "0xb8807c99ade19e4e2db5cf48650474f10ff874a3", 
     contractPath: "contracts/current/defi/PlayerVault.sol:PlayerVault",
     constructorArgs: [
       "0xa94b609310f8fe9a6db5cd66faaf64cd0189581f"  // DungeonCore
@@ -46,7 +46,7 @@ const contractsToVerify = [
   },
   {
     name: "Hero",
-    address: "0xdb40cb3a1ba6fd3e8e6323c296f3f17cc7ec9c0e",
+    address: "0x1723b67ef81c4d2c5dd2027776ae8bdbdd61636b",
     contractPath: "contracts/current/nft/Hero.sol:Hero", 
     constructorArgs: [
       "0xa94b609310f8fe9a6db5cd66faaf64cd0189581f"  // DungeonCore
@@ -54,7 +54,7 @@ const contractsToVerify = [
   },
   {
     name: "Relic",
-    address: "0xb6038db5c6a168c74995dc9a0c8a6ab1910198fd",
+    address: "0x7a78a54010b0d201c026ef0f4a9456b464dfce11",
     contractPath: "contracts/current/nft/Relic.sol:Relic",
     constructorArgs: [
       "0xa94b609310f8fe9a6db5cd66faaf64cd0189581f"  // DungeonCore

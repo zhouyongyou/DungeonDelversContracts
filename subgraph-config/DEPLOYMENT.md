@@ -1,16 +1,16 @@
 
-# DungeonDelvers V1.3.3 子圖部署指南
+# DungeonDelvers V1.3.4 子圖部署指南
 
 ## 📋 更新的合約地址
 
 ### 核心合約
 - DungeonCore: 0xa94b609310f8fe9a6db5cd66faaf64cd0189581f
 - Oracle: 0x21928de992cb31ede864b62bc94002fb449c2738
-- PlayerVault: 0xe3c03d3e270d7eb3f8e27017790135f5a885a66f
+- PlayerVault: 0xb8807c99ade19e4e2db5cf48650474f10ff874a3
 
 ### NFT 合約
-- Hero: 0xdb40cb3a1ba6fd3e8e6323c296f3f17cc7ec9c0e
-- Relic: 0xb6038db5c6a168c74995dc9a0c8a6ab1910198fd  
+- Hero: 0x1723b67ef81c4d2c5dd2027776ae8bdbdd61636b
+- Relic: 0x7a78a54010b0d201c026ef0f4a9456b464dfce11  
 - Party: 0xb393e482495bacde5aaf08d25323146cc5b9567f
 - PlayerProfile: 0xd32d3ab232cd2d13a80217c0f05a9f3bdc51b44b
 - VIPStaking: 0x409d964675235a5a00f375053535fce9f6e79882
@@ -47,24 +47,24 @@
 
 5. **部署到 Studio**
    ```bash
-   graph deploy --studio dungeon-delvers---bsc --version-label v1.3.3
+   graph deploy --studio dungeon-delvers---bsc --version-label v1.3.4
    ```
 
 ## ⚙️ 重要配置
 
-- **起始區塊**: 59848829
-- **部署日期**: 2025-09-03T16:00:00.000Z
+- **起始區塊**: 59911082
+- **部署日期**: 2025-09-04T04:00:00.000Z
 - **網路**: BSC Mainnet (Chain ID: 56)
-- **版本**: v1.3.3
+- **版本**: v1.3.4
 
 ## 🔗 驗證鏈接
 
 所有合約都已在 BSCScan 上驗證：
 - dungeonCore: https://bscscan.com/address/0xa94b609310f8fe9a6db5cd66faaf64cd0189581f#code
 - oracle: https://bscscan.com/address/0x21928de992cb31ede864b62bc94002fb449c2738#code
-- playerVault: https://bscscan.com/address/0xe3c03d3e270d7eb3f8e27017790135f5a885a66f#code
-- hero: https://bscscan.com/address/0xdb40cb3a1ba6fd3e8e6323c296f3f17cc7ec9c0e#code
-- relic: https://bscscan.com/address/0xb6038db5c6a168c74995dc9a0c8a6ab1910198fd#code
+- playerVault: https://bscscan.com/address/0xb8807c99ade19e4e2db5cf48650474f10ff874a3#code
+- hero: https://bscscan.com/address/0x1723b67ef81c4d2c5dd2027776ae8bdbdd61636b#code
+- relic: https://bscscan.com/address/0x7a78a54010b0d201c026ef0f4a9456b464dfce11#code
 - party: https://bscscan.com/address/0xb393e482495bacde5aaf08d25323146cc5b9567f#code
 - playerProfile: https://bscscan.com/address/0xd32d3ab232cd2d13a80217c0f05a9f3bdc51b44b#code
 - vipStaking: https://bscscan.com/address/0x409d964675235a5a00f375053535fce9f6e79882#code

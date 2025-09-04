@@ -1,7 +1,7 @@
 {
-  "version": "v1.3.3",
-  "deploymentDate": "2025-09-03T16:00:00.000Z",
-  "startBlock": 59848829,
+  "version": "v1.3.4",
+  "deploymentDate": "2025-09-04T04:00:00.000Z",
+  "startBlock": 59911082,
   "network": "bsc",
   "chainId": 56,
   "contracts": {
