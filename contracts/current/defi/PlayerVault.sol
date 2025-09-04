@@ -24,6 +24,14 @@ contract PlayerVault is Ownable, ReentrancyGuard {
         uint256 withdrawableBalance;
         uint256 lastWithdrawTimestamp;
         uint256 lastFreeWithdrawTimestamp;
+        // Enhanced: Complete precomputed statistics
+        uint256 totalDeposited;              // Lifetime deposits
+        uint256 totalWithdrawn;              // Lifetime withdrawals (gross amount)
+        uint256 totalGameSpent;              // Lifetime game spending
+        uint256 totalTaxPaid;                // Lifetime tax payments
+        uint256 totalCommissionEarned;       // Lifetime commission earnings
+        uint256 totalCommissionWithdrawn;    // Lifetime commission withdrawals
+        uint256 totalReferrals;              // Total referrals made
     }
     mapping(address => PlayerInfo) public playerInfo;
     mapping(address => address) public referrers;
@@ -54,24 +62,63 @@ contract PlayerVault is Ownable, ReentrancyGuard {
 
     uint256 public commissionRate = 500; // 5%
 
-    // Original events
-    event Deposited(address indexed player, uint256 amount);
-    event Withdrawn(address indexed player, uint256 amount, uint256 taxAmount);
-    event GameSpending(address indexed player, address indexed spender, uint256 amount);
-    event ReferralSet(address indexed user, address indexed referrer);
-    event CommissionPaid(address indexed user, address indexed referrer, uint256 amount);
+    // Enhanced events with precomputed statistics
+    event Deposited(
+        address indexed player, 
+        uint256 amount,
+        uint256 newBalance,         // Balance after deposit
+        uint256 totalDeposited      // Lifetime deposits
+    );
+    event Withdrawn(
+        address indexed player, 
+        uint256 grossAmount,        // Original withdrawal amount (before taxes)
+        uint256 netAmount,          // Final amount transferred to player
+        uint256 taxAmount,          // Tax deducted
+        uint256 commissionAmount,   // Commission paid to referrer
+        uint256 newBalance,         // Balance after withdrawal
+        uint256 totalWithdrawn,     // Lifetime withdrawals (gross)
+        uint256 totalTaxPaid        // Lifetime tax payments
+    );
+    event GameSpending(
+        address indexed player, 
+        address indexed spender, 
+        uint256 amount,
+        uint256 newBalance,         // Balance after spending
+        uint256 totalGameSpent      // Lifetime game spending
+    );
+    event ReferralSet(
+        address indexed user, 
+        address indexed referrer,
+        uint256 referrerTotalReferrals  // Referrer's total referral count
+    );
+    event CommissionPaid(
+        address indexed user, 
+        address indexed referrer, 
+        uint256 amount,
+        uint256 referrerTotalCommissionEarned,     // Referrer's lifetime commission
+        uint256 referrerCurrentCommissionBalance   // Referrer's current commission balance
+    );
     event VirtualCommissionAdded(address indexed referrer, uint256 amount);
     
-    // Commission-specific withdrawal event
-    event CommissionWithdrawn(address indexed player, uint256 amount);
+    // Enhanced commission withdrawal event
+    event CommissionWithdrawn(
+        address indexed player, 
+        uint256 amount,
+        uint256 remainingCommissionBalance,    // Remaining commission after withdrawal
+        uint256 totalCommissionWithdrawn      // Lifetime commission withdrawals
+    );
     event VirtualTaxCollected(uint256 amount);
     event DungeonCoreSet(address indexed newAddress);
     event TaxParametersUpdated(uint256 standardRate, uint256 largeRate, uint256 decreaseRate, uint256 period);
     event WithdrawThresholdsUpdated(uint256 smallAmount, uint256 largeAmount);
 
-    // ============ NEW: Username Events ============
-    event UsernameRegistered(address indexed user, string username);
-    event UsernameUpdated(address indexed user, string oldUsername, string newUsername);
+    // ============ Enhanced: Username Events ============
+    event UsernameUpdated(
+        address indexed user, 
+        string oldUsername,     // Empty string for new registrations
+        string newUsername
+        // Removed fee parameter to reduce gas cost
+    );
     event UsernameRegistrationFeeUpdated(uint256 newFee);
     event ReferralSetByUsername(address indexed user, address indexed referrer, string username);
     // =============================================
@@ -114,7 +161,11 @@ contract PlayerVault is Ownable, ReentrancyGuard {
         addressToUsername[msg.sender] = username;
         usernameExists[username] = true;
         
-        emit UsernameRegistered(msg.sender, username);
+        emit UsernameUpdated(
+            msg.sender, 
+            "",        // Empty string indicates new registration
+            username
+        );
     }
     
     /**
@@ -138,7 +189,11 @@ contract PlayerVault is Ownable, ReentrancyGuard {
         addressToUsername[msg.sender] = newUsername;
         usernameExists[newUsername] = true;
         
-        emit UsernameUpdated(msg.sender, oldUsername, newUsername);
+        emit UsernameUpdated(
+            msg.sender, 
+            oldUsername, 
+            newUsername
+        );
     }
     
     /**
@@ -152,8 +207,13 @@ contract PlayerVault is Ownable, ReentrancyGuard {
         require(referrerAddr != msg.sender, "Vault: Cannot refer yourself");
         
         referrers[msg.sender] = referrerAddr;
+        
+        // Update referrer's total referrals count
+        PlayerInfo storage referrerInfo = playerInfo[referrerAddr];
+        referrerInfo.totalReferrals += 1;
+        
         emit ReferralSetByUsername(msg.sender, referrerAddr, referrerInput);
-        emit ReferralSet(msg.sender, referrerAddr);
+        emit ReferralSet(msg.sender, referrerAddr, referrerInfo.totalReferrals);
     }
     
     /**
@@ -235,13 +295,19 @@ contract PlayerVault is Ownable, ReentrancyGuard {
     
     // =============================================
     
-    // Original functions remain unchanged
+    // Enhanced referral functions
     function setReferrer(address _referrer) external nonReentrant {
         require(referrers[msg.sender] == address(0), "Vault: Referrer already set");
         require(_referrer != msg.sender, "Vault: Cannot refer yourself");
         require(_referrer != address(0), "Vault: Referrer cannot be zero address");
+        
         referrers[msg.sender] = _referrer;
-        emit ReferralSet(msg.sender, _referrer);
+        
+        // Update referrer's total referrals count
+        PlayerInfo storage referrerInfo = playerInfo[_referrer];
+        referrerInfo.totalReferrals += 1;
+        
+        emit ReferralSet(msg.sender, _referrer, referrerInfo.totalReferrals);
     }
 
     function withdraw(uint256 _amount) external nonReentrant {
@@ -268,33 +334,66 @@ contract PlayerVault is Ownable, ReentrancyGuard {
         uint256 commission = virtualCommissionBalance[msg.sender];
         require(commission > 0, "Vault: No commission to withdraw");
         
+        PlayerInfo storage info = playerInfo[msg.sender];
+        
         virtualCommissionBalance[msg.sender] = 0;
+        info.totalCommissionWithdrawn += commission;
+        
         IERC20(_getSoulShardToken()).safeTransfer(msg.sender, commission);
         
-        emit CommissionWithdrawn(msg.sender, commission);
-        // Note: Removed duplicate Withdrawn event for cleaner event distinction
+        emit CommissionWithdrawn(
+            msg.sender, 
+            commission,
+            0, // remainingCommissionBalance
+            info.totalCommissionWithdrawn
+        );
     }
 
     function deposit(address _player, uint256 _amount) external onlyDungeonMaster {
         require(_player != address(0), "Vault: Cannot deposit to zero address");
-        playerInfo[_player].withdrawableBalance += _amount;
-        emit Deposited(_player, _amount);
+        
+        PlayerInfo storage info = playerInfo[_player];
+        info.withdrawableBalance += _amount;
+        info.totalDeposited += _amount;
+        
+        emit Deposited(
+            _player, 
+            _amount, 
+            info.withdrawableBalance, 
+            info.totalDeposited
+        );
     }
 
     function spendForGame(address _player, uint256 _amount) external onlyAuthorizedGameContracts {
-        PlayerInfo storage player = playerInfo[_player];
-        require(player.withdrawableBalance >= _amount, "Vault: Insufficient balance for game spending");
+        PlayerInfo storage info = playerInfo[_player];
+        require(info.withdrawableBalance >= _amount, "Vault: Insufficient balance for game spending");
         
-        player.withdrawableBalance -= _amount;
-        emit GameSpending(_player, msg.sender, _amount);
+        info.withdrawableBalance -= _amount;
+        info.totalGameSpent += _amount;
+        
+        emit GameSpending(
+            _player, 
+            msg.sender, 
+            _amount, 
+            info.withdrawableBalance, 
+            info.totalGameSpent
+        );
     }
 
     function _processWithdrawal(PlayerInfo storage player, address _withdrawer, uint256 _amount, uint256 _taxRate) private {
         player.withdrawableBalance -= _amount;
+        player.totalWithdrawn += _amount; // Track gross withdrawal amount
         player.lastWithdrawTimestamp = block.timestamp;
 
         uint256 taxAmount = (_amount * _taxRate) / PERCENT_DIVISOR;
         uint256 amountAfterTaxes = _amount - taxAmount;
+        
+        // Update tax statistics
+        if (taxAmount > 0) {
+            player.totalTaxPaid += taxAmount;
+            virtualTaxBalance += taxAmount;
+            emit VirtualTaxCollected(taxAmount);
+        }
 
         address referrer = referrers[_withdrawer];
         uint256 commissionAmount = 0;
@@ -304,23 +403,38 @@ contract PlayerVault is Ownable, ReentrancyGuard {
             if (commissionAmount > 0) {
                 virtualCommissionBalance[referrer] += commissionAmount;
                 totalCommissionPaid[referrer] += commissionAmount;
+                
+                // Update referrer's commission earnings
+                PlayerInfo storage referrerInfo = playerInfo[referrer];
+                referrerInfo.totalCommissionEarned += commissionAmount;
+                
                 emit VirtualCommissionAdded(referrer, commissionAmount);
-                emit CommissionPaid(_withdrawer, referrer, commissionAmount);
+                emit CommissionPaid(
+                    _withdrawer, 
+                    referrer, 
+                    commissionAmount,
+                    referrerInfo.totalCommissionEarned,
+                    virtualCommissionBalance[referrer]  // Current commission balance after adding
+                );
             }
         }
         
         uint256 finalAmountToPlayer = amountAfterTaxes - commissionAmount;
 
-        if (taxAmount > 0) {
-            virtualTaxBalance += taxAmount;
-            emit VirtualTaxCollected(taxAmount);
-        }
-
         if (finalAmountToPlayer > 0) {
             IERC20(_getSoulShardToken()).safeTransfer(_withdrawer, finalAmountToPlayer);
         }
         
-        emit Withdrawn(_withdrawer, finalAmountToPlayer, taxAmount);
+        emit Withdrawn(
+            _withdrawer, 
+            _amount,                    // grossAmount
+            finalAmountToPlayer,        // netAmount
+            taxAmount,                  // taxAmount
+            commissionAmount,           // commissionAmount
+            player.withdrawableBalance, // newBalance
+            player.totalWithdrawn,      // totalWithdrawn
+            player.totalTaxPaid         // totalTaxPaid
+        );
     }
 
     function _calculateTaxRate(address _player, uint256 _amountUSD) internal view returns (uint256) {
@@ -436,7 +550,8 @@ contract PlayerVault is Ownable, ReentrancyGuard {
     }
 
     function getTotalCommissionPaid(address _user) external view returns (uint256) {
-        return totalCommissionPaid[_user];
+        // Return from enhanced PlayerInfo structure for consistency
+        return playerInfo[_user].totalCommissionEarned;
     }
 
     function getCommissionBalance(address _user) external view returns (uint256) {
@@ -456,6 +571,47 @@ contract PlayerVault is Ownable, ReentrancyGuard {
         tokenAddress = _getSoulShardToken();
         coreAddress = address(dungeonCore);
         isReady = tokenAddress != address(0) && coreAddress != address(0);
+    }
+
+    /**
+     * @notice Get complete player financial profile (Enhanced)
+     * @param _player Player address
+     * @return currentBalance Current withdrawable balance
+     * @return totalDeposited Lifetime total deposits
+     * @return totalWithdrawn Lifetime total withdrawals (gross)
+     * @return totalGameSpent Lifetime total game spending
+     * @return totalTaxPaid Lifetime total tax payments
+     * @return totalCommissionEarned Lifetime total commission earned
+     * @return totalCommissionWithdrawn Lifetime total commission withdrawn
+     * @return totalReferrals Total number of referrals made
+     * @return availableCommission Currently available commission balance
+     * @return referrer Address of the player's referrer
+     */
+    function getPlayerStats(address _player) external view returns (
+        uint256 currentBalance,
+        uint256 totalDeposited,
+        uint256 totalWithdrawn,
+        uint256 totalGameSpent,
+        uint256 totalTaxPaid,
+        uint256 totalCommissionEarned,
+        uint256 totalCommissionWithdrawn,
+        uint256 totalReferrals,
+        uint256 availableCommission,
+        address referrer
+    ) {
+        PlayerInfo storage info = playerInfo[_player];
+        return (
+            info.withdrawableBalance,
+            info.totalDeposited,
+            info.totalWithdrawn,
+            info.totalGameSpent,
+            info.totalTaxPaid,
+            info.totalCommissionEarned,
+            info.totalCommissionWithdrawn,
+            info.totalReferrals,
+            virtualCommissionBalance[_player],
+            referrers[_player]
+        );
     }
 
     // Allow contract to receive BNB for username registration fees
