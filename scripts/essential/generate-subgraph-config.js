@@ -375,7 +375,7 @@ function generateDeploymentInstructions() {
 
 5. **部署到 Studio**
    \`\`\`bash
-   graph deploy --studio dungeon-delvers---bsc --version-label v1.3.3
+   graph deploy --studio dungeon-delvers---bsc --version-label v1.3.4
    \`\`\`
 
 ## ⚙️ 重要配置

@@ -32,8 +32,6 @@ contract PlayerVault is Ownable, ReentrancyGuard {
         uint256 totalCommissionEarned;       // Lifetime commission earnings
         uint256 totalCommissionWithdrawn;    // Lifetime commission withdrawals
         uint256 totalReferrals;              // Total referrals made
-        uint256 transactionCount;            // Total transaction count
-        uint256 usernameChanges;             // Username registration/update count
     }
     mapping(address => PlayerInfo) public playerInfo;
     mapping(address => address) public referrers;
@@ -69,8 +67,7 @@ contract PlayerVault is Ownable, ReentrancyGuard {
         address indexed player, 
         uint256 amount,
         uint256 newBalance,         // Balance after deposit
-        uint256 totalDeposited,     // Lifetime deposits
-        uint256 transactionCount    // Total transaction count
+        uint256 totalDeposited      // Lifetime deposits
     );
     event Withdrawn(
         address indexed player, 
@@ -80,16 +77,14 @@ contract PlayerVault is Ownable, ReentrancyGuard {
         uint256 commissionAmount,   // Commission paid to referrer
         uint256 newBalance,         // Balance after withdrawal
         uint256 totalWithdrawn,     // Lifetime withdrawals (gross)
-        uint256 totalTaxPaid,       // Lifetime tax payments
-        uint256 transactionCount    // Total transaction count
+        uint256 totalTaxPaid        // Lifetime tax payments
     );
     event GameSpending(
         address indexed player, 
         address indexed spender, 
         uint256 amount,
         uint256 newBalance,         // Balance after spending
-        uint256 totalGameSpent,     // Lifetime game spending
-        uint256 transactionCount    // Total transaction count
+        uint256 totalGameSpent      // Lifetime game spending
     );
     event ReferralSet(
         address indexed user, 
@@ -109,8 +104,7 @@ contract PlayerVault is Ownable, ReentrancyGuard {
         address indexed player, 
         uint256 amount,
         uint256 remainingCommissionBalance,    // Remaining commission after withdrawal
-        uint256 totalCommissionWithdrawn,     // Lifetime commission withdrawals
-        uint256 transactionCount              // Total transaction count
+        uint256 totalCommissionWithdrawn      // Lifetime commission withdrawals
     );
     event VirtualTaxCollected(uint256 amount);
     event DungeonCoreSet(address indexed newAddress);
@@ -121,15 +115,13 @@ contract PlayerVault is Ownable, ReentrancyGuard {
     event UsernameRegistered(
         address indexed user, 
         string username,
-        uint256 fee,                    // Fee paid for registration
-        uint256 totalUsernameChanges    // Total username changes for this user
+        uint256 fee                     // Fee paid for registration
     );
     event UsernameUpdated(
         address indexed user, 
         string oldUsername, 
         string newUsername,
-        uint256 fee,                    // Fee paid for update
-        uint256 totalUsernameChanges    // Total username changes for this user
+        uint256 fee                     // Fee paid for update
     );
     event UsernameRegistrationFeeUpdated(uint256 newFee);
     event ReferralSetByUsername(address indexed user, address indexed referrer, string username);
@@ -168,9 +160,6 @@ contract PlayerVault is Ownable, ReentrancyGuard {
         require(!usernameExists[username], "Vault: Username already taken");
         require(bytes(addressToUsername[msg.sender]).length == 0, "Vault: User already has a username. Use updateUsername instead");
         
-        PlayerInfo storage info = playerInfo[msg.sender];
-        info.usernameChanges += 1;
-        
         // Register the username
         usernameToAddress[username] = msg.sender;
         addressToUsername[msg.sender] = username;
@@ -179,8 +168,7 @@ contract PlayerVault is Ownable, ReentrancyGuard {
         emit UsernameRegistered(
             msg.sender, 
             username,
-            msg.value,
-            info.usernameChanges
+            msg.value
         );
     }
     
@@ -196,9 +184,6 @@ contract PlayerVault is Ownable, ReentrancyGuard {
         string memory oldUsername = addressToUsername[msg.sender];
         require(bytes(oldUsername).length > 0, "Vault: No existing username. Use registerUsername instead");
         
-        PlayerInfo storage info = playerInfo[msg.sender];
-        info.usernameChanges += 1;
-        
         // Remove old mapping
         usernameExists[oldUsername] = false;
         delete usernameToAddress[oldUsername];
@@ -212,8 +197,7 @@ contract PlayerVault is Ownable, ReentrancyGuard {
             msg.sender, 
             oldUsername, 
             newUsername,
-            msg.value,
-            info.usernameChanges
+            msg.value
         );
     }
     
@@ -359,7 +343,6 @@ contract PlayerVault is Ownable, ReentrancyGuard {
         
         virtualCommissionBalance[msg.sender] = 0;
         info.totalCommissionWithdrawn += commission;
-        info.transactionCount += 1;
         
         IERC20(_getSoulShardToken()).safeTransfer(msg.sender, commission);
         
@@ -367,8 +350,7 @@ contract PlayerVault is Ownable, ReentrancyGuard {
             msg.sender, 
             commission,
             0, // remainingCommissionBalance
-            info.totalCommissionWithdrawn,
-            info.transactionCount
+            info.totalCommissionWithdrawn
         );
     }
 
@@ -378,14 +360,12 @@ contract PlayerVault is Ownable, ReentrancyGuard {
         PlayerInfo storage info = playerInfo[_player];
         info.withdrawableBalance += _amount;
         info.totalDeposited += _amount;
-        info.transactionCount += 1;
         
         emit Deposited(
             _player, 
             _amount, 
             info.withdrawableBalance, 
-            info.totalDeposited,
-            info.transactionCount
+            info.totalDeposited
         );
     }
 
@@ -395,22 +375,19 @@ contract PlayerVault is Ownable, ReentrancyGuard {
         
         info.withdrawableBalance -= _amount;
         info.totalGameSpent += _amount;
-        info.transactionCount += 1;
         
         emit GameSpending(
             _player, 
             msg.sender, 
             _amount, 
             info.withdrawableBalance, 
-            info.totalGameSpent,
-            info.transactionCount
+            info.totalGameSpent
         );
     }
 
     function _processWithdrawal(PlayerInfo storage player, address _withdrawer, uint256 _amount, uint256 _taxRate) private {
         player.withdrawableBalance -= _amount;
         player.totalWithdrawn += _amount; // Track gross withdrawal amount
-        player.transactionCount += 1;
         player.lastWithdrawTimestamp = block.timestamp;
 
         uint256 taxAmount = (_amount * _taxRate) / PERCENT_DIVISOR;
@@ -460,8 +437,7 @@ contract PlayerVault is Ownable, ReentrancyGuard {
             commissionAmount,           // commissionAmount
             player.withdrawableBalance, // newBalance
             player.totalWithdrawn,      // totalWithdrawn
-            player.totalTaxPaid,        // totalTaxPaid
-            player.transactionCount     // transactionCount
+            player.totalTaxPaid         // totalTaxPaid
         );
     }
 
@@ -612,8 +588,6 @@ contract PlayerVault is Ownable, ReentrancyGuard {
      * @return totalCommissionEarned Lifetime total commission earned
      * @return totalCommissionWithdrawn Lifetime total commission withdrawn
      * @return totalReferrals Total number of referrals made
-     * @return transactionCount Total transaction count
-     * @return usernameChanges Total username changes
      * @return availableCommission Currently available commission balance
      * @return referrer Address of the player's referrer
      */
@@ -626,8 +600,6 @@ contract PlayerVault is Ownable, ReentrancyGuard {
         uint256 totalCommissionEarned,
         uint256 totalCommissionWithdrawn,
         uint256 totalReferrals,
-        uint256 transactionCount,
-        uint256 usernameChanges,
         uint256 availableCommission,
         address referrer
     ) {
@@ -641,8 +613,6 @@ contract PlayerVault is Ownable, ReentrancyGuard {
             info.totalCommissionEarned,
             info.totalCommissionWithdrawn,
             info.totalReferrals,
-            info.transactionCount,
-            info.usernameChanges,
             virtualCommissionBalance[_player],
             referrers[_player]
         );
@@ -765,13 +735,13 @@ contract PlayerVault is Ownable, ReentrancyGuard {
      * @notice Get player activity summary
      * @param _player Player address
      * @return netProfit Net profit (deposits + commission - withdrawals - taxes - game spent)
-     * @return totalActivity Total transaction count
      * @return isActiveUser Whether user has recent activity (30 days)
+     * @return hasActivity Whether user has any financial activity
      */
     function getPlayerSummary(address _player) external view returns (
         int256 netProfit,
-        uint256 totalActivity,
-        bool isActiveUser
+        bool isActiveUser,
+        bool hasActivity
     ) {
         PlayerInfo storage info = playerInfo[_player];
         
@@ -780,11 +750,13 @@ contract PlayerVault is Ownable, ReentrancyGuard {
         int256 expenses = int256(info.totalWithdrawn + info.totalTaxPaid + info.totalGameSpent);
         netProfit = income - expenses;
         
-        totalActivity = info.transactionCount;
-        
         // Check if user is active (transaction or login within 30 days)
         isActiveUser = (info.lastWithdrawTimestamp + 30 days >= block.timestamp) ||
                       (info.withdrawableBalance > 0);
+                      
+        // Check if user has any financial activity
+        hasActivity = (info.totalDeposited > 0) || (info.totalWithdrawn > 0) || 
+                     (info.totalGameSpent > 0) || (info.totalCommissionEarned > 0);
     }
 
     // Allow contract to receive BNB for username registration fees

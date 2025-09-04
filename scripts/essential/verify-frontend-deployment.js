@@ -140,7 +140,7 @@ function generateVercelEnvList() {
     'VITE_PLAYERVAULT_ADDRESS': process.env.PLAYERVAULT_ADDRESS,
     'VITE_SOULSHARD_ADDRESS': process.env.SOULSHARD_ADDRESS,
     'VITE_USD_ADDRESS': process.env.USD_ADDRESS,
-    'VITE_CONTRACT_VERSION': 'v1.3.3'
+    'VITE_CONTRACT_VERSION': 'v1.3.4'
   };
   
   // 檢查環境變數是否存在
