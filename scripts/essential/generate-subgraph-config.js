@@ -3,7 +3,7 @@
 const fs = require("fs");
 const path = require("path");
 
-// V1.3.3 部署的合約地址
+// V1.3.4 部署的合約地址
 const contractAddresses = {
   // 核心合約
   dungeonCore: "0xa94b609310f8fe9a6db5cd66faaf64cd0189581f",
@@ -32,9 +32,9 @@ const contractAddresses = {
 };
 
 const deploymentInfo = {
-  version: "v1.3.3",
-  startBlock: 59848829,
-  deploymentDate: "2025-09-03T16:00:00.000Z",
+  version: "v1.3.4",
+  startBlock: 59911082,
+  deploymentDate: "2025-09-04T04:00:00.000Z",
   network: "bsc",
   chainId: 56
 };
@@ -42,7 +42,7 @@ const deploymentInfo = {
 function generateSubgraphManifest() {
   const manifest = {
     specVersion: "0.0.5",
-    description: "DungeonDelvers V1.3.3 - Complete Game Ecosystem",
+    description: "DungeonDelvers V1.3.4 - Complete Game Ecosystem",
     repository: "https://github.com/your-repo/dungeon-delvers-subgraph",
     schema: {
       file: "./schema.graphql"
