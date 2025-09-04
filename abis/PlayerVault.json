@@ -62,6 +62,18 @@
         "internalType": "uint256",
         "name": "amount",
         "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "referrerTotalCommissionEarned",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "referrerCurrentCommissionBalance",
+        "type": "uint256"
       }
     ],
     "name": "CommissionPaid",
@@ -81,6 +93,18 @@
         "internalType": "uint256",
         "name": "amount",
         "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "remainingCommissionBalance",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "totalCommissionWithdrawn",
+        "type": "uint256"
       }
     ],
     "name": "CommissionWithdrawn",
@@ -99,6 +123,18 @@
         "indexed": false,
         "internalType": "uint256",
         "name": "amount",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "newBalance",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "totalDeposited",
         "type": "uint256"
       }
     ],
@@ -138,6 +174,18 @@
         "internalType": "uint256",
         "name": "amount",
         "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "newBalance",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "totalGameSpent",
+        "type": "uint256"
       }
     ],
     "name": "GameSpending",
@@ -176,6 +224,12 @@
         "internalType": "address",
         "name": "referrer",
         "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "referrerTotalReferrals",
+        "type": "uint256"
       }
     ],
     "name": "ReferralSet",
@@ -235,25 +289,6 @@
       }
     ],
     "name": "TaxParametersUpdated",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "user",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "string",
-        "name": "username",
-        "type": "string"
-      }
-    ],
-    "name": "UsernameRegistered",
     "type": "event"
   },
   {
@@ -357,13 +392,43 @@
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "amount",
+        "name": "grossAmount",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "netAmount",
         "type": "uint256"
       },
       {
         "indexed": false,
         "internalType": "uint256",
         "name": "taxAmount",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "commissionAmount",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "newBalance",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "totalWithdrawn",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "totalTaxPaid",
         "type": "uint256"
       }
     ],
@@ -553,6 +618,70 @@
       {
         "internalType": "uint256",
         "name": "lastFreeWithdrawTimestamp",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "referrer",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_player",
+        "type": "address"
+      }
+    ],
+    "name": "getPlayerStats",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "currentBalance",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "totalDeposited",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "totalWithdrawn",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "totalGameSpent",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "totalTaxPaid",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "totalCommissionEarned",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "totalCommissionWithdrawn",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "totalReferrals",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "availableCommission",
         "type": "uint256"
       },
       {
@@ -756,6 +885,41 @@
       {
         "internalType": "uint256",
         "name": "lastFreeWithdrawTimestamp",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "totalDeposited",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "totalWithdrawn",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "totalGameSpent",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "totalTaxPaid",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "totalCommissionEarned",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "totalCommissionWithdrawn",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "totalReferrals",
         "type": "uint256"
       }
     ],
