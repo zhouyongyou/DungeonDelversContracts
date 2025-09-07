@@ -49,6 +49,9 @@ contract DungeonMaster is Ownable, ReentrancyGuard, Pausable, IVRFCallback {
     event VRFRequestFulfilled(uint256 indexed requestId, uint256 randomWordsCount);
     event ExpeditionProcessingError(address indexed user, uint256 requestId, string reason);
     event EmergencyCleanup(address indexed user, uint256 refundAmount);
+    
+    // New event for cooldown updates - enables subgraph indexing
+    event PartyCooldownUpdated(uint256 indexed partyId, uint256 cooldownEndsAt, address indexed player);
 
     // Modified: Use msg.sender as owner instead of requiring parameter
     constructor() Ownable(msg.sender) {}
@@ -84,6 +87,9 @@ contract DungeonMaster is Ownable, ReentrancyGuard, Pausable, IVRFCallback {
         // Immediately set cooldown (prevent double usage)
         partyStatus.cooldownEndsAt = block.timestamp + COOLDOWN_PERIOD;
         _setPartyStatus(_partyId, partyStatus);
+        
+        // Emit cooldown event for subgraph indexing
+        emit PartyCooldownUpdated(_partyId, partyStatus.cooldownEndsAt, msg.sender);
         
         address vrfManagerAddr = _getVRFManager();
         if (vrfManagerAddr != address(0)) {
