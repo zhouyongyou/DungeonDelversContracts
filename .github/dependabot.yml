@@ -1,0 +1,36 @@
+version: 2
+updates:
+  # Enable version updates for npm (root directory only)
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "sunday"
+      time: "02:00"
+    open-pull-requests-limit: 3
+    assignees:
+      - "zhouyongyou"
+    commit-message:
+      prefix: "chore"
+      include: "scope"
+    
+    # Critical dependencies - be conservative
+    ignore:
+      - dependency-name: "hardhat"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "ethers"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "@openzeppelin/contracts"
+        update-types: ["version-update:semver-major"]
+    
+    # Group related updates
+    groups:
+      hardhat-ecosystem:
+        patterns:
+          - "hardhat"
+          - "@nomicfoundation/*"
+          - "@nomiclabs/*"
+      
+      openzeppelin:
+        patterns:
+          - "@openzeppelin/*"
