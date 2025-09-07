@@ -19,7 +19,7 @@ const contractAddresses = {
   
   // 遊戲合約
   altarOfAscension: "0x7f4b3d0ff2994182200fc3b306fb5b035680de3c",
-  dungeonMaster: "0xdbee76d1c6e94f93ceecf743a0a0132c57371254",
+  dungeonMaster: "0x924a6d3a90a012ec98ff09de1e9a8ac53b0e46dd",
   dungeonStorage: "0x30dcbe703b258fa1e421d22c8ada643da51ceb4c",
   
   // VRF 管理
