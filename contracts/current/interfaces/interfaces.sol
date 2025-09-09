@@ -157,8 +157,8 @@ interface IHero {
     
     // Cross-contract functions
     function ownerOf(uint256 tokenId) external view returns (address);
-    function getHeroProperties(uint256 tokenId) external view returns (uint8 rarity, uint256 power);
-    function mintFromAltar(address to, uint8 rarity, uint256 power) external returns (uint256);
+    function getHeroProperties(uint256 tokenId) external view returns (uint8 rarity, uint16 power);
+    function mintFromAltar(address to, uint8 rarity, uint16 power) external returns (uint256);
     function burnFromAltar(uint256 tokenId) external;
     function safeTransferFrom(address from, address to, uint256 tokenId) external;
     function setApprovalForAll(address operator, bool approved) external;
