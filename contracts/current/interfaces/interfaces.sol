@@ -74,6 +74,7 @@ interface IDungeonCore {
     function vrfManager() external view returns (address);
     
     function setSoulShardToken(address _token) external;
+    function setUsdToken(address _token) external;
     function setDungeonStorage(address _storage) external;
     function setBatchAddresses(address _soulShard, address _vrfManager, address _oracle, address _dungeonStorage) external;
     function getAllCoreAddresses() external view returns (address soulShard, address vrf, address oracle, address vault, address storage_);

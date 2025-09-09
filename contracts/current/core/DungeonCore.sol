@@ -48,6 +48,7 @@ contract DungeonCore is Ownable, ReentrancyGuard, Pausable {
     // Unified management events
     event VRFManagerSet(address indexed newAddress);
     event SoulShardTokenSet(address indexed token);
+    event UsdTokenSet(address indexed token);
     event DungeonStorageSet(address indexed storage_);
     event BatchAddressesSet(address soulShard, address vrfManager, address oracle, address storage_);
 
@@ -177,6 +178,17 @@ contract DungeonCore is Ownable, ReentrancyGuard, Pausable {
         require(_token != address(0), "DungeonCore: Token cannot be zero address");
         soulShardTokenAddress = _token;
         emit SoulShardTokenSet(_token);
+    }
+    
+    /**
+     * @notice Set USD Token address
+     * @param _token USD Token contract address
+     */
+    function setUsdToken(address _token) external onlyOwner {
+        require(_token != address(0), "DungeonCore: Token cannot be zero address");
+        usdTokenAddress = _token;
+        usdDecimals = IERC20Metadata(_token).decimals();
+        emit UsdTokenSet(_token);
     }
     
     /**
