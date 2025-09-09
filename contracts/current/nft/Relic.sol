@@ -8,9 +8,10 @@ import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol
 import {Pausable} from "@openzeppelin/contracts/utils/Pausable.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
+import "@openzeppelin/contracts/interfaces/IERC4906.sol";
 import "../interfaces/interfaces.sol";
 
-contract Relic is ERC721, Ownable, ReentrancyGuard, Pausable, IVRFCallback {
+contract Relic is ERC721, Ownable, ReentrancyGuard, Pausable, IVRFCallback, IERC4906 {
     using SafeERC20 for IERC20;
     using Strings for uint256;
     
@@ -54,6 +55,8 @@ contract Relic is ERC721, Ownable, ReentrancyGuard, Pausable, IVRFCallback {
     event RelicBurned(uint256 indexed tokenId, address indexed owner, uint8 rarity, uint8 capacity);
     event MintRequested(address indexed player, uint256 quantity, bool fromVault, uint256[] tokenIds);
     
+    // ERC-4906 events are inherited from IERC4906
+    
     modifier onlyAltar() {
         require(msg.sender == _getAscensionAltar(), "Relic: Not authorized - only Altar of Ascension can call");
         _;
@@ -68,6 +71,11 @@ contract Relic is ERC721, Ownable, ReentrancyGuard, Pausable, IVRFCallback {
         
         // Set default contractURI for collection-level metadata
         _contractURI = "https://dungeon-delvers-metadata-server.onrender.com/metadata/collection/relic";
+    }
+
+    // ERC-4906 support
+    function supportsInterface(bytes4 interfaceId) public view virtual override(ERC721, IERC165) returns (bool) {
+        return interfaceId == bytes4(0x49064906) || super.supportsInterface(interfaceId);
     }
 
     function mintFromWallet(uint256 _quantity) external payable nonReentrant whenNotPaused {
@@ -254,6 +262,7 @@ contract Relic is ERC721, Ownable, ReentrancyGuard, Pausable, IVRFCallback {
             });
             
             emit RelicMinted(tokenId, user, rarity, capacity);
+            emit MetadataUpdate(tokenId);
         }
         
         // Critical fix: set fulfilled only after all processing is complete
@@ -289,6 +298,7 @@ contract Relic is ERC721, Ownable, ReentrancyGuard, Pausable, IVRFCallback {
         _safeMint(_to, tokenId);
         _nextTokenId++;
         emit RelicMinted(tokenId, _to, _rarity, _capacity);
+        emit MetadataUpdate(tokenId);
         return tokenId;
     }
 

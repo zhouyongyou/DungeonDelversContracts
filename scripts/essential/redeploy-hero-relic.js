@@ -3,7 +3,7 @@ const { ethers } = require("hardhat");
 const fs = require("fs");
 const path = require("path");
 
-const GAS_PRICE = ethers.parseUnits("0.12", "gwei");
+const GAS_PRICE = ethers.parseUnits("0.11", "gwei");
 const GAS_LIMIT = 8000000;
 
 async function main() {

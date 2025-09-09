@@ -8,9 +8,10 @@ import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol
 import {Pausable} from "@openzeppelin/contracts/utils/Pausable.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
+import "@openzeppelin/contracts/interfaces/IERC4906.sol";
 import "../interfaces/interfaces.sol";
 
-contract Hero is ERC721, Ownable, ReentrancyGuard, Pausable, IVRFCallback {
+contract Hero is ERC721, Ownable, ReentrancyGuard, Pausable, IVRFCallback, IERC4906 {
     using SafeERC20 for IERC20;
     using Strings for uint256;
     
@@ -19,7 +20,7 @@ contract Hero is ERC721, Ownable, ReentrancyGuard, Pausable, IVRFCallback {
     
     struct HeroData {
         uint8 rarity;
-        uint256 power;
+        uint16 power;
     }
     mapping(uint256 => HeroData) public heroData;
     
@@ -45,14 +46,16 @@ contract Hero is ERC721, Ownable, ReentrancyGuard, Pausable, IVRFCallback {
     
     mapping(address => MintRequest) public userRequests;
 
-    event HeroMinted(uint256 indexed tokenId, address indexed owner, uint8 rarity, uint256 power);
+    event HeroMinted(uint256 indexed tokenId, address indexed owner, uint8 rarity, uint16 power);
     event BatchMintCompleted(address indexed player, uint256 indexed requestId, uint256 quantity, uint8 maxRarity, uint256[] tokenIds);
     event ContractsSet(address indexed core, address indexed token);
     event BaseURISet(string newBaseURI);
     event ContractURIUpdated(string newContractURI);
-    event HeroBurned(uint256 indexed tokenId, address indexed owner, uint8 rarity, uint256 power);
+    event HeroBurned(uint256 indexed tokenId, address indexed owner, uint8 rarity, uint16 power);
     event MintRequested(address indexed player, uint256 quantity, bool fromVault, uint256[] tokenIds);
     event EmergencyReset(address indexed user, uint256 refundAmount);
+    
+    // ERC-4906 events are inherited from IERC4906
     
     modifier onlyAltar() {
         require(msg.sender == _getAscensionAltar(), "Hero: Not authorized - only Altar of Ascension can call");
@@ -68,6 +71,11 @@ contract Hero is ERC721, Ownable, ReentrancyGuard, Pausable, IVRFCallback {
         
         // Set default contractURI for collection-level metadata
         _contractURI = "https://dungeon-delvers-metadata-server.onrender.com/metadata/collection/hero";
+    }
+
+    // ERC-4906 support
+    function supportsInterface(bytes4 interfaceId) public view virtual override(ERC721, IERC165) returns (bool) {
+        return interfaceId == bytes4(0x49064906) || super.supportsInterface(interfaceId);
     }
 
     function mintFromWallet(uint256 _quantity) external payable nonReentrant whenNotPaused {
@@ -246,7 +254,7 @@ contract Hero is ERC721, Ownable, ReentrancyGuard, Pausable, IVRFCallback {
             else if (rarityRoll < 99) rarity = 4;
             else rarity = 5;
             
-            uint256 power = _generateHeroPowerByRarity(rarity, uniqueSeed);
+            uint16 power = _generateHeroPowerByRarity(rarity, uniqueSeed);
             
             heroData[tokenId] = HeroData({
                 rarity: rarity,
@@ -254,6 +262,7 @@ contract Hero is ERC721, Ownable, ReentrancyGuard, Pausable, IVRFCallback {
             });
             
             emit HeroMinted(tokenId, user, rarity, power);
+            emit MetadataUpdate(tokenId);
         }
         
         // Critical fix: Set fulfilled only after all processing is complete
@@ -278,7 +287,7 @@ contract Hero is ERC721, Ownable, ReentrancyGuard, Pausable, IVRFCallback {
         return rarity;
     }
 
-    function _mintHero(address _to, uint8 _rarity, uint256 _power) private returns (uint256) {
+    function _mintHero(address _to, uint8 _rarity, uint16 _power) private returns (uint256) {
         uint256 tokenId = _nextTokenId;
         heroData[tokenId] = HeroData({
             rarity: _rarity,
@@ -287,10 +296,11 @@ contract Hero is ERC721, Ownable, ReentrancyGuard, Pausable, IVRFCallback {
         _safeMint(_to, tokenId);
         _nextTokenId++;
         emit HeroMinted(tokenId, _to, _rarity, _power);
+        emit MetadataUpdate(tokenId);
         return tokenId;
     }
 
-    function mintFromAltar(address _to, uint8 _rarity, uint256 _power) external onlyAltar returns (uint256) {
+    function mintFromAltar(address _to, uint8 _rarity, uint16 _power) external onlyAltar returns (uint256) {
         return _mintHero(_to, _rarity, _power);
     }
 
@@ -301,12 +311,12 @@ contract Hero is ERC721, Ownable, ReentrancyGuard, Pausable, IVRFCallback {
         _burn(_tokenId);
     }
 
-    function _generateHeroPowerByRarity(uint8 _rarity, uint256 _randomNumber) private pure returns (uint256 power) {
-        if (_rarity == 1) { power = 15 + (_randomNumber % (50 - 15 + 1)); }
-        else if (_rarity == 2) { power = 50 + (_randomNumber % (100 - 50 + 1)); }
-        else if (_rarity == 3) { power = 100 + (_randomNumber % (150 - 100 + 1)); }
-        else if (_rarity == 4) { power = 150 + (_randomNumber % (200 - 150 + 1)); }
-        else if (_rarity == 5) { power = 200 + (_randomNumber % (255 - 200 + 1)); }
+    function _generateHeroPowerByRarity(uint8 _rarity, uint256 _randomNumber) private pure returns (uint16 power) {
+        if (_rarity == 1) { power = 15 + uint16(_randomNumber % 36); }
+        else if (_rarity == 2) { power = 50 + uint16(_randomNumber % 51); }
+        else if (_rarity == 3) { power = 100 + uint16(_randomNumber % 51); }
+        else if (_rarity == 4) { power = 150 + uint16(_randomNumber % 51); }
+        else if (_rarity == 5) { power = 200 + uint16(_randomNumber % 56); }
         else { revert("Hero: Invalid rarity value"); }
     }
 
@@ -325,7 +335,7 @@ contract Hero is ERC721, Ownable, ReentrancyGuard, Pausable, IVRFCallback {
         return priceForOne * _quantity;
     }
 
-    function getHeroProperties(uint256 tokenId) external view returns (uint8 rarity, uint256 power) {
+    function getHeroProperties(uint256 tokenId) external view returns (uint8 rarity, uint16 power) {
         _requireOwned(tokenId);
         HeroData memory data = heroData[tokenId];
         return (data.rarity, data.power);
