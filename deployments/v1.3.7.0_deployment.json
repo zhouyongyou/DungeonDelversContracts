@@ -1,0 +1,52 @@
+{
+  "version": "v1.3.7.0",
+  "network": "BSC Mainnet",
+  "timestamp": "2025-09-09T08:27:35.839Z",
+  "deployer": "0x84Cd63a840274d267aCb19e708d7f6298c315E75",
+  "gasPrice": "0.11 gwei",
+  "oldAddresses": {
+    "DUNGEONCORE": "0xa94b609310f8fe9a6db5cd66faaf64cd0189581f",
+    "HERO": "0x1723b67ef81c4d2c5dd2027776ae8bdbdd61636b",
+    "RELIC": "0x7a78a54010b0d201c026ef0f4a9456b464dfce11",
+    "PARTY": "0xb393e482495bacde5aaf08d25323146cc5b9567f",
+    "VIPSTAKING": "0x409d964675235a5a00f375053535fce9f6e79882",
+    "PLAYERPROFILE": "0xd32d3ab232cd2d13a80217c0f05a9f3bdc51b44b",
+    "ALTAROFASCENSION": "0x7f4b3d0ff2994182200fc3b306fb5b035680de3c",
+    "DUNGEONMASTER": "0x924a6d3a90a012ec98ff09de1e9a8ac53b0e46dd",
+    "DUNGEONSTORAGE": "0x30dcbe703b258fa1e621d22c8ada643da51ceb4c",
+    "PLAYERVAULT": "0x2009102a168880477c72e4c9cbd907d44e5c751c"
+  },
+  "newAddresses": {
+    "DUNGEONSTORAGE": "0x67614515B159d80CaADD04027687Fc10372c2Dc5",
+    "PLAYERPROFILE": "0x6FE7D8A3771bca13B9B9b11cdfd30edbA5Ed3c2E",
+    "VIPSTAKING": "0x33664dA450b069012b28F90183c76B9C85382fFe",
+    "HERO": "0x4a5AAf3Ec310E56E13c541B2B23ab88AB6b75C90",
+    "RELIC": "0xa4871C0ebDDb67C9C5FcbbdA1910aF9FC0a7B938",
+    "PARTY": "0x047De9d685735f79EEAE9f094977460e64ef0EB9",
+    "PLAYERVAULT": "0xdC4089a4fB178DD826BF7dCD08210AFAeFc4b6cE",
+    "ALTAROFASCENSION": "0x957930C62A274519779c3ef305Ceab28Fc90817B",
+    "DUNGEONMASTER": "0xDFDEB32633232B15FA22dd25407Fb2e485A33700"
+  },
+  "upgrades": {
+    "hero": {
+      "powerOptimization": "uint256 → uint16 (50% gas saving)",
+      "erc4906Support": "Added MetadataUpdate events"
+    },
+    "relic": {
+      "erc4906Support": "Added MetadataUpdate events"
+    }
+  },
+  "coreUpdateTimestamp": "2025-09-09T08:28:20.405Z",
+  "verifiedAddresses": {
+    "hero": "0x4a5AAf3Ec310E56E13c541B2B23ab88AB6b75C90",
+    "relic": "0xa4871C0ebDDb67C9C5FcbbdA1910aF9FC0a7B938",
+    "party": "0x047De9d685735f79EEAE9f094977460e64ef0EB9",
+    "playerVault": "0xdC4089a4fB178DD826BF7dCD08210AFAeFc4b6cE",
+    "altarOfAscension": "0x957930C62A274519779c3ef305Ceab28Fc90817B",
+    "dungeonMaster": "0xDFDEB32633232B15FA22dd25407Fb2e485A33700",
+    "playerProfile": "0x6FE7D8A3771bca13B9B9b11cdfd30edbA5Ed3c2E",
+    "vipStaking": "0x33664dA450b069012b28F90183c76B9C85382fFe",
+    "dungeonStorage": "0x67614515B159d80CaADD04027687Fc10372c2Dc5"
+  },
+  "updateStatus": "completed"
+}

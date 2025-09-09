@@ -8,19 +8,19 @@ const contractAddresses = {
   // 核心合約
   dungeonCore: "0xa94b609310f8fe9a6db5cd66faaf64cd0189581f",
   oracle: "0x21928de992cb31ede864b62bc94002fb449c2738",
-  playerVault: "0xb8807c99ade19e4e2db5cf48650474f10ff874a3",
+  playerVault: "0xdc4089a4fb178dd826bf7dcd08210afaefc4b6ce",
   
   // NFT 合約
-  hero: "0x1723b67ef81c4d2c5dd2027776ae8bdbdd61636b",
-  relic: "0x7a78a54010b0d201c026ef0f4a9456b464dfce11",
-  party: "0xb393e482495bacde5aaf08d25323146cc5b9567f",
-  playerProfile: "0xd32d3ab232cd2d13a80217c0f05a9f3bdc51b44b",
-  vipStaking: "0x409d964675235a5a00f375053535fce9f6e79882",
+  hero: "0x4a5aaf3ec310e56e13c541b2b23ab88ab6b75c90",
+  relic: "0xa4871c0ebddb67c9c5fcbbda1910af9fc0a7b938",
+  party: "0xbdc1413268d55d1aa694f610783cac1ea4fed07a",
+  playerProfile: "0x6fe7d8a3771bca13b9b9b11cdfd30edba5ed3c2e",
+  vipStaking: "0x33664da450b069012b28f90183c76b9c85382ffe",
   
   // 遊戲合約
-  altarOfAscension: "0x7f4b3d0ff2994182200fc3b306fb5b035680de3c",
-  dungeonMaster: "0x924a6d3a90a012ec98ff09de1e9a8ac53b0e46dd",
-  dungeonStorage: "0x30dcbe703b258fa1e421d22c8ada643da51ceb4c",
+  altarOfAscension: "0xaf333612398f061fc9f17b4574d66b5ca550ada4",
+  dungeonMaster: "0xdfdeb32633232b15fa22dd25407fb2e485a33700",
+  dungeonStorage: "0x67614515b159d80caadd04027687fc10372c2dc5",
   
   // VRF 管理
   vrfManager: "0x601f0a1e5a0cacfa39b502fd7a9ac5024f53ae40",

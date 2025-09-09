@@ -87,7 +87,7 @@ contract Party is ERC721, Ownable, ReentrancyGuard, Pausable, ERC721Holder {
         // Verify heroes and calculate total power
         for (uint i = 0; i < _heroIds.length; i++) {
             require(heroContract.ownerOf(_heroIds[i]) == msg.sender, "Party: You do not own all heroes");
-            (, uint256 power) = heroContract.getHeroProperties(_heroIds[i]);
+            (, uint16 power) = heroContract.getHeroProperties(_heroIds[i]);
             totalPower += power;
         }
 

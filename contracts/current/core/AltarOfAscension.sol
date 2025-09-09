@@ -270,17 +270,17 @@ contract AltarOfAscension is Ownable, ReentrancyGuard, Pausable, IVRFCallback {
             // Great success - generate 2 NFTs
             outcome = 3;
             targetRarity = request.baseRarity + 1;
-            mintedIds = _performGreatSuccessUpgrade(user, request.burnedTokenIds, request.baseRarity, request.tokenContract);
+            mintedIds = _performGreatSuccessUpgrade(user, request.burnedTokenIds, request.baseRarity, request.tokenContract, randomWord);
         } else if (randomValue < rule.greatSuccessChance + effectiveSuccessChance) {
             // Success - generate 1 NFT
             outcome = 2;
             targetRarity = request.baseRarity + 1;
-            mintedIds = _performSuccessfulUpgrade(user, request.burnedTokenIds, request.baseRarity, request.tokenContract);
+            mintedIds = _performSuccessfulUpgrade(user, request.burnedTokenIds, request.baseRarity, request.tokenContract, randomWord);
         } else if (randomValue < rule.greatSuccessChance + effectiveSuccessChance + rule.partialFailChance) {
             // Partial failure - generate half NFTs
             outcome = 1;
             targetRarity = request.baseRarity; // Keep same rarity
-            mintedIds = _performPartialFailUpgrade(user, request.burnedTokenIds, request.baseRarity, request.tokenContract);
+            mintedIds = _performPartialFailUpgrade(user, request.burnedTokenIds, request.baseRarity, request.tokenContract, randomWord);
         } else {
             // Complete failure
             outcome = 0;
@@ -327,7 +327,8 @@ contract AltarOfAscension is Ownable, ReentrancyGuard, Pausable, IVRFCallback {
         address user,
         uint256[] memory tokenIds,
         uint8 baseRarity,
-        address tokenContract
+        address tokenContract,
+        uint256 randomWord
     ) internal returns (uint256[] memory) {
         // Burn sacrificial NFTs
         _burnNFTs(tokenContract, tokenIds);
@@ -335,8 +336,8 @@ contract AltarOfAscension is Ownable, ReentrancyGuard, Pausable, IVRFCallback {
         // Great success - generate 2 upgraded NFTs
         uint8 newRarity = baseRarity + 1;
         uint256[] memory mintedIds = new uint256[](2);
-        mintedIds[0] = _mintUpgradedNFT(user, tokenContract, newRarity);
-        mintedIds[1] = _mintUpgradedNFT(user, tokenContract, newRarity);
+        mintedIds[0] = _mintUpgradedNFT(user, tokenContract, newRarity, randomWord);
+        mintedIds[1] = _mintUpgradedNFT(user, tokenContract, newRarity, randomWord >> 128);
         
         return mintedIds;
     }
@@ -345,7 +346,8 @@ contract AltarOfAscension is Ownable, ReentrancyGuard, Pausable, IVRFCallback {
         address user,
         uint256[] memory tokenIds,
         uint8 baseRarity,
-        address tokenContract
+        address tokenContract,
+        uint256 randomWord
     ) internal returns (uint256[] memory) {
         // Burn sacrificial NFTs
         _burnNFTs(tokenContract, tokenIds);
@@ -354,7 +356,7 @@ contract AltarOfAscension is Ownable, ReentrancyGuard, Pausable, IVRFCallback {
         
         // Upgrade primary NFT
         uint8 newRarity = baseRarity + 1;
-        uint256 newTokenId = _mintUpgradedNFT(user, tokenContract, newRarity);
+        uint256 newTokenId = _mintUpgradedNFT(user, tokenContract, newRarity, randomWord);
         
         uint256[] memory mintedIds = new uint256[](1);
         mintedIds[0] = newTokenId;
@@ -366,7 +368,8 @@ contract AltarOfAscension is Ownable, ReentrancyGuard, Pausable, IVRFCallback {
         address user,
         uint256[] memory tokenIds,
         uint8 baseRarity,
-        address tokenContract
+        address tokenContract,
+        uint256 randomWord
     ) internal returns (uint256[] memory) {
         // Burn sacrificial NFTs
         _burnNFTs(tokenContract, tokenIds);
@@ -376,7 +379,7 @@ contract AltarOfAscension is Ownable, ReentrancyGuard, Pausable, IVRFCallback {
         uint256[] memory mintedIds = new uint256[](mintCount);
         
         for (uint256 i = 0; i < mintCount; i++) {
-            mintedIds[i] = _mintUpgradedNFT(user, tokenContract, baseRarity);
+            mintedIds[i] = _mintUpgradedNFT(user, tokenContract, baseRarity, randomWord >> (i * 32));
         }
         
         return mintedIds;
@@ -397,10 +400,11 @@ contract AltarOfAscension is Ownable, ReentrancyGuard, Pausable, IVRFCallback {
     function _mintUpgradedNFT(
         address _player,
         address _tokenContract,
-        uint8 _rarity
+        uint8 _rarity,
+        uint256 _randomNumber
     ) private returns (uint256) {
         if (_tokenContract == address(heroContract)) {
-            uint256 power = _generatePowerByRarity(_rarity);
+            uint16 power = _generatePowerByRarity(_rarity, _randomNumber);
             return heroContract.mintFromAltar(_player, _rarity, power);
         } else {
             uint8 capacity = _rarity;
@@ -408,13 +412,13 @@ contract AltarOfAscension is Ownable, ReentrancyGuard, Pausable, IVRFCallback {
         }
     }
 
-    function _generatePowerByRarity(uint8 _rarity) private view returns (uint256) {
-        if (_rarity == 1) return 15 + (block.timestamp % 36);
-        else if (_rarity == 2) return 50 + (block.timestamp % 51);
-        else if (_rarity == 3) return 100 + (block.timestamp % 51);
-        else if (_rarity == 4) return 150 + (block.timestamp % 51);
-        else if (_rarity == 5) return 200 + (block.timestamp % 56);
-        else return 255;
+    function _generatePowerByRarity(uint8 _rarity, uint256 _randomNumber) private pure returns (uint16) {
+        if (_rarity == 1) return 15 + uint16(_randomNumber % 36);
+        else if (_rarity == 2) return 50 + uint16(_randomNumber % 51);
+        else if (_rarity == 3) return 100 + uint16(_randomNumber % 51);
+        else if (_rarity == 4) return 150 + uint16(_randomNumber % 51);
+        else if (_rarity == 5) return 200 + uint16(_randomNumber % 56);
+        else revert("AltarOfAscension: Invalid rarity value");
     }
 
     function _validateMaterials(address _tokenContract, uint256[] calldata _tokenIds) private view returns (uint8) {
