@@ -7,7 +7,9 @@ const path = require('path');
 const GAS_PRICE = ethers.parseUnits("0.11", "gwei");
 
 // DungeonCore address (unchanged)
-const DUNGEONCORE_ADDRESS = "0xa94b609310f8fe9a6db5cd66faaf64cd0189581f";
+// 🚀 從 .env 動態讀取地址
+require('dotenv').config();
+const DUNGEONCORE_ADDRESS = process.env.DUNGEONCORE_ADDRESS;
 
 async function main() {
     console.log("🔧 Updating DungeonCore with v1.3.7.1 addresses");

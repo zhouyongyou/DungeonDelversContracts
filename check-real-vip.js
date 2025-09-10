@@ -7,7 +7,8 @@ async function checkRealVip() {
     
     // 直接連接BSC網路
     const provider = new ethers.JsonRpcProvider("https://bsc-dataseed1.binance.org/");
-    const vipStakingAddr = "0x33664da450b069012b28f90183c76b9c85382ffe";
+    // 🚀 從 .env 動態讀取地址
+    const vipStakingAddr = process.env.VIPSTAKING_ADDRESS;
     
     console.log(`檢查地址: ${vipStakingAddr}`);
     

@@ -6,11 +6,12 @@ async function diagnoseVipIssue() {
     console.log("🔍 診斷VIP質押問題...");
     
     const provider = new ethers.JsonRpcProvider("https://bsc-dataseed1.binance.org/");
-    const vipAddr = "0x33664da450b069012b28f90183c76b9c85382ffe";
-    const coreAddr = "0xa94b609310f8fe9a6db5cd66faaf64cd0189581f";
+    // 🚀 從 .env 動態讀取地址
+    const vipAddr = process.env.VIPSTAKING_ADDRESS;
+    const coreAddr = process.env.DUNGEONCORE_ADDRESS;
     
-    // 測試地址（你可以改成實際錢包地址）
-    const testAddress = "0x84Cd63a840274d267aCb19e708d7f6298c315E75";
+    // 測試地址（從環境變數讀取）
+    const testAddress = process.env.VITE_ADMIN_WALLET;
     
     try {
         console.log("1. 檢查VIPStaking基本狀態...");

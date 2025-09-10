@@ -1,48 +1,51 @@
 // generate-subgraph-config.js - 生成子圖配置更新文件
 // 🚨 Gas Price 核心原則：0.11 gwei
+// 🔥 重構：從 .env 動態讀取所有地址，消除硬編碼
+require('dotenv').config();
 const fs = require("fs");
 const path = require("path");
 
-// V1.3.4 部署的合約地址
+// 🚀 從 .env 動態讀取合約地址 - 單一事實來源原則
 const contractAddresses = {
   // 核心合約
-  dungeonCore: "0xa94b609310f8fe9a6db5cd66faaf64cd0189581f",
-  oracle: "0x21928de992cb31ede864b62bc94002fb449c2738",
-  playerVault: "0xdc4089a4fb178dd826bf7dcd08210afaefc4b6ce",
+  dungeonCore: process.env.DUNGEONCORE_ADDRESS,
+  oracle: process.env.ORACLE_ADDRESS,
+  playerVault: process.env.PLAYERVAULT_ADDRESS,
   
   // NFT 合約
-  hero: "0x4a5aaf3ec310e56e13c541b2b23ab88ab6b75c90",
-  relic: "0xa4871c0ebddb67c9c5fcbbda1910af9fc0a7b938",
-  party: "0xbdc1413268d55d1aa694f610783cac1ea4fed07a",
-  playerProfile: "0x6fe7d8a3771bca13b9b9b11cdfd30edba5ed3c2e",
-  vipStaking: "0x33664da450b069012b28f90183c76b9c85382ffe",
+  hero: process.env.HERO_ADDRESS,
+  relic: process.env.RELIC_ADDRESS,
+  party: process.env.PARTY_ADDRESS,
+  playerProfile: process.env.PLAYERPROFILE_ADDRESS,
+  vipStaking: process.env.VIPSTAKING_ADDRESS,
   
   // 遊戲合約
-  altarOfAscension: "0xaf333612398f061fc9f17b4574d66b5ca550ada4",
-  dungeonMaster: "0xdfdeb32633232b15fa22dd25407fb2e485a33700",
-  dungeonStorage: "0x67614515b159d80caadd04027687fc10372c2dc5",
+  altarOfAscension: process.env.ALTAROFASCENSION_ADDRESS,
+  dungeonMaster: process.env.DUNGEONMASTER_ADDRESS,
+  dungeonStorage: process.env.DUNGEONSTORAGE_ADDRESS,
   
   // VRF 管理
-  vrfManager: "0x601f0a1e5a0cacfa39b502fd7a9ac5024f53ae40",
+  vrfManager: process.env.VRF_MANAGER_V2PLUS_ADDRESS,
   
-  // 代幣合約 (保持不變)
-  soulShard: "0x1a98769b8034d400745cc658dc204cd079de36fa",
-  testUSD1: "0x916a2a1eb605e88561139c56af0698de241169f2",
-  v3Pool: "0x2733f7e7e95d22e7691e5aa5abb6210cf81ebdba"
+  // 代幣合約 (永久固定)
+  soulShard: process.env.SOULSHARD_ADDRESS,
+  testUSD1: process.env.USD_ADDRESS,
+  v3Pool: process.env.V3_POOL_ADDRESS
 };
 
+// 🚀 從 .env 動態讀取部署資訊
 const deploymentInfo = {
-  version: "v1.3.4",
-  startBlock: 59911082,
-  deploymentDate: "2025-09-04T04:00:00.000Z",
+  version: process.env.VITE_CONTRACT_VERSION || "v1.3.8.0",
+  startBlock: parseInt(process.env.VITE_START_BLOCK) || 60555454,
+  deploymentDate: process.env.VITE_DEPLOYMENT_DATE || new Date().toISOString(),
   network: "bsc",
-  chainId: 56
+  chainId: parseInt(process.env.VITE_CHAIN_ID) || 56
 };
 
 function generateSubgraphManifest() {
   const manifest = {
     specVersion: "0.0.5",
-    description: "DungeonDelvers V1.3.4 - Complete Game Ecosystem",
+    description: `DungeonDelvers ${deploymentInfo.version} - Complete Game Ecosystem`,
     repository: "https://github.com/your-repo/dungeon-delvers-subgraph",
     schema: {
       file: "./schema.graphql"
@@ -327,7 +330,7 @@ function generateNetworksConfig() {
 
 function generateDeploymentInstructions() {
   return `
-# DungeonDelvers V1.3.3 子圖部署指南
+# DungeonDelvers ${deploymentInfo.version} 子圖部署指南
 
 ## 📋 更新的合約地址
 
@@ -375,7 +378,7 @@ function generateDeploymentInstructions() {
 
 5. **部署到 Studio**
    \`\`\`bash
-   graph deploy --studio dungeon-delvers---bsc --version-label v1.3.4
+   graph deploy --studio dungeon-delvers---bsc --version-label ${deploymentInfo.version}
    \`\`\`
 
 ## ⚙️ 重要配置
@@ -410,7 +413,7 @@ function main() {
     // 生成子圖清單
     const manifest = generateSubgraphManifest();
     const manifestPath = path.join(outputDir, "subgraph.yaml");
-    fs.writeFileSync(manifestPath, `# DungeonDelvers V1.3.3 Subgraph Manifest
+    fs.writeFileSync(manifestPath, `# DungeonDelvers ${deploymentInfo.version} Subgraph Manifest
 # 自動生成於: ${new Date().toISOString()}
 
 ${JSON.stringify(manifest, null, 2).replace(/"/g, '').replace(/,/g, '')}

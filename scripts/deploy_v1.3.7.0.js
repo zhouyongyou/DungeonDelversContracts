@@ -1,5 +1,7 @@
 // Deployment script for DungeonDelvers v1.3.7.0
 // Features: Hero uint16 optimization + ERC-4906 support
+// 🔥 重構：從 .env 動態讀取地址，消除硬編碼
+require('dotenv').config();
 const { ethers } = require("hardhat");
 const fs = require('fs');
 const path = require('path');
@@ -7,18 +9,18 @@ const path = require('path');
 // Gas price: 0.11 gwei (BSC mainnet optimized)
 const GAS_PRICE = ethers.parseUnits("0.11", "gwei");
 
-// Current addresses (v1.3.6.2)
+// 🚀 從 .env 動態讀取當前地址
 const OLD_ADDRESSES = {
-    DUNGEONCORE: "0xa94b609310f8fe9a6db5cd66faaf64cd0189581f", // Core contract
-    HERO: "0x1723b67ef81c4d2c5dd2027776ae8bdbdd61636b",
-    RELIC: "0x7a78a54010b0d201c026ef0f4a9456b464dfce11", 
-    PARTY: "0xb393e482495bacde5aaf08d25323146cc5b9567f",
-    VIPSTAKING: "0x409d964675235a5a00f375053535fce9f6e79882",
-    PLAYERPROFILE: "0xd32d3ab232cd2d13a80217c0f05a9f3bdc51b44b",
-    ALTAROFASCENSION: "0x7f4b3d0ff2994182200fc3b306fb5b035680de3c",
-    DUNGEONMASTER: "0x924a6d3a90a012ec98ff09de1e9a8ac53b0e46dd",
-    DUNGEONSTORAGE: "0x30dcbe703b258fa1e621d22c8ada643da51ceb4c", 
-    PLAYERVAULT: "0x2009102a168880477c72e4c9cbd907d44e5c751c"
+    DUNGEONCORE: process.env.DUNGEONCORE_ADDRESS,
+    HERO: process.env.HERO_ADDRESS,
+    RELIC: process.env.RELIC_ADDRESS,
+    PARTY: process.env.PARTY_ADDRESS,
+    VIPSTAKING: process.env.VIPSTAKING_ADDRESS,
+    PLAYERPROFILE: process.env.PLAYERPROFILE_ADDRESS,
+    ALTAROFASCENSION: process.env.ALTAROFASCENSION_ADDRESS,
+    DUNGEONMASTER: process.env.DUNGEONMASTER_ADDRESS,
+    DUNGEONSTORAGE: process.env.DUNGEONSTORAGE_ADDRESS,
+    PLAYERVAULT: process.env.PLAYERVAULT_ADDRESS
 };
 
 // New addresses (v1.3.7.0) - will be populated during deployment

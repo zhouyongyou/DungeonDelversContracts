@@ -163,19 +163,19 @@ contract VIPStaking is ERC721, Ownable, ReentrancyGuard, Pausable, IERC4906 {
     /**
      * @notice Disable all approval functions
      */
-    function approve(address, uint256) public pure override {
+    function approve(address, uint256) public pure override(ERC721, IERC721) {
         // SBT (Soul Bound Token) - not approvable
     }
     
-    function setApprovalForAll(address, bool) public pure override {
+    function setApprovalForAll(address, bool) public pure override(ERC721, IERC721) {
         // SBT (Soul Bound Token) - not approvable
     }
     
-    function transferFrom(address, address, uint256) public pure override {
+    function transferFrom(address, address, uint256) public pure override(ERC721, IERC721) {
         // SBT (Soul Bound Token) - not transferable
     }
     
-    function safeTransferFrom(address, address, uint256, bytes memory) public pure override {
+    function safeTransferFrom(address, address, uint256, bytes memory) public pure override(ERC721, IERC721) {
         // SBT (Soul Bound Token) - not transferable
     }
     
