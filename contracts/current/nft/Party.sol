@@ -9,9 +9,10 @@ import {Pausable} from "@openzeppelin/contracts/utils/Pausable.sol";
 import "@openzeppelin/contracts/token/ERC721/utils/ERC721Holder.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts/interfaces/IERC4906.sol";
 import "../interfaces/interfaces.sol";
 
-contract Party is ERC721, Ownable, ReentrancyGuard, Pausable, ERC721Holder {
+contract Party is ERC721, Ownable, ReentrancyGuard, Pausable, ERC721Holder, IERC4906 {
     using Strings for uint256;
     string public baseURI;
     string private _contractURI;
@@ -53,6 +54,11 @@ contract Party is ERC721, Ownable, ReentrancyGuard, Pausable, ERC721Holder {
         
         // Set default contractURI for collection-level metadata
         _contractURI = "https://dungeon-delvers-metadata-server.onrender.com/metadata/collection/party";
+    }
+
+    // EIP-4906 support
+    function supportsInterface(bytes4 interfaceId) public view virtual override(ERC721, IERC165) returns (bool) {
+        return interfaceId == bytes4(0x49064906) || super.supportsInterface(interfaceId);
     }
 
     receive() external payable {}
@@ -116,6 +122,11 @@ contract Party is ERC721, Ownable, ReentrancyGuard, Pausable, ERC721Holder {
         _nextTokenId++;
         
         emit PartyCreated(partyId, msg.sender, _heroIds, _relicIds, totalPower, partyRarity);
+        
+        // EIP-4906: Emit MetadataUpdate for OKX marketplace refresh
+        emit MetadataUpdate(partyId);
+        
+        return partyId;
     }
     
     function tokenURI(uint256 tokenId) public view override returns (string memory) {
@@ -224,5 +235,25 @@ contract Party is ERC721, Ownable, ReentrancyGuard, Pausable, ERC721Holder {
 
     function _getRelicContract() internal view returns (address) {
         return dungeonCoreContract.relicContractAddress();
+    }
+
+    /**
+     * @notice Manually trigger MetadataUpdate event for debugging
+     * @dev Owner-only function to force NFT marketplace refresh
+     */
+    function forceMetadataRefresh(uint256 tokenId) external onlyOwner {
+        _requireOwned(tokenId);
+        emit MetadataUpdate(tokenId);
+    }
+
+    /**
+     * @notice Batch manually trigger MetadataUpdate events for debugging  
+     * @dev Owner-only function to force multiple NFT marketplace refresh
+     */
+    function batchForceMetadataRefresh(uint256[] calldata tokenIds) external onlyOwner {
+        for (uint256 i = 0; i < tokenIds.length; i++) {
+            _requireOwned(tokenIds[i]);
+            emit MetadataUpdate(tokenIds[i]);
+        }
     }
 }

@@ -9,9 +9,10 @@ import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol
 import {Pausable} from "@openzeppelin/contracts/utils/Pausable.sol";
 import {Math} from "@openzeppelin/contracts/utils/math/Math.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
+import "@openzeppelin/contracts/interfaces/IERC4906.sol";
 import "../interfaces/interfaces.sol";
 
-contract VIPStaking is ERC721, Ownable, ReentrancyGuard, Pausable {
+contract VIPStaking is ERC721, Ownable, ReentrancyGuard, Pausable, IERC4906 {
     using SafeERC20 for IERC20;
     using Strings for uint256;
 
@@ -43,7 +44,7 @@ contract VIPStaking is ERC721, Ownable, ReentrancyGuard, Pausable {
     event BaseURISet(string newBaseURI);
     event ContractURIUpdated(string newContractURI);
 
-    // 🔥 EIP-5192: Minimal Non-Transferable NFTs Event
+    // EIP-5192: Minimal Non-Transferable NFTs Event
     event Locked(uint256 tokenId);
 
     // Enhanced constructor with default metadata URIs
@@ -58,7 +59,7 @@ contract VIPStaking is ERC721, Ownable, ReentrancyGuard, Pausable {
         _contractURI = "https://dungeon-delvers-metadata-server.onrender.com/metadata/collection/vipstaking";
     }
 
-    // 🔥 EIP-5192: Returns the locking status of a Soulbound Token
+    // EIP-5192: Returns the locking status of a Soulbound Token
     function locked(uint256 tokenId) external view returns (bool) {
         _requireOwned(tokenId);
         return true; // All VIP tokens are permanently locked
@@ -83,7 +84,7 @@ contract VIPStaking is ERC721, Ownable, ReentrancyGuard, Pausable {
             userStake.tokenId = currentTokenId;
             _safeMint(msg.sender, currentTokenId);
             
-            // 🔥 EIP-5192: Emit Locked event when token is minted
+            // EIP-5192: Emit Locked event when token is minted
             emit Locked(currentTokenId);
         }
         
@@ -91,6 +92,9 @@ contract VIPStaking is ERC721, Ownable, ReentrancyGuard, Pausable {
         uint8 newVipLevel = getVipLevel(msg.sender);
         
         emit Staked(msg.sender, _amount, currentTokenId, newVipLevel);
+        
+        // EIP-4906: Emit MetadataUpdate for OKX marketplace refresh (staked amount changed)
+        emit MetadataUpdate(currentTokenId);
         
         // If VIP level changed, emit level change event
         if (newVipLevel != oldVipLevel) {
@@ -119,6 +123,9 @@ contract VIPStaking is ERC721, Ownable, ReentrancyGuard, Pausable {
         uint8 newVipLevel = getVipLevel(msg.sender);
         
         emit UnstakeRequested(msg.sender, _amount, availableAt, newVipLevel);
+        
+        // EIP-4906: Emit MetadataUpdate for OKX marketplace refresh (staked amount changed)
+        emit MetadataUpdate(userStake.tokenId);
         
         // If VIP level changed, emit level change event
         if (newVipLevel != oldVipLevel) {

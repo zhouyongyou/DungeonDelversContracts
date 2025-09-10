@@ -467,6 +467,26 @@ contract Relic is ERC721, Ownable, ReentrancyGuard, Pausable, IVRFCallback, IERC
     function canMint(address user) external view returns (bool) {
         return userRequests[user].quantity == 0 || userRequests[user].fulfilled;
     }
+
+    /**
+     * @notice Manually trigger MetadataUpdate event for debugging
+     * @dev Owner-only function to force NFT marketplace refresh
+     */
+    function forceMetadataRefresh(uint256 tokenId) external onlyOwner {
+        _requireOwned(tokenId);
+        emit MetadataUpdate(tokenId);
+    }
+
+    /**
+     * @notice Batch manually trigger MetadataUpdate events for debugging  
+     * @dev Owner-only function to force multiple NFT marketplace refresh
+     */
+    function batchForceMetadataRefresh(uint256[] calldata tokenIds) external onlyOwner {
+        for (uint256 i = 0; i < tokenIds.length; i++) {
+            _requireOwned(tokenIds[i]);
+            emit MetadataUpdate(tokenIds[i]);
+        }
+    }
     
     // Add emergency reset event
     event EmergencyReset(address indexed user, uint256 refundAmount);

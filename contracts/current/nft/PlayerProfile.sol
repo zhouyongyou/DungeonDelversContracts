@@ -7,9 +7,10 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Pausable.sol";
 import "@openzeppelin/contracts/utils/math/Math.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
+import "@openzeppelin/contracts/interfaces/IERC4906.sol";
 import "../interfaces/interfaces.sol";
 
-contract PlayerProfile is ERC721, Ownable, Pausable {
+contract PlayerProfile is ERC721, Ownable, Pausable, IERC4906 {
     using Math for uint256;
     using Strings for uint256;
 
@@ -32,7 +33,7 @@ contract PlayerProfile is ERC721, Ownable, Pausable {
     event BaseURISet(string newBaseURI);
     event ContractURIUpdated(string newContractURI);
 
-    // 🔥 EIP-5192: Minimal Non-Transferable NFTs Event
+    // EIP-5192: Minimal Non-Transferable NFTs Event
     event Locked(uint256 tokenId);
 
     // Enhanced constructor with default metadata URIs
@@ -46,7 +47,7 @@ contract PlayerProfile is ERC721, Ownable, Pausable {
         _contractURI = "https://dungeon-delvers-metadata-server.onrender.com/metadata/collection/playerprofile";
     }
 
-    // 🔥 EIP-5192: Returns the locking status of a Soulbound Token
+    // EIP-5192: Returns the locking status of a Soulbound Token
     function locked(uint256 tokenId) external view returns (bool) {
         _requireOwned(tokenId);
         return true; // All profile tokens are permanently locked
@@ -70,7 +71,7 @@ contract PlayerProfile is ERC721, Ownable, Pausable {
         profileTokenOf[_player] = tokenId;
         profileData[tokenId].experience = 0;
         
-        // 🔥 EIP-5192: Emit Locked event when token is minted
+        // EIP-5192: Emit Locked event when token is minted
         emit Locked(tokenId);
         
         // Calculate and emit initial level (always 1 for new profiles)
@@ -106,6 +107,9 @@ contract PlayerProfile is ERC721, Ownable, Pausable {
         if (newLevel > oldLevel) {
             emit LevelUp(_player, tokenId, oldLevel, newLevel);
         }
+        
+        // EIP-4906: Emit MetadataUpdate for OKX marketplace refresh
+        emit MetadataUpdate(tokenId);
     }
     
     /**
