@@ -48,7 +48,7 @@ contract DungeonStorage is Ownable, Pausable {
         // Dungeon 1: 新手礦洞
         dungeons[1] = Dungeon({
             requiredPower: 300,
-            rewardAmountUSD: 6,  // $6
+            rewardAmountUSD: 6 * 1e18,  // $6
             baseSuccessRate: 89,
             isInitialized: true
         });
@@ -56,7 +56,7 @@ contract DungeonStorage is Ownable, Pausable {
         // Dungeon 2: 哥布林洞穴
         dungeons[2] = Dungeon({
             requiredPower: 600,
-            rewardAmountUSD: 12,  // $12
+            rewardAmountUSD: 12 * 1e18,  // $12
             baseSuccessRate: 84,
             isInitialized: true
         });
@@ -64,7 +64,7 @@ contract DungeonStorage is Ownable, Pausable {
         // Dungeon 3: 食人魔山谷
         dungeons[3] = Dungeon({
             requiredPower: 900,
-            rewardAmountUSD: 20,  // $20
+            rewardAmountUSD: 20 * 1e18,  // $20
             baseSuccessRate: 79,
             isInitialized: true
         });
@@ -72,7 +72,7 @@ contract DungeonStorage is Ownable, Pausable {
         // Dungeon 4: 蜘蛛巢穴
         dungeons[4] = Dungeon({
             requiredPower: 1200,
-            rewardAmountUSD: 33,  // $33
+            rewardAmountUSD: 33 * 1e18,  // $33
             baseSuccessRate: 74,
             isInitialized: true
         });
@@ -80,7 +80,7 @@ contract DungeonStorage is Ownable, Pausable {
         // Dungeon 5: 石化蜥蜴沼澤
         dungeons[5] = Dungeon({
             requiredPower: 1500,
-            rewardAmountUSD: 52,  // $52
+            rewardAmountUSD: 52 * 1e18,  // $52
             baseSuccessRate: 69,
             isInitialized: true
         });
@@ -88,7 +88,7 @@ contract DungeonStorage is Ownable, Pausable {
         // Dungeon 6: 巫妖墓穴
         dungeons[6] = Dungeon({
             requiredPower: 1800,
-            rewardAmountUSD: 78,  // $78
+            rewardAmountUSD: 78 * 1e18,  // $78
             baseSuccessRate: 64,
             isInitialized: true
         });
@@ -96,7 +96,7 @@ contract DungeonStorage is Ownable, Pausable {
         // Dungeon 7: 奇美拉之巢
         dungeons[7] = Dungeon({
             requiredPower: 2100,
-            rewardAmountUSD: 113,  // $113
+            rewardAmountUSD: 113 * 1e18,  // $113
             baseSuccessRate: 59,
             isInitialized: true
         });
@@ -104,7 +104,7 @@ contract DungeonStorage is Ownable, Pausable {
         // Dungeon 8: 惡魔前哨站
         dungeons[8] = Dungeon({
             requiredPower: 2400,
-            rewardAmountUSD: 156,  // $156
+            rewardAmountUSD: 156 * 1e18,  // $156
             baseSuccessRate: 54,
             isInitialized: true
         });
@@ -112,7 +112,7 @@ contract DungeonStorage is Ownable, Pausable {
         // Dungeon 9: 巨龍之巔
         dungeons[9] = Dungeon({
             requiredPower: 2700,
-            rewardAmountUSD: 209,  // $209
+            rewardAmountUSD: 209 * 1e18,  // $209
             baseSuccessRate: 49,
             isInitialized: true
         });
@@ -120,7 +120,7 @@ contract DungeonStorage is Ownable, Pausable {
         // Dungeon 10: 混沌深淵
         dungeons[10] = Dungeon({
             requiredPower: 3000,
-            rewardAmountUSD: 225,  // $225
+            rewardAmountUSD: 225 * 1e18,  // $225
             baseSuccessRate: 44,
             isInitialized: true
         });
@@ -128,7 +128,7 @@ contract DungeonStorage is Ownable, Pausable {
         // Dungeon 11: 冥界之門
         dungeons[11] = Dungeon({
             requiredPower: 3300,
-            rewardAmountUSD: 320,  // $320
+            rewardAmountUSD: 320 * 1e18,  // $320
             baseSuccessRate: 39,
             isInitialized: true
         });
@@ -136,7 +136,7 @@ contract DungeonStorage is Ownable, Pausable {
         // Dungeon 12: 虛空裂隙
         dungeons[12] = Dungeon({
             requiredPower: 3600,
-            rewardAmountUSD: 450,  // $450
+            rewardAmountUSD: 450 * 1e18,  // $450
             baseSuccessRate: 34,
             isInitialized: true
         });
