@@ -222,6 +222,25 @@
     "anonymous": false,
     "inputs": [
       {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "_fromTokenId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "_toTokenId",
+        "type": "uint256"
+      }
+    ],
+    "name": "BatchMetadataUpdate",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
         "indexed": true,
         "internalType": "address",
         "name": "player",
@@ -329,9 +348,9 @@
       },
       {
         "indexed": false,
-        "internalType": "uint256",
+        "internalType": "uint16",
         "name": "power",
-        "type": "uint256"
+        "type": "uint16"
       }
     ],
     "name": "HeroBurned",
@@ -360,12 +379,25 @@
       },
       {
         "indexed": false,
-        "internalType": "uint256",
+        "internalType": "uint16",
         "name": "power",
-        "type": "uint256"
+        "type": "uint16"
       }
     ],
     "name": "HeroMinted",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "_tokenId",
+        "type": "uint256"
+      }
+    ],
+    "name": "MetadataUpdate",
     "type": "event"
   },
   {
@@ -522,6 +554,19 @@
   {
     "inputs": [
       {
+        "internalType": "uint256[]",
+        "name": "tokenIds",
+        "type": "uint256[]"
+      }
+    ],
+    "name": "batchForceMetadataRefresh",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "uint256",
         "name": "_tokenId",
         "type": "uint256"
@@ -598,6 +643,19 @@
         "type": "uint256"
       }
     ],
+    "name": "forceMetadataRefresh",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "tokenId",
+        "type": "uint256"
+      }
+    ],
     "name": "getApproved",
     "outputs": [
       {
@@ -625,9 +683,9 @@
         "type": "uint8"
       },
       {
-        "internalType": "uint256",
+        "internalType": "uint16",
         "name": "power",
-        "type": "uint256"
+        "type": "uint16"
       }
     ],
     "stateMutability": "view",
@@ -729,9 +787,9 @@
         "type": "uint8"
       },
       {
-        "internalType": "uint256",
+        "internalType": "uint16",
         "name": "power",
-        "type": "uint256"
+        "type": "uint16"
       }
     ],
     "stateMutability": "view",
@@ -774,9 +832,9 @@
         "type": "uint8"
       },
       {
-        "internalType": "uint256",
+        "internalType": "uint16",
         "name": "_power",
-        "type": "uint256"
+        "type": "uint16"
       }
     ],
     "name": "mintFromAltar",

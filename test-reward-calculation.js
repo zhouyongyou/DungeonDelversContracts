@@ -22,9 +22,10 @@ async function testRewardCalculation() {
       console.log(`\n--- Dungeon ${dungeonId} ---`);
       
       // Get dungeon config
-      const config = await DungeonStorage.getDungeonConfig(dungeonId);
-      console.log(`🎯 Difficulty Level: ${config.difficultyLevel}`);
+      const config = await DungeonStorage.dungeons(dungeonId);
+      console.log(`⚡ Required Power: ${config.requiredPower}`);
       console.log(`💰 Reward Amount USD: ${ethers.formatEther(config.rewardAmountUSD)} USD`);
+      console.log(`🎯 Success Rate: ${config.baseSuccessRate}%`);
       
       // Get USD to SOUL conversion
       try {
@@ -49,7 +50,7 @@ async function testRewardCalculation() {
     console.log("\n🔍 Testing Previous Problematic Amount (225599 wei):");
     const problemAmount = "225599";
     try {
-      const soulFromProblem = await PriceOracle.convertUSDToSOUL(problemAmount);
+      const soulFromProblem = await Oracle.convertUSDToSOUL(problemAmount);
       console.log(`💰 225599 wei converts to: ${ethers.formatEther(soulFromProblem)} SOUL`);
       console.log(`📊 In scientific notation: ${parseFloat(ethers.formatEther(soulFromProblem)).toExponential()} SOUL`);
     } catch (error) {
@@ -60,7 +61,7 @@ async function testRewardCalculation() {
     console.log("\n✅ Testing Proper 18-Decimal Amount ($12 = 12 * 1e18 wei):");
     const properAmount = ethers.parseEther("12"); // $12 in 18-decimal format
     try {
-      const soulFromProper = await PriceOracle.convertUSDToSOUL(properAmount);
+      const soulFromProper = await Oracle.convertUSDToSOUL(properAmount);
       console.log(`💰 12 USD (${properAmount} wei) converts to: ${ethers.formatEther(soulFromProper)} SOUL`);
       
       const soulInMillion = parseFloat(ethers.formatEther(soulFromProper));
