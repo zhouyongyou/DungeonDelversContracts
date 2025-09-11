@@ -2,12 +2,12 @@
 const fs = require('fs');
 const path = require('path');
 
-// v1.3.8.0 新地址（統一小寫）
+// v1.3.9.1 新地址（統一小寫）
 const NEW_ADDRESSES = {
-    HERO: '0x6d4393ad1507012039a6f1364f70b8de3afcb3bd',
-    RELIC: '0x3bcb4af9d94b343b1f154a253a6047b707ba74bd',
+    HERO: '0x45a7e3e0ae5077f85ecba051f346667365a32be3',
+    RELIC: '0xc957c671a7183ae4c4bbd772585961b5cd8d96d2',
     PARTY: '0x0d93b2c10d5ff944b3bb47c75b52fca75c92a4cc',
-    VIPSTAKING: '0x0440634aa6e4028efafefe7683b39e3a7bec0ebc',
+    VIPSTAKING: '0x47ad81582b0f8b8167b72ecd960815b2e523bcc1',
     PLAYERPROFILE: '0xa7aab98223268f8049430bdba6d1ba36cbef424a',
     ALTAROFASCENSION: '0xda7fb30cb2a2311ca3326ad2a4f826dcdac8bd7b',
     DUNGEONMASTER: '0x35a765d767d3fc2dfd6968e6faa7ffe7a303a77e',
