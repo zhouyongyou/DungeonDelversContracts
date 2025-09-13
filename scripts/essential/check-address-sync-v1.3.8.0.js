@@ -2,7 +2,7 @@
 const fs = require('fs');
 const path = require('path');
 
-// v1.3.9.1 新地址（統一小寫）
+// v1.3.9.4 新地址（統一小寫）
 const NEW_ADDRESSES = {
     HERO: '0x45a7e3e0ae5077f85ecba051f346667365a32be3',
     RELIC: '0xc957c671a7183ae4c4bbd772585961b5cd8d96d2',
