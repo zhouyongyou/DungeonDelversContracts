@@ -118,10 +118,10 @@ contract Party is ERC721, Ownable, ReentrancyGuard, Pausable, ERC721Holder, IERC
         // Store power in direct mapping for fast lookup
         partyPowerDirect[partyId] = totalPower;
 
+        emit PartyCreated(partyId, msg.sender, _heroIds, _relicIds, totalPower, partyRarity);
+
         _safeMint(msg.sender, partyId);
         _nextTokenId++;
-        
-        emit PartyCreated(partyId, msg.sender, _heroIds, _relicIds, totalPower, partyRarity);
         
         // EIP-4906: Emit MetadataUpdate for OKX marketplace refresh
         emit MetadataUpdate(partyId);

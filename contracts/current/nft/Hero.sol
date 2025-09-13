@@ -93,8 +93,10 @@ contract Hero is ERC721, Ownable, ReentrancyGuard, Pausable, IVRFCallback, IERC4
         // SoulShard payment - using query mode
         IERC20(_getSoulShardToken()).safeTransferFrom(msg.sender, address(this), requiredAmount);
         
-        // Pre-mint NFTs
         uint256[] memory tokenIds = new uint256[](_quantity);
+        emit MintRequested(msg.sender, _quantity, false, tokenIds);
+
+        // Pre-mint NFTs
         for (uint256 i = 0; i < _quantity; i++) {
             uint256 tokenId = _nextTokenId++;
             tokenIds[i] = tokenId;
@@ -132,8 +134,6 @@ contract Hero is ERC721, Ownable, ReentrancyGuard, Pausable, IVRFCallback, IERC4
             requestId: requestId,  // Store requestId for later use
             timestamp: block.timestamp  // Record when request was created
         });
-        
-        emit MintRequested(msg.sender, _quantity, false, tokenIds);
     }
 
     function mintFromVault(uint256 _quantity) external payable nonReentrant whenNotPaused {
@@ -151,8 +151,10 @@ contract Hero is ERC721, Ownable, ReentrancyGuard, Pausable, IVRFCallback, IERC4
         // Deduct SoulShard from vault - using query mode
         IPlayerVault(_getPlayerVault()).spendForGame(msg.sender, requiredAmount);
         
-        // Pre-mint NFTs
         uint256[] memory tokenIds = new uint256[](_quantity);
+        emit MintRequested(msg.sender, _quantity, true, tokenIds);
+
+        // Pre-mint NFTs
         for (uint256 i = 0; i < _quantity; i++) {
             uint256 tokenId = _nextTokenId++;
             tokenIds[i] = tokenId;
@@ -190,8 +192,6 @@ contract Hero is ERC721, Ownable, ReentrancyGuard, Pausable, IVRFCallback, IERC4
             requestId: requestId,  // Store requestId for later use
             timestamp: block.timestamp  // Record when request was created
         });
-        
-        emit MintRequested(msg.sender, _quantity, true, tokenIds);
     }
 
     function onVRFFulfilled(uint256 requestId, uint256[] memory randomWords) external override {
