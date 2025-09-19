@@ -94,7 +94,6 @@ contract Relic is ERC721, Ownable, ReentrancyGuard, Pausable, IVRFCallback, IERC
         IERC20(_getSoulShardToken()).safeTransferFrom(msg.sender, address(this), requiredAmount);
         
         uint256[] memory tokenIds = new uint256[](_quantity);
-        emit MintRequested(msg.sender, _quantity, false, tokenIds);
 
         // Pre-mint NFTs
         for (uint256 i = 0; i < _quantity; i++) {
@@ -133,7 +132,8 @@ contract Relic is ERC721, Ownable, ReentrancyGuard, Pausable, IVRFCallback, IERC
             pendingTokenIds: tokenIds,
             requestId: requestId,  // Store requestId for later use
             timestamp: block.timestamp  // Record when request was created
-        });        
+        });
+        emit MintRequested(msg.sender, _quantity, false, tokenIds);
     }
 
     function mintFromVault(uint256 _quantity) external payable nonReentrant whenNotPaused {
@@ -152,7 +152,6 @@ contract Relic is ERC721, Ownable, ReentrancyGuard, Pausable, IVRFCallback, IERC
         IPlayerVault(_getPlayerVault()).spendForGame(msg.sender, requiredAmount);
         
         uint256[] memory tokenIds = new uint256[](_quantity);
-        emit MintRequested(msg.sender, _quantity, true, tokenIds);
 
         // Pre-mint NFTs
         for (uint256 i = 0; i < _quantity; i++) {
@@ -191,7 +190,8 @@ contract Relic is ERC721, Ownable, ReentrancyGuard, Pausable, IVRFCallback, IERC
             pendingTokenIds: tokenIds,
             requestId: requestId,  // Store requestId for later use
             timestamp: block.timestamp  // Record when request was created
-        });        
+        });
+        emit MintRequested(msg.sender, _quantity, true, tokenIds);
     }
 
     function onVRFFulfilled(uint256 requestId, uint256[] memory randomWords) external override {
@@ -227,20 +227,6 @@ contract Relic is ERC721, Ownable, ReentrancyGuard, Pausable, IVRFCallback, IERC
         for (uint256 i = 0; i < request.quantity; i++) {
             uint256 tokenId = tokenIds[i];
             
-            // Ensure NFT still belongs to user (safety check)
-            address tokenOwner = address(0);
-            try this.ownerOf(tokenId) returns (address owner) {
-                tokenOwner = owner;
-            } catch {
-                allProcessedSuccessfully = false;
-                continue;
-            }
-            
-            if (tokenOwner != user) {
-                allProcessedSuccessfully = false;
-                continue;
-            }
-            
             // Generate unique seed for each NFT (hybrid approach: efficiency + security)
             uint256 mixed = baseRandomWord ^ (tokenId << 8) ^ i;
             uint256 uniqueSeed = uint256(keccak256(abi.encode(mixed)));
@@ -274,7 +260,6 @@ contract Relic is ERC721, Ownable, ReentrancyGuard, Pausable, IVRFCallback, IERC
         }
     }
 
-
     function _determineRarityFromSeed(uint256 randomValue) internal pure returns (uint8) {
         uint256 rarityRoll = randomValue % 100;
         uint8 rarity;
@@ -287,7 +272,6 @@ contract Relic is ERC721, Ownable, ReentrancyGuard, Pausable, IVRFCallback, IERC
         
         return rarity;
     }
-
 
     function _mintRelic(address _to, uint8 _rarity, uint8 _capacity) private returns (uint256) {
         uint256 tokenId = _nextTokenId;
