@@ -1,4 +1,4 @@
-// complete-v1.3.8.0-config.js - 完成剩餘的配置步驟
+// complete-v1.3.9.6-config.js - 完成剩餘的配置步驟
 // 🎯 基於已部署的合約地址，完成剩餘配置
 
 const { ethers } = require("hardhat");
@@ -10,7 +10,7 @@ const GAS_LIMIT = 200000;
 // 現有 DungeonCore 地址
 const DUNGEONCORE_ADDRESS = "0xa94b609310f8fe9a6db5cd66faaf64cd0189581f";
 
-// 新部署的合約地址 (v1.3.8.0)
+// 新部署的合約地址 (v1.3.9.6)
 const NEW_ADDRESSES = {
     DungeonStorage: "0x063A9De0daC8B68C03C9D77f41FE8B20A2fe7683",
     VRFConsumerV2Plus: "0xFC88901B6BB94d677884EDC1dad143c2Add2a1C5", 
@@ -137,7 +137,7 @@ async function completeConfiguration() {
 }
 
 async function main() {
-    console.log("🎯 完成 DungeonDelvers v1.3.8.0 配置");
+    console.log("🎯 完成 DungeonDelvers v1.3.9.6 配置");
     console.log("=".repeat(50));
     
     const [deployer] = await ethers.getSigners();
@@ -162,7 +162,7 @@ async function main() {
             console.log(`${result.contract}: ${status}`);
         });
         
-        console.log("\\n🎉 v1.3.8.0 配置完成!");
+        console.log("\\n🎉 v1.3.9.6 配置完成!");
         console.log("\\n📋 新部署的合約地址:");
         Object.entries(NEW_ADDRESSES).forEach(([name, addr]) => {
             console.log(`${name.padEnd(20)}: ${addr}`);

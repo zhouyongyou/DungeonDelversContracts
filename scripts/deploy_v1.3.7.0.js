@@ -1,4 +1,4 @@
-// Deployment script for DungeonDelvers v1.3.7.0
+// Deployment script for DungeonDelvers v1.3.9.6
 // Features: Hero uint16 optimization + ERC-4906 support
 // 🔥 重構：從 .env 動態讀取地址，消除硬編碼
 require('dotenv').config();
@@ -23,11 +23,11 @@ const OLD_ADDRESSES = {
     PLAYERVAULT: process.env.PLAYERVAULT_ADDRESS
 };
 
-// New addresses (v1.3.7.0) - will be populated during deployment
+// New addresses (v1.3.9.6) - will be populated during deployment
 const NEW_ADDRESSES = {};
 
 async function main() {
-    console.log("🚀 Starting DungeonDelvers v1.3.7.0 Deployment");
+    console.log("🚀 Starting DungeonDelvers v1.3.9.6 Deployment");
     console.log("⚡ Gas Price:", ethers.formatUnits(GAS_PRICE, "gwei"), "gwei");
     
     const [deployer] = await ethers.getSigners();
@@ -163,7 +163,7 @@ async function main() {
 
         // ============ SAVE DEPLOYMENT INFO ============
         const deploymentInfo = {
-            version: "v1.3.7.0",
+            version: "v1.3.9.6",
             network: "BSC Mainnet", 
             timestamp: new Date().toISOString(),
             deployer: deployer.address,
@@ -182,7 +182,7 @@ async function main() {
         };
 
         // Save to file
-        const outputPath = path.join(__dirname, '../deployments/v1.3.7.0_deployment.json');
+        const outputPath = path.join(__dirname, '../deployments/v1.3.9.6_deployment.json');
         const outputDir = path.dirname(outputPath);
         if (!fs.existsSync(outputDir)) {
             fs.mkdirSync(outputDir, { recursive: true });
@@ -190,7 +190,7 @@ async function main() {
         fs.writeFileSync(outputPath, JSON.stringify(deploymentInfo, null, 2));
 
         // ============ SUMMARY ============
-        console.log("\n🎉 Deployment Summary v1.3.7.0");
+        console.log("\n🎉 Deployment Summary v1.3.9.6");
         console.log("================================");
         Object.entries(NEW_ADDRESSES).forEach(([name, address]) => {
             console.log(`${name}: ${address}`);
@@ -204,7 +204,7 @@ async function main() {
         console.log("5. Update backend contract addresses");
 
         console.log(`\n✅ Deployment info saved to: ${outputPath}`);
-        console.log("🚀 v1.3.7.0 Deployment completed successfully!");
+        console.log("🚀 v1.3.9.6 Deployment completed successfully!");
 
     } catch (error) {
         console.error("❌ Deployment failed:", error);

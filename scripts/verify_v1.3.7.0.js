@@ -1,4 +1,4 @@
-// Verify deployed contracts on BSCScan v1.3.7.0
+// Verify deployed contracts on BSCScan v1.3.9.6
 const { run } = require("hardhat");
 const fs = require('fs');
 const path = require('path');
@@ -65,13 +65,13 @@ async function verifyContract(contractName, address, constructorArguments = []) 
 }
 
 async function main() {
-    console.log("🔍 Starting BSCScan Verification for v1.3.7.0");
+    console.log("🔍 Starting BSCScan Verification for v1.3.9.6");
     
     try {
         // Load deployment info
-        const deploymentPath = path.join(__dirname, '../deployments/v1.3.7.0_deployment.json');
+        const deploymentPath = path.join(__dirname, '../deployments/v1.3.9.6_deployment.json');
         if (!fs.existsSync(deploymentPath)) {
-            throw new Error("Deployment file not found. Run deploy_v1.3.7.0.js first.");
+            throw new Error("Deployment file not found. Run deploy_v1.3.9.6.js first.");
         }
 
         const deploymentInfo = JSON.parse(fs.readFileSync(deploymentPath, 'utf8'));
@@ -140,7 +140,7 @@ async function main() {
         fs.writeFileSync(deploymentPath, JSON.stringify(verificationInfo, null, 2));
 
         // ============ SUMMARY ============
-        console.log("\n🎉 Verification Summary v1.3.7.0");
+        console.log("\n🎉 Verification Summary v1.3.9.6");
         console.log("==================================");
         console.log(`📊 Total contracts: ${totalCount}`);
         console.log(`✅ Successfully verified: ${successCount}`);

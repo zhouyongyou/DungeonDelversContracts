@@ -1,4 +1,4 @@
-// Deployment script for DungeonDelvers v1.3.7.1
+// Deployment script for DungeonDelvers v1.3.9.6
 // Focus: Only deploy AltarOfAscension + Party with uint16 optimizations
 const { ethers } = require("hardhat");
 const fs = require('fs');
@@ -7,18 +7,18 @@ const path = require('path');
 // Gas price: 0.11 gwei (BSC mainnet optimized)
 const GAS_PRICE = ethers.parseUnits("0.11", "gwei");
 
-// Current addresses (v1.3.7.0)
+// Current addresses (v1.3.9.6)
 const CURRENT_ADDRESSES = {
     DUNGEONCORE: "0xa94b609310f8fe9a6db5cd66faaf64cd0189581f", // Core contract
     ALTAROFASCENSION: "0x957930c62a274519779c3ef305ceab28fc90817b", // Old version
     PARTY: "0x047de9d685735f79eeae9f094977460e64ef0eb9", // Old version
 };
 
-// New addresses (v1.3.7.1) - will be populated during deployment
+// New addresses (v1.3.9.6) - will be populated during deployment
 const NEW_ADDRESSES = {};
 
 async function main() {
-    console.log("🚀 Starting DungeonDelvers v1.3.7.1 Targeted Deployment");
+    console.log("🚀 Starting DungeonDelvers v1.3.9.6 Targeted Deployment");
     console.log("🎯 Contracts: AltarOfAscension + Party only");
     console.log("⚡ Gas Price:", ethers.formatUnits(GAS_PRICE, "gwei"), "gwei");
     
@@ -65,7 +65,7 @@ async function main() {
         console.log("✅ Party configured with DungeonCore");
 
         // ============ DEPLOYMENT SUMMARY ============
-        console.log("\n🎉 v1.3.7.1 Deployment Summary");
+        console.log("\n🎉 v1.3.9.6 Deployment Summary");
         console.log("================================");
         console.log("ALTAROFASCENSION:", NEW_ADDRESSES.ALTAROFASCENSION);
         console.log("PARTY:", NEW_ADDRESSES.PARTY);
@@ -75,14 +75,14 @@ async function main() {
         console.log("- Party: uint16 power compatibility + optimized gas usage");
         
         console.log("\n📋 Next Steps:");
-        console.log("1. Update DungeonCore with new addresses (run update_core_v1.3.7.1.js)");
-        console.log("2. Verify contracts on BSCScan (run verify_v1.3.7.1.js)");
+        console.log("1. Update DungeonCore with new addresses (run update_core_v1.3.9.6.js)");
+        console.log("2. Verify contracts on BSCScan (run verify_v1.3.9.6.js)");
         console.log("3. Update subgraph with new addresses");
         console.log("4. Update frontend contract addresses");
 
         // Save deployment info
         const deploymentInfo = {
-            version: "v1.3.7.1",
+            version: "v1.3.9.6",
             network: "BSC Mainnet",
             timestamp: new Date().toISOString(),
             deployer: deployer.address,
@@ -110,11 +110,11 @@ async function main() {
             fs.mkdirSync(deploymentDir, { recursive: true });
         }
         
-        const deploymentFile = path.join(deploymentDir, 'v1.3.7.1_deployment.json');
+        const deploymentFile = path.join(deploymentDir, 'v1.3.9.6_deployment.json');
         fs.writeFileSync(deploymentFile, JSON.stringify(deploymentInfo, null, 2));
         console.log("✅ Deployment info saved to:", deploymentFile);
         
-        console.log("\n🚀 v1.3.7.1 Deployment completed successfully!");
+        console.log("\n🚀 v1.3.9.6 Deployment completed successfully!");
 
     } catch (error) {
         console.error("\n❌ Deployment failed:", error.message);

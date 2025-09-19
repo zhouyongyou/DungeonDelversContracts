@@ -1,4 +1,4 @@
-// verify-remaining-v1.3.8.0.js - 驗證剩餘的合約
+// verify-remaining-v1.3.9.6.js - 驗證剩餘的合約
 const { run } = require("hardhat");
 
 const remainingContracts = [
@@ -30,7 +30,7 @@ const remainingContracts = [
 ];
 
 async function verifyRemaining() {
-  console.log("🔍 驗證剩餘的 v1.3.8.0 合約");
+  console.log("🔍 驗證剩餘的 v1.3.9.6 合約");
   console.log("=".repeat(50));
   
   for (const contract of remainingContracts) {

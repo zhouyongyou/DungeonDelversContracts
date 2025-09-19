@@ -1,10 +1,10 @@
-// Complete deployment pipeline for DungeonDelvers v1.3.7.0
+// Complete deployment pipeline for DungeonDelvers v1.3.9.6
 // Includes: Deploy → Update Core → Verify contracts
 const { exec } = require('child_process');
 const { promisify } = require('util');
 const execAsync = promisify(exec);
 
-console.log("🚀 DungeonDelvers v1.3.7.0 Complete Deployment Pipeline");
+console.log("🚀 DungeonDelvers v1.3.9.6 Complete Deployment Pipeline");
 console.log("==================================================");
 console.log("Features:");
 console.log("- Hero uint16 power optimization (50% Gas saving)");
@@ -37,7 +37,7 @@ async function main() {
         
         // Phase 1: Deploy contracts
         await runScript(
-            'deploy_v1.3.7.0.js',
+            'deploy_v1.3.9.6.js',
             'Phase 1: Deploying all contracts'
         );
         
@@ -47,7 +47,7 @@ async function main() {
         
         // Phase 2: Update DungeonCore
         await runScript(
-            'update_core_v1.3.7.0.js', 
+            'update_core_v1.3.9.6.js', 
             'Phase 2: Updating DungeonCore with new addresses'
         );
         
@@ -57,7 +57,7 @@ async function main() {
         
         // Phase 3: Verify contracts
         await runScript(
-            'verify_v1.3.7.0.js',
+            'verify_v1.3.9.6.js',
             'Phase 3: Verifying contracts on BSCScan'
         );
 
@@ -83,10 +83,10 @@ async function main() {
         console.log("5. 🔄 Update documentation");
 
         console.log("\n📂 Files Created:");
-        console.log("- deployments/v1.3.7.0_deployment.json (complete deployment info)");
+        console.log("- deployments/v1.3.9.6_deployment.json (complete deployment info)");
         console.log("- All contract addresses and verification status");
 
-        console.log("\n🎯 Version: v1.3.7.0");
+        console.log("\n🎯 Version: v1.3.9.6");
         console.log("💫 Status: READY FOR PRODUCTION");
         console.log("🌟 Happy coding! 🌟");
 
@@ -103,9 +103,9 @@ async function main() {
         
         console.error("\n📋 Manual Recovery:");
         console.error("- Run individual scripts separately:");
-        console.error("  - npx hardhat run scripts/deploy_v1.3.7.0.js --network bsc");
-        console.error("  - npx hardhat run scripts/update_core_v1.3.7.0.js --network bsc");
-        console.error("  - npx hardhat run scripts/verify_v1.3.7.0.js --network bsc");
+        console.error("  - npx hardhat run scripts/deploy_v1.3.9.6.js --network bsc");
+        console.error("  - npx hardhat run scripts/update_core_v1.3.9.6.js --network bsc");
+        console.error("  - npx hardhat run scripts/verify_v1.3.9.6.js --network bsc");
         
         process.exit(1);
     }

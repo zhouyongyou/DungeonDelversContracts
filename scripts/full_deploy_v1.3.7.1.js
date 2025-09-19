@@ -1,10 +1,10 @@
-// Complete deployment pipeline for DungeonDelvers v1.3.7.1
+// Complete deployment pipeline for DungeonDelvers v1.3.9.6
 // Target: AltarOfAscension + Party with uint16 optimizations
 const { exec } = require('child_process');
 const util = require('util');
 const execAsync = util.promisify(exec);
 
-console.log("🚀 DungeonDelvers v1.3.7.1 Complete Deployment Pipeline");
+console.log("🚀 DungeonDelvers v1.3.9.6 Complete Deployment Pipeline");
 console.log("==================================================");
 console.log("Target Contracts:");
 console.log("- AltarOfAscension: VRF integration + uint16 power optimization");
@@ -38,7 +38,7 @@ async function main() {
 
         // Phase 1: Deploy contracts
         await runCommand(
-            "npx hardhat run scripts/deploy_v1.3.7.1.js --network bsc",
+            "npx hardhat run scripts/deploy_v1.3.9.6.js --network bsc",
             "Phase 1: Deploying AltarOfAscension and Party contracts"
         );
 
@@ -48,7 +48,7 @@ async function main() {
 
         // Phase 2: Update DungeonCore
         await runCommand(
-            "npx hardhat run scripts/update_core_v1.3.7.1.js --network bsc",
+            "npx hardhat run scripts/update_core_v1.3.9.6.js --network bsc",
             "Phase 2: Updating DungeonCore with new contract addresses"
         );
 
@@ -58,7 +58,7 @@ async function main() {
 
         // Phase 3: Verify contracts
         await runCommand(
-            "npx hardhat run scripts/verify_v1.3.7.1.js --network bsc",
+            "npx hardhat run scripts/verify_v1.3.9.6.js --network bsc",
             "Phase 3: Verifying contracts on BSCScan"
         );
 
@@ -74,7 +74,7 @@ async function main() {
         console.log("3. Update backend contract addresses (if needed)");
         console.log("");
         console.log("🔗 Check deployment details:");
-        console.log("📄 deployments/v1.3.7.1_deployment.json");
+        console.log("📄 deployments/v1.3.9.6_deployment.json");
 
     } catch (error) {
         console.error("\n❌ DEPLOYMENT PIPELINE FAILED");
@@ -90,9 +90,9 @@ async function main() {
         console.error("");
         console.error("📋 Manual Recovery:");
         console.error("- Run individual scripts separately:");
-        console.error("  - npx hardhat run scripts/deploy_v1.3.7.1.js --network bsc");
-        console.error("  - npx hardhat run scripts/update_core_v1.3.7.1.js --network bsc");
-        console.error("  - npx hardhat run scripts/verify_v1.3.7.1.js --network bsc");
+        console.error("  - npx hardhat run scripts/deploy_v1.3.9.6.js --network bsc");
+        console.error("  - npx hardhat run scripts/update_core_v1.3.9.6.js --network bsc");
+        console.error("  - npx hardhat run scripts/verify_v1.3.9.6.js --network bsc");
         
         process.exit(1);
     }

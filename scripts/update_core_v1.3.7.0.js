@@ -1,4 +1,4 @@
-// Update DungeonCore with new contract addresses v1.3.7.0
+// Update DungeonCore with new contract addresses v1.3.9.6
 const { ethers } = require("hardhat");
 const fs = require('fs');
 const path = require('path');
@@ -12,7 +12,7 @@ require('dotenv').config();
 const DUNGEONCORE_ADDRESS = process.env.DUNGEONCORE_ADDRESS;
 
 async function main() {
-    console.log("🔧 Updating DungeonCore with v1.3.7.0 addresses");
+    console.log("🔧 Updating DungeonCore with v1.3.9.6 addresses");
     console.log("⚡ Gas Price:", ethers.formatUnits(GAS_PRICE, "gwei"), "gwei");
     
     const [deployer] = await ethers.getSigners();
@@ -25,9 +25,9 @@ async function main() {
 
     try {
         // Load deployment info
-        const deploymentPath = path.join(__dirname, '../deployments/v1.3.7.0_deployment.json');
+        const deploymentPath = path.join(__dirname, '../deployments/v1.3.9.6_deployment.json');
         if (!fs.existsSync(deploymentPath)) {
-            throw new Error("Deployment file not found. Run deploy_v1.3.7.0.js first.");
+            throw new Error("Deployment file not found. Run deploy_v1.3.9.6.js first.");
         }
 
         const deploymentInfo = JSON.parse(fs.readFileSync(deploymentPath, 'utf8'));
@@ -162,12 +162,12 @@ async function main() {
         console.log("\n📋 Next Steps:");
         console.log("1. ✅ Deploy contracts - COMPLETED");
         console.log("2. ✅ Update DungeonCore - COMPLETED");
-        console.log("3. 🔄 Verify contracts on BSCScan (run verify_v1.3.7.0.js)");
+        console.log("3. 🔄 Verify contracts on BSCScan (run verify_v1.3.9.6.js)");
         console.log("4. 🔄 Update subgraph with new addresses");
         console.log("5. 🔄 Update frontend contract addresses");
         console.log("6. 🔄 Update backend contract addresses");
 
-        console.log("\n🚀 DungeonCore v1.3.7.0 update completed successfully!");
+        console.log("\n🚀 DungeonCore v1.3.9.6 update completed successfully!");
 
     } catch (error) {
         console.error("❌ Core update failed:", error);

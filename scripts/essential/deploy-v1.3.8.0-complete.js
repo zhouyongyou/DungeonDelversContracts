@@ -1,4 +1,4 @@
-// deploy-v1.3.8.0-complete.js - 完整的10個合約重新部署腳本
+// deploy-v1.3.9.6-complete.js - 完整的10個合約重新部署腳本
 // 🎯 核心修復：DungeonStorage 獎勵金額使用18位小數格式
 // 🚨 強制執行 0.11 gwei Gas Price - 絕對不可修改
 
@@ -22,7 +22,7 @@ const VRF_CONFIG = {
 
 // 部署配置
 const DEPLOYMENT_CONFIG = {
-    version: "v1.3.8.0",
+    version: "v1.3.9.6",
     description: "修復DungeonStorage獎勵金額18位小數格式 + 10合約重新部署",
     network: "BSC Mainnet",
     gasPrice: "0.11 gwei",
@@ -328,7 +328,7 @@ async function verifyContracts() {
     
     console.log("\\n🔍 生成批量驗證腳本...");
     
-    let verifyScript = `// verify-v1.3.8.0-contracts.js - 批量驗證腳本\\n`;
+    let verifyScript = `// verify-v1.3.9.6-contracts.js - 批量驗證腳本\\n`;
     verifyScript += `const { run } = require("hardhat");\\n\\n`;
     verifyScript += `async function verifyAll() {\\n`;
     
@@ -352,14 +352,14 @@ async function verifyContracts() {
     verifyScript += `}\\n\\nverifyAll().catch(console.error);`;
     
     // 儲存驗證腳本
-    const verifyScriptPath = path.join(__dirname, `../verify-v1.3.8.0-contracts.js`);
+    const verifyScriptPath = path.join(__dirname, `../verify-v1.3.9.6-contracts.js`);
     fs.writeFileSync(verifyScriptPath, verifyScript);
     
     console.log(`📁 驗證腳本已生成: ${verifyScriptPath}`);
 }
 
 async function main() {
-    console.log("🚀 DungeonDelvers v1.3.8.0 完整部署開始");
+    console.log("🚀 DungeonDelvers v1.3.9.6 完整部署開始");
     console.log("=".repeat(60)); 
     console.log(`📅 時間: ${DEPLOYMENT_CONFIG.timestamp}`);
     console.log(`🌐 網絡: ${DEPLOYMENT_CONFIG.network}`);
@@ -416,7 +416,7 @@ async function main() {
         await verifyContracts();
         
         // 保存部署結果
-        const resultPath = path.join(__dirname, `../deployments/v1.3.8.0_deployment.json`);
+        const resultPath = path.join(__dirname, `../deployments/v1.3.9.6_deployment.json`);
         fs.writeFileSync(resultPath, JSON.stringify(deploymentResults, null, 2));
         
         console.log("\\n" + "=".repeat(60));
@@ -435,10 +435,10 @@ async function main() {
         
         console.log(`\\n📁 結果文件:`);
         console.log(`- 部署結果: ${resultPath}`);
-        console.log(`- 驗證腳本: scripts/verify-v1.3.8.0-contracts.js`);
+        console.log(`- 驗證腳本: scripts/verify-v1.3.9.6-contracts.js`);
         
         console.log(`\\n🔄 後續步驟:`);
-        console.log(`1. 執行合約驗證: node scripts/verify-v1.3.8.0-contracts.js`);
+        console.log(`1. 執行合約驗證: node scripts/verify-v1.3.9.6-contracts.js`);
         console.log(`2. 更新前端合約地址配置`);
         console.log(`3. 更新子圖合約地址和起始區塊`);
         console.log(`4. 更新後端合約地址配置`);
@@ -449,7 +449,7 @@ async function main() {
         console.log(`- $12 USD 獎勵將正確轉換為數百萬 SOUL`);
         console.log(`- Oracle 價格計算使用正確的18位小數格式`);
         
-        console.log("\\n🚀 DungeonDelvers v1.3.8.0 部署成功完成！");
+        console.log("\\n🚀 DungeonDelvers v1.3.9.6 部署成功完成！");
         
     } catch (error) {
         console.error("💥 部署過程發生錯誤:", error);
@@ -460,7 +460,7 @@ async function main() {
             timestamp: new Date().toISOString()
         };
         
-        const errorPath = path.join(__dirname, `../deployments/v1.3.8.0_deployment_error.json`);
+        const errorPath = path.join(__dirname, `../deployments/v1.3.9.6_deployment_error.json`);
         fs.writeFileSync(errorPath, JSON.stringify(deploymentResults, null, 2));
         
         process.exit(1);

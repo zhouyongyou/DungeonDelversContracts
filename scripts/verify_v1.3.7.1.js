@@ -1,17 +1,17 @@
-// Verify contracts on BSCScan for v1.3.7.1
+// Verify contracts on BSCScan for v1.3.9.6
 const { ethers } = require("hardhat");
 const fs = require('fs');
 const path = require('path');
 
 async function main() {
-    console.log("🔍 Starting BSCScan verification for v1.3.7.1");
+    console.log("🔍 Starting BSCScan verification for v1.3.9.6");
     console.log("🎯 Contracts: AltarOfAscension + Party");
     
     try {
         // Read deployment addresses
-        const deploymentFile = path.join(__dirname, '..', 'deployments', 'v1.3.7.1_deployment.json');
+        const deploymentFile = path.join(__dirname, '..', 'deployments', 'v1.3.9.6_deployment.json');
         if (!fs.existsSync(deploymentFile)) {
-            throw new Error("❌ Deployment file not found. Run deploy_v1.3.7.1.js first!");
+            throw new Error("❌ Deployment file not found. Run deploy_v1.3.9.6.js first!");
         }
 
         const deploymentData = JSON.parse(fs.readFileSync(deploymentFile, 'utf8'));
@@ -87,7 +87,7 @@ async function main() {
         console.log("4. 🔄 Update subgraph with new addresses");
         console.log("5. 🔄 Update frontend contract addresses");
 
-        console.log("\n🚀 v1.3.7.1 Verification completed successfully!");
+        console.log("\n🚀 v1.3.9.6 Verification completed successfully!");
 
     } catch (error) {
         console.error("\n❌ Verification failed:", error.message);

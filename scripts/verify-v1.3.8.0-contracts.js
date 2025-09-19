@@ -1,4 +1,4 @@
-// verify-v1.3.8.0-contracts.js - 批量驗證腳本
+// verify-v1.3.9.6-contracts.js - 批量驗證腳本
 const { run } = require("hardhat");
 
 const contracts = [
@@ -55,7 +55,7 @@ const contracts = [
 ];
 
 async function verifyAll() {
-  console.log("🔍 開始批量驗證 DungeonDelvers v1.3.8.0 合約");
+  console.log("🔍 開始批量驗證 DungeonDelvers v1.3.9.6 合約");
   console.log("=".repeat(60));
   
   const results = [];
