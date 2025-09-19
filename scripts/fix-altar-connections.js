@@ -11,7 +11,7 @@ const NETWORK_CONFIG = {
   rpcUrl: "https://bsc-dataseed.binance.org/"
 };
 
-// 📍 v1.3.9.5 合約地址
+// 📍 v1.3.9.6 合約地址
 const ADDRESSES = {
   HERO: "0x45a7e3e0ae5077f85ecba051f346667365a32be3",
   RELIC: "0xc957c671a7183ae4c4bbd772585961b5cd8d96d2",
