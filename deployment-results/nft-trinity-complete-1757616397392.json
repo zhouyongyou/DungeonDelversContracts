@@ -1,0 +1,63 @@
+{
+  "deployment": {
+    "network": "bsc",
+    "timestamp": "2025-09-11T18:46:37.392Z",
+    "gasPrice": "0.11 gwei",
+    "dungeonCore": "0xa94b609310f8fe9a6db5cd66faaf64cd0189581f"
+  },
+  "contracts": {
+    "VIPStaking": {
+      "address": "0x47aD81582b0f8b8167B72ecd960815B2E523bcc1",
+      "deployTxHash": "0x67d1d0a56d6e8685497da541886e53c00656184d7f4ef65b75c7acd8a3bce871",
+      "verified": true
+    },
+    "Hero": {
+      "address": "0x45a7e3E0ae5077F85ECBA051F346667365a32Be3",
+      "deployTxHash": "0x9500b3ed91cc3d3de81d4b246c3835cfb8e7ba4ba760718ea7360ebfc5817cfc",
+      "verified": true
+    },
+    "Relic": {
+      "address": "0xC957c671A7183ae4c4bbD772585961B5cD8d96d2",
+      "deployTxHash": "0xbdb2e078c9deef4e9156cdec13b6cada6709d13143047cc1c4ed64657a6933e0",
+      "verified": true
+    }
+  },
+  "connections": [
+    {
+      "contract": "VIPStaking",
+      "direction": "Core→NFT",
+      "success": false
+    },
+    {
+      "contract": "Hero",
+      "direction": "Core→NFT",
+      "success": true
+    },
+    {
+      "contract": "Relic",
+      "direction": "Core→NFT",
+      "success": false
+    },
+    {
+      "contract": "VIPStaking",
+      "direction": "NFT→Core",
+      "success": true
+    },
+    {
+      "contract": "Hero",
+      "direction": "NFT→Core",
+      "success": true
+    },
+    {
+      "contract": "Relic",
+      "direction": "NFT→Core",
+      "success": true
+    }
+  ],
+  "summary": {
+    "totalContracts": 3,
+    "successfulDeployments": 3,
+    "successfulVerifications": 3,
+    "successfulConnections": 4
+  }
+}

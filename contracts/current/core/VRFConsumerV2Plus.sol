@@ -63,12 +63,12 @@ contract VRFConsumerV2Plus is VRFConsumerBaseV2Plus, ReentrancyGuard {
     uint32 public constant MIN_CALLBACK_GAS_LIMIT = 100000;
     uint32 public constant MAX_CALLBACK_GAS_LIMIT = 2500000;
     
-    // NEW: Adjustable dynamic gas formula parameters
-    uint32 public dynamicGasBaseCost = 310000;     // Base cost (fixed overhead)
-    uint32 public dynamicGasPerNFTCost = 54000;    // Cost per NFT
+    // UPDATED: Balanced gas formula (safe for 1-50 NFT, 50 NFT ≈ 2.46M Gas)
+    uint32 public dynamicGasBaseCost = 295000;     // Balanced base cost for safety
+    uint32 public dynamicGasPerNFTCost = 43300;    // Balanced per-NFT cost (50×43.3k+295k=2.46M)
     
-    // NEW: Reduced max batch size from 50 to 40 for safety
-    uint32 public constant MAX_BATCH_SIZE = 40;    // Changed from 50 to 40
+    // UPDATED: Restored max batch size to 50 after uint16 Gas optimizations
+    uint32 public constant MAX_BATCH_SIZE = 50;    // Restored to 50 after optimization
     
     // Authorized contracts
     mapping(address => bool) public authorized;
