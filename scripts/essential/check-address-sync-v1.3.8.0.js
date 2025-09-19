@@ -1,4 +1,4 @@
-// check-address-sync-v1.3.8.0.js - 檢查所有項目中的合約地址同步狀態
+// check-address-sync-v1.3.9.6.js - 檢查所有項目中的合約地址同步狀態
 const fs = require('fs');
 const path = require('path');
 
@@ -16,7 +16,7 @@ const NEW_ADDRESSES = {
     VRF_MANAGER_V2PLUS: '0xfc88901b6bb94d677884edc1dad143c2add2a1c5'
 };
 
-// v1.3.7.3 舊地址（需要被替換的）
+// v1.3.9.6 舊地址（需要被替換的）
 const OLD_ADDRESSES = {
     HERO: '0x4a5aaf3ec310e56e13c541b2b23ab88ab6b75c90',
     RELIC: '0xa4871c0ebddb67c9c5fcbbda1910af9fc0a7b938',
@@ -101,7 +101,7 @@ function scanDirectory(dirPath, searchTexts, excludeDirs = ['node_modules', '.gi
 }
 
 async function main() {
-    console.log('🔍 DungeonDelvers v1.3.8.0 地址同步檢查');
+    console.log('🔍 DungeonDelvers v1.3.9.6 地址同步檢查');
     console.log('='.repeat(60));
     
     const allResults = {};
@@ -155,7 +155,7 @@ async function main() {
         'v1.3.6': 'v1.3.6',
         'v1.3.7': 'v1.3.7',
         'v4.2.2': 'v4.2.2',  // 舊子圖版本
-        '60555454': '60555454', // 舊區塊
+        '60976874': '60976874', // 舊區塊
     };
     
     for (const [projectName, projectPath] of Object.entries(PROJECT_PATHS)) {
