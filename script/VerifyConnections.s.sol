@@ -47,190 +47,190 @@ contract VerifyConnections is Script {
         passedChecks += verifySatelliteConnections();
         passedChecks += verifyVRFAuthorizations();
 
-        console.log("\n📊 驗證結果摘要：");
+        console.log("\nVerification Summary:");
         console.log("===============================================");
         if (passedChecks == totalChecks) {
-            console.log("🎉 所有連接驗證通過！(%d/%d)", passedChecks, totalChecks);
-            console.log("✅ 系統已準備就緒，可以開始測試功能");
+            console.log("All connection verifications passed! (%d/%d)", passedChecks, totalChecks);
+            console.log("System ready for testing");
         } else {
-            console.log("⚠️  部分連接驗證失敗！(%d/%d)", passedChecks, totalChecks);
-            console.log("❌ 請檢查失敗的連接並重新設置");
+            console.log("Some connection verifications failed! (%d/%d)", passedChecks, totalChecks);
+            console.log("Please check failed connections and reconfigure");
         }
     }
 
     function verifyDungeonCoreConnections() internal view returns (uint256) {
-        console.log("\n🔄 驗證 DungeonCore 中的衛星合約設置...");
+        console.log("\nVerifying satellite contract addresses in DungeonCore...");
 
         DungeonCore dungeonCore = DungeonCore(DUNGEONCORE);
         uint256 passed = 0;
 
         // 驗證 NFT 系統
         if (dungeonCore.heroContractAddress() == HERO) {
-            console.log("✅ Hero 合約地址設置正確");
+            console.log("Hero contract address configured correctly");
             passed++;
         } else {
-            console.log("❌ Hero 合約地址設置錯誤");
+            console.log("ERROR: Hero contract address misconfigured");
         }
 
         if (dungeonCore.relicContractAddress() == RELIC) {
-            console.log("✅ Relic 合約地址設置正確");
+            console.log("Relic contract address configured correctly");
             passed++;
         } else {
-            console.log("❌ Relic 合約地址設置錯誤");
+            console.log("ERROR: Relic contract address misconfigured");
         }
 
         if (dungeonCore.partyContractAddress() == PARTY) {
-            console.log("✅ Party 合約地址設置正確");
+            console.log("Party contract address configured correctly");
             passed++;
         } else {
-            console.log("❌ Party 合約地址設置錯誤");
+            console.log("ERROR: Party contract address misconfigured");
         }
 
         // 驗證玩家系統
         if (dungeonCore.playerProfileAddress() == PLAYERPROFILE) {
-            console.log("✅ PlayerProfile 合約地址設置正確");
+            console.log("PlayerProfile contract address configured correctly");
             passed++;
         } else {
-            console.log("❌ PlayerProfile 合約地址設置錯誤");
+            console.log("ERROR: PlayerProfile contract address misconfigured");
         }
 
         if (dungeonCore.vipStakingAddress() == VIPSTAKING) {
-            console.log("✅ VIPStaking 合約地址設置正確");
+            console.log("VIPStaking contract address configured correctly");
             passed++;
         } else {
-            console.log("❌ VIPStaking 合約地址設置錯誤");
+            console.log("ERROR: VIPStaking contract address misconfigured");
         }
 
         if (dungeonCore.playerVaultAddress() == PLAYERVAULT) {
-            console.log("✅ PlayerVault 合約地址設置正確");
+            console.log("PlayerVault contract address configured correctly");
             passed++;
         } else {
-            console.log("❌ PlayerVault 合約地址設置錯誤");
+            console.log("ERROR: PlayerVault contract address misconfigured");
         }
 
         // 驗證遊戲系統
         if (dungeonCore.dungeonMasterAddress() == DUNGEONMASTER) {
-            console.log("✅ DungeonMaster 合約地址設置正確");
+            console.log("DungeonMaster contract address configured correctly");
             passed++;
         } else {
-            console.log("❌ DungeonMaster 合約地址設置錯誤");
+            console.log("ERROR: DungeonMaster contract address misconfigured");
         }
 
         if (dungeonCore.altarOfAscensionAddress() == ALTAROFASCENSION) {
-            console.log("✅ AltarOfAscension 合約地址設置正確");
+            console.log("AltarOfAscension contract address configured correctly");
             passed++;
         } else {
-            console.log("❌ AltarOfAscension 合約地址設置錯誤");
+            console.log("ERROR: AltarOfAscension contract address misconfigured");
         }
 
         if (dungeonCore.vrfManager() == VRF_MANAGER_V2PLUS) {
-            console.log("✅ VRFManager 合約地址設置正確");
+            console.log("VRFManager contract address configured correctly");
             passed++;
         } else {
-            console.log("❌ VRFManager 合約地址設置錯誤");
+            console.log("ERROR: VRFManager contract address misconfigured");
         }
 
         if (dungeonCore.dungeonStorageAddress() == DUNGEONSTORAGE) {
-            console.log("✅ DungeonStorage 合約地址設置正確");
+            console.log("DungeonStorage contract address configured correctly");
             passed++;
         } else {
-            console.log("❌ DungeonStorage 合約地址設置錯誤");
+            console.log("ERROR: DungeonStorage contract address misconfigured");
         }
 
         return passed;
     }
 
     function verifySatelliteConnections() internal view returns (uint256) {
-        console.log("\n🔄 驗證衛星合約中的 DungeonCore 設置...");
+        console.log("\nVerifying satellite DungeonCore connections...");
         uint256 passed = 0;
 
-        // NFT 系統
+        // NFT System
         if (Hero(HERO).dungeonCore() == DUNGEONCORE) {
-            console.log("✅ Hero → DungeonCore 連接正確");
+            console.log("OK: Hero to DungeonCore connected correctly");
             passed++;
         } else {
-            console.log("❌ Hero → DungeonCore 連接錯誤");
+            console.log("ERROR: Hero to DungeonCore connection failed");
         }
 
         if (Relic(RELIC).dungeonCore() == DUNGEONCORE) {
-            console.log("✅ Relic → DungeonCore 連接正確");
+            console.log("OK: Relic to DungeonCore connected correctly");
             passed++;
         } else {
-            console.log("❌ Relic → DungeonCore 連接錯誤");
+            console.log("ERROR: Relic to DungeonCore connection failed");
         }
 
         if (Party(PARTY).dungeonCore() == DUNGEONCORE) {
-            console.log("✅ Party → DungeonCore 連接正確");
+            console.log("OK: Party to DungeonCore connected correctly");
             passed++;
         } else {
-            console.log("❌ Party → DungeonCore 連接錯誤");
+            console.log("ERROR: Party to DungeonCore connection failed");
         }
 
-        // 玩家系統
+        // Player System
         if (PlayerProfile(PLAYERPROFILE).dungeonCore() == DUNGEONCORE) {
-            console.log("✅ PlayerProfile → DungeonCore 連接正確");
+            console.log("OK: PlayerProfile to DungeonCore connected correctly");
             passed++;
         } else {
-            console.log("❌ PlayerProfile → DungeonCore 連接錯誤");
+            console.log("ERROR: PlayerProfile to DungeonCore connection failed");
         }
 
         if (VIPStaking(VIPSTAKING).dungeonCore() == DUNGEONCORE) {
-            console.log("✅ VIPStaking → DungeonCore 連接正確");
+            console.log("OK: VIPStaking to DungeonCore connected correctly");
             passed++;
         } else {
-            console.log("❌ VIPStaking → DungeonCore 連接錯誤");
+            console.log("ERROR: VIPStaking to DungeonCore connection failed");
         }
 
         if (PlayerVault(PLAYERVAULT).dungeonCore() == DUNGEONCORE) {
-            console.log("✅ PlayerVault → DungeonCore 連接正確");
+            console.log("OK: PlayerVault to DungeonCore connected correctly");
             passed++;
         } else {
-            console.log("❌ PlayerVault → DungeonCore 連接錯誤");
+            console.log("ERROR: PlayerVault to DungeonCore connection failed");
         }
 
-        // 遊戲系統
+        // Game System
         if (DungeonMaster(DUNGEONMASTER).dungeonCore() == DUNGEONCORE) {
-            console.log("✅ DungeonMaster → DungeonCore 連接正確");
+            console.log("OK: DungeonMaster to DungeonCore connected correctly");
             passed++;
         } else {
-            console.log("❌ DungeonMaster → DungeonCore 連接錯誤");
+            console.log("ERROR: DungeonMaster to DungeonCore connection failed");
         }
 
         if (AltarOfAscension(ALTAROFASCENSION).dungeonCore() == DUNGEONCORE) {
-            console.log("✅ AltarOfAscension → DungeonCore 連接正確");
+            console.log("OK: AltarOfAscension to DungeonCore connected correctly");
             passed++;
         } else {
-            console.log("❌ AltarOfAscension → DungeonCore 連接錯誤");
+            console.log("ERROR: AltarOfAscension to DungeonCore connection failed");
         }
 
         if (VRFConsumerV2Plus(VRF_MANAGER_V2PLUS).dungeonCore() == DUNGEONCORE) {
-            console.log("✅ VRFManager → DungeonCore 連接正確");
+            console.log("OK: VRFManager to DungeonCore connected correctly");
             passed++;
         } else {
-            console.log("❌ VRFManager → DungeonCore 連接錯誤");
+            console.log("ERROR: VRFManager to DungeonCore connection failed");
         }
 
         return passed;
     }
 
     function verifyVRFAuthorizations() internal view returns (uint256) {
-        console.log("\n🔄 驗證 VRF 授權設置...");
+        console.log("\nVerifying VRF authorization settings...");
         uint256 passed = 0;
 
         VRFConsumerV2Plus vrfManager = VRFConsumerV2Plus(VRF_MANAGER_V2PLUS);
 
         if (vrfManager.authorizedContracts(DUNGEONMASTER)) {
-            console.log("✅ DungeonMaster VRF 授權正確");
+            console.log("OK: DungeonMaster VRF authorization correct");
             passed++;
         } else {
-            console.log("❌ DungeonMaster VRF 授權錯誤");
+            console.log("ERROR: DungeonMaster VRF authorization failed");
         }
 
         if (vrfManager.authorizedContracts(ALTAROFASCENSION)) {
-            console.log("✅ AltarOfAscension VRF 授權正確");
+            console.log("OK: AltarOfAscension VRF authorization correct");
             passed++;
         } else {
-            console.log("❌ AltarOfAscension VRF 授權錯誤");
+            console.log("ERROR: AltarOfAscension VRF authorization failed");
         }
 
         return passed;
