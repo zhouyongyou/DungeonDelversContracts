@@ -6,7 +6,7 @@ async function testVRFStatus() {
   // Setup provider
   const provider = new ethers.JsonRpcProvider("https://bsc-dataseed1.binance.org/");
   
-  // Contract addresses - 硬編碼最新的 v1.3.9.6 地址
+  // Contract addresses - 硬編碼最新的 v1.3.9.7 (v1-3-9-5) 地址
   const VRF_MANAGER = "0xfc88901b6bb94d677884edc1dad143c2add2a1c5";
   const DUNGEON_CORE = "0xa94b609310f8fe9a6db5cd66faaf64cd0189581f";
   

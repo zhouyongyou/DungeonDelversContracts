@@ -55,29 +55,18 @@ contract AltarOfAscension is Ownable, ReentrancyGuard, Pausable, IVRFCallback {
     
     mapping(address => UpgradeRequest) public userRequests;
     
-    // 🎯 v1.3.9.8 Simplified: Remove BigInt parameters causing subgraph i32 overflow
     event UpgradeAttempted(
         address indexed player,
-        address indexed tokenContract,
-        string targetId,        // Use string instead of uint256 to avoid overflow
-        uint8 outcome,
-        uint8 targetRarity,
-        uint256 timestamp      // Block timestamp for ordering
-    );
-
-    // 🔄 Keep original for backwards compatibility during transition (will be removed in next version)
-    event UpgradeAttemptedLegacy(
-        address indexed player,
-        uint256 indexed requestId,
+        uint256 indexed requestId,  // Add requestId as second indexed parameter
         address indexed tokenContract,
         uint8 baseRarity,
         uint8 targetRarity,
         uint256[] burnedTokenIds,
         uint256[] mintedTokenIds,
         uint8 outcome,
-        uint256 fee,
-        uint8 vipLevel,
-        uint8 totalVipBonus
+        uint256 fee,        // Keep: required for economic analysis
+        uint8 vipLevel,     // Keep: required for game balance analysis
+        uint8 totalVipBonus // Keep: VIP effect tracking
     );
     
     event PlayerStatsUpdated(
@@ -240,17 +229,7 @@ contract AltarOfAscension is Ownable, ReentrancyGuard, Pausable, IVRFCallback {
                 tokenOwner = owner;
             } catch {
                 // If call fails, treat as NFT already transferred
-                // 🎯 Emit simplified event for subgraph
-                emit UpgradeAttempted(
-                    user,
-                    request.tokenContract,
-                    request.burnedTokenIds.length > 0 ? _toString(request.burnedTokenIds[0]) : "0",
-                    0, // failed outcome
-                    0, // no target rarity
-                    block.timestamp
-                );
-                // Keep legacy event for backwards compatibility
-                emit UpgradeAttemptedLegacy(user, request.requestId, request.tokenContract, request.baseRarity, 0, request.burnedTokenIds, new uint256[](0), 0, request.payment, 0, 0);
+                emit UpgradeAttempted(user, request.requestId, request.tokenContract, request.baseRarity, 0, request.burnedTokenIds, new uint256[](0), 0, request.payment, 0, 0);
                 emit EmergencyCleanup(user, request.requestId, 0, "NFT ownership check failed");
                 request.fulfilled = true;
                 return;
@@ -258,17 +237,7 @@ contract AltarOfAscension is Ownable, ReentrancyGuard, Pausable, IVRFCallback {
             
             if (tokenOwner != user) {
                 // If NFT already transferred, upgrade fails
-                // 🎯 Emit simplified event for subgraph
-                emit UpgradeAttempted(
-                    user,
-                    request.tokenContract,
-                    request.burnedTokenIds.length > 0 ? _toString(request.burnedTokenIds[0]) : "0",
-                    0, // failed outcome
-                    0, // no target rarity
-                    block.timestamp
-                );
-                // Keep legacy event for backwards compatibility
-                emit UpgradeAttemptedLegacy(user, request.requestId, request.tokenContract, request.baseRarity, 0, request.burnedTokenIds, new uint256[](0), 0, request.payment, 0, 0);
+                emit UpgradeAttempted(user, request.requestId, request.tokenContract, request.baseRarity, 0, request.burnedTokenIds, new uint256[](0), 0, request.payment, 0, 0);
                 request.fulfilled = true;
                 return;
             }
@@ -322,29 +291,19 @@ contract AltarOfAscension is Ownable, ReentrancyGuard, Pausable, IVRFCallback {
         // Update statistics (required for subgraph)
         _updateStats(user, request.burnedTokenIds.length, mintedIds.length, request.payment);
         
-        // 🎯 Emit simplified event for subgraph (no BigInt overflow risk)
+        // Emit complete event (subgraph dependency)
         emit UpgradeAttempted(
             user,
-            request.tokenContract,
-            request.burnedTokenIds.length > 0 ? _toString(request.burnedTokenIds[0]) : "0",
-            outcome,
-            targetRarity,
-            block.timestamp
-        );
-
-        // Keep legacy event for backwards compatibility (will be removed in next version)
-        emit UpgradeAttemptedLegacy(
-            user,
-            request.requestId,
+            request.requestId,   // Add requestId parameter
             request.tokenContract,
             request.baseRarity,
             targetRarity,
             request.burnedTokenIds,
             mintedIds,
             outcome,
-            request.payment,
-            vipLevel,
-            totalVipBonus
+            request.payment,     // Retain fee record for economic analysis
+            vipLevel,            // Retain VIP level for balance tracking
+            totalVipBonus        // Retain VIP bonus for effect analysis
         );
         
         // Critical fix: set fulfilled only after all processing complete
@@ -451,24 +410,6 @@ contract AltarOfAscension is Ownable, ReentrancyGuard, Pausable, IVRFCallback {
             uint8 capacity = _rarity;
             return relicContract.mintFromAltar(_player, _rarity, capacity);
         }
-    }
-
-    // 🎯 Helper function to convert uint256 to string for event emission
-    function _toString(uint256 value) private pure returns (string memory) {
-        if (value == 0) return "0";
-        uint256 temp = value;
-        uint256 digits;
-        while (temp != 0) {
-            digits++;
-            temp /= 10;
-        }
-        bytes memory buffer = new bytes(digits);
-        while (value != 0) {
-            digits -= 1;
-            buffer[digits] = bytes1(uint8(48 + uint256(value % 10)));
-            value /= 10;
-        }
-        return string(buffer);
     }
 
     function _generatePowerByRarity(uint8 _rarity, uint256 _randomNumber) private pure returns (uint16) {

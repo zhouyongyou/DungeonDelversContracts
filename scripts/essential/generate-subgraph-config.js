@@ -35,7 +35,7 @@ const contractAddresses = {
 
 // 🚀 從 .env 動態讀取部署資訊
 const deploymentInfo = {
-  version: process.env.VITE_CONTRACT_VERSION || "v1.3.9.6",
+  version: process.env.VITE_CONTRACT_VERSION || "v1.3.9.7 (v1-3-9-5)",
   startBlock: parseInt(process.env.VITE_START_BLOCK) || 60555454,
   deploymentDate: process.env.VITE_DEPLOYMENT_DATE || new Date().toISOString(),
   network: "bsc",
