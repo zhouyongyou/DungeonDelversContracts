@@ -7,7 +7,7 @@ async function testRewardSimple() {
   const provider = new ethers.JsonRpcProvider("https://bsc-dataseed1.binance.org/");
   
   // Contract addresses
-  const DUNGEON_STORAGE = "0x063a9de0dac8b68c03c9d77f41fe8b20a2fe7683";
+  const DUNGEON_STORAGE = "0x8878a235d36f8a44f53d87654fdfb0e3c5b2c791";
   const ORACLE = "0x21928de992cb31ede864b62bc94002fb449c2738";
   
   console.log("📍 DungeonStorage:", DUNGEON_STORAGE);

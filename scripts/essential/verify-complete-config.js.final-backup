@@ -3,16 +3,16 @@ const { ethers } = require("hardhat");
 
 const DUNGEONCORE_ADDRESS = "0x6c900a1cf182aa5960493bf4646c9efc8eaed16b";
 const NEW_ADDRESSES = {
-    DungeonStorage: "0x8878a235d36f8a44f53d87654fdfb0e3c5b2c791",
-    VRFConsumerV2Plus: "0xcd6bad326c68ba4f4c07b2d3f9c945364e56840c", 
-    PlayerVault: "0x81dad3af7edcf1026fe18977172fb6e24f3cf7d0",
+    DungeonStorage: "0x063A9De0daC8B68C03C9D77f41FE8B20A2fe7683",
+    VRFConsumerV2Plus: "0xFC88901B6BB94d677884EDC1dad143c2Add2a1C5", 
+    PlayerVault: "0x72205a7DCA3Dbd7A8656107797B0B0604E781413",
     Hero: "0x6d4393AD1507012039A6f1364f70B8De3AfCB3Bd",
     Relic: "0x3bCB4Af9d94B343B1F154a253a6047b707Ba74BD", 
-    Party: "0x73953a4dac5339b28e13c38294e758655e62dfde",
-    PlayerProfile: "0xea827e472937abd1117f0d4104a76e173724a061",
+    Party: "0x0D93b2c10d5FF944b3BB47c75b52fca75c92A4CC",
+    PlayerProfile: "0xa7AAB98223268F8049430Bdba6d1ba36CBEF424A",
     VIPStaking: "0x0440634aa6e4028efAFEFe7683B39E3a7BEC0EBC",
-    AltarOfAscension: "0x1357c546ce8cd529a1914e53f98405e1ebfbfc53", 
-    DungeonMaster: "0xa573ccf8332a5b1e830ea04a87856a28c99d9b53"
+    AltarOfAscension: "0xda7Fb30CB2a2311cA3326aD2a4f826dcdAC8BD7b", 
+    DungeonMaster: "0x35A765D767d3FC2dFd6968e6faA7fFe7a303A77e"
 };
 
 async function main() {

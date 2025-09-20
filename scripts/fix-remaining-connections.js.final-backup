@@ -15,8 +15,8 @@ async function main() {
   
   const addresses = {
     DUNGEONCORE: "0x6c900a1cf182aa5960493bf4646c9efc8eaed16b",
-    VIPSTAKING: "0xd82ef4be9e6d037140bd54afa04be983673637fb",
-    RELIC: "0x04c6bc2548b9f5c38be2be0902259d428f1fec2b"
+    VIPSTAKING: "0x47aD81582b0f8b8167B72ecd960815B2E523bcc1",
+    RELIC: "0xC957c671A7183ae4c4bbD772585961B5cD8d96d2"
   };
   
   try {

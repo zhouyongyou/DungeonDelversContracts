@@ -5,7 +5,7 @@
 ### 需要添加的合約
 ```yaml
 # 添加到 subgraph.yaml
-- DungeonCore: 0xa94b609310f8fe9a6db5cd66faaf64cd0189581f
+- DungeonCore: 0x6c900a1cf182aa5960493bf4646c9efc8eaed16b
 - Oracle: 0x21928de992cb31ede864b62bc94002fb449c2738  
 - PlayerVault: 0xb8807c99ade19e4e2db5cf48650474f10ff874a3
 - SoulShard: 0x1a98769b8034d400745cc658dc204cd079de36fa
