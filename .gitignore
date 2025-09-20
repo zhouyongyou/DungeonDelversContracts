@@ -82,3 +82,6 @@ VRFManagerV2PlusFixed_*.sol
 
 # Local test files
 test-local/
+
+out/
+deployment-results/

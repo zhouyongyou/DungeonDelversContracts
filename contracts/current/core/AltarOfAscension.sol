@@ -55,7 +55,7 @@ contract AltarOfAscension is Ownable, ReentrancyGuard, Pausable, IVRFCallback {
     
     mapping(address => UpgradeRequest) public userRequests;
     
-    // 🎯 v1.3.9.8 Simplified: Remove BigInt parameters causing subgraph i32 overflow
+    // 🎯 v1.4.0.0 Simplified: Remove BigInt parameters causing subgraph i32 overflow
     event UpgradeAttempted(
         address indexed player,
         address indexed tokenContract,
@@ -63,21 +63,6 @@ contract AltarOfAscension is Ownable, ReentrancyGuard, Pausable, IVRFCallback {
         uint8 outcome,
         uint8 targetRarity,
         uint256 timestamp      // Block timestamp for ordering
-    );
-
-    // 🔄 Keep original for backwards compatibility during transition (will be removed in next version)
-    event UpgradeAttemptedLegacy(
-        address indexed player,
-        uint256 indexed requestId,
-        address indexed tokenContract,
-        uint8 baseRarity,
-        uint8 targetRarity,
-        uint256[] burnedTokenIds,
-        uint256[] mintedTokenIds,
-        uint8 outcome,
-        uint256 fee,
-        uint8 vipLevel,
-        uint8 totalVipBonus
     );
     
     event PlayerStatsUpdated(
@@ -249,8 +234,6 @@ contract AltarOfAscension is Ownable, ReentrancyGuard, Pausable, IVRFCallback {
                     0, // no target rarity
                     block.timestamp
                 );
-                // Keep legacy event for backwards compatibility
-                emit UpgradeAttemptedLegacy(user, request.requestId, request.tokenContract, request.baseRarity, 0, request.burnedTokenIds, new uint256[](0), 0, request.payment, 0, 0);
                 emit EmergencyCleanup(user, request.requestId, 0, "NFT ownership check failed");
                 request.fulfilled = true;
                 return;
@@ -267,8 +250,6 @@ contract AltarOfAscension is Ownable, ReentrancyGuard, Pausable, IVRFCallback {
                     0, // no target rarity
                     block.timestamp
                 );
-                // Keep legacy event for backwards compatibility
-                emit UpgradeAttemptedLegacy(user, request.requestId, request.tokenContract, request.baseRarity, 0, request.burnedTokenIds, new uint256[](0), 0, request.payment, 0, 0);
                 request.fulfilled = true;
                 return;
             }
@@ -332,21 +313,6 @@ contract AltarOfAscension is Ownable, ReentrancyGuard, Pausable, IVRFCallback {
             block.timestamp
         );
 
-        // Keep legacy event for backwards compatibility (will be removed in next version)
-        emit UpgradeAttemptedLegacy(
-            user,
-            request.requestId,
-            request.tokenContract,
-            request.baseRarity,
-            targetRarity,
-            request.burnedTokenIds,
-            mintedIds,
-            outcome,
-            request.payment,
-            vipLevel,
-            totalVipBonus
-        );
-        
         // Critical fix: set fulfilled only after all processing complete
         request.fulfilled = true;
     }

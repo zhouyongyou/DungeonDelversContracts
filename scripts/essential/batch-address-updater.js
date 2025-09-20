@@ -1,4 +1,4 @@
-// update-v1.3.9.7 (v1-3-9-5)-addresses.js - 自動更新各項目中的合約地址
+// batch-address-updater.js - 自動更新各項目中的合約地址
 const fs = require('fs');
 const path = require('path');
 
@@ -18,9 +18,8 @@ const ADDRESS_MAPPING = {
 
 // 版本映射
 const VERSION_MAPPING = {
-    'v1.3.9.7 (v1-3-9-5)': 'v1.3.9.7 (v1-3-9-5)',
-    'v1.3.6': 'v1.3.9.7 (v1-3-9-5)',
-    'v1.3.7': 'v1.3.9.7 (v1-3-9-5)',
+    'v1.3.6': 'v1.4.0.0',
+    'v1.3.7': 'v1.4.0.0',
     '60555454': '60663015'
 };
 
@@ -78,7 +77,7 @@ function updateFile(filePath, replacements) {
 }
 
 function main() {
-    console.log('🔄 開始自動更新 v1.3.9.7 (v1-3-9-5) 地址和版本');
+    console.log('🔄 開始自動更新 v1.4.0.0 地址和版本');
     console.log('='.repeat(60));
 
     const results = {
