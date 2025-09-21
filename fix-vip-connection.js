@@ -3,7 +3,7 @@ const { ethers } = require("hardhat");
 require('dotenv').config();
 
 async function fixVipConnection() {
-    console.log("🔧 修復VIPStaking與DungeonCore連接...");
+    console.log("修復VIPStaking與DungeonCore連接...");
     
     const vipAddr = process.env.VITE_VIPSTAKING_ADDRESS;
     const coreAddr = process.env.VITE_DUNGEONCORE_ADDRESS;
@@ -42,7 +42,7 @@ async function fixVipConnection() {
         }
         
         // 設定DungeonCore地址
-        console.log("\n🔧 設定DungeonCore地址...");
+        console.log("\n設定DungeonCore地址...");
         
         const gasPrice = ethers.parseUnits("1", "gwei"); // 稍高的gas price
         

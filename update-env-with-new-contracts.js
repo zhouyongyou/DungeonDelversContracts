@@ -67,8 +67,8 @@ envContent = updateAddress(envContent, 'VRF_MANAGER_V2PLUS', newAddresses.VRFCon
 // 寫回 .env
 fs.writeFileSync(envPath, envContent);
 
-console.log('\n🎉 .env 檔案更新完成！');
-console.log('\n📊 新部署的合約地址摘要：');
+console.log('\n.env 檔案更新完成！');
+console.log('\n新部署的合約地址摘要：');
 console.log('='.repeat(60));
 Object.entries(newAddresses).forEach(([name, address]) => {
   console.log(`${name.padEnd(20)} : ${address}`);
