@@ -60,14 +60,15 @@ contract AltarOfAscension is Ownable, ReentrancyGuard, Pausable, IVRFCallback {
 
     mapping(address => UpgradeRequest) public userRequests;
 
-    // 🚀 Gas Optimized: Use bytes32 instead of string to avoid _toString() calls
+    // 🎯 v1.4.0.1 Gas Optimized: Add first mintedTokenId for subgraph calculation
     event UpgradeAttempted(
         address indexed player,
         address indexed tokenContract,
         bytes32 targetId,      // Direct conversion, no string processing
         uint8 outcome,
         uint8 targetRarity,
-        uint256 timestamp
+        uint256 timestamp,
+        bytes32 mintedTokenId    // 🚀 Gas 優化：只存第一個ID，子圖推算其餘
     );
 
     event PlayerStatsUpdated(
@@ -237,7 +238,8 @@ contract AltarOfAscension is Ownable, ReentrancyGuard, Pausable, IVRFCallback {
                     request.burnedTokenIds.length > 0 ? bytes32(request.burnedTokenIds[0]) : bytes32(0),
                     0, // failed outcome
                     0, // no target rarity
-                    block.timestamp
+                    block.timestamp,
+                    bytes32(0) // no minted token on failure
                 );
                 emit EmergencyCleanup(user, request.requestId, 0, "NFT ownership check failed");
                 request.fulfilled = true;
@@ -253,7 +255,8 @@ contract AltarOfAscension is Ownable, ReentrancyGuard, Pausable, IVRFCallback {
                     request.burnedTokenIds.length > 0 ? bytes32(request.burnedTokenIds[0]) : bytes32(0),
                     0, // failed outcome
                     0, // no target rarity
-                    block.timestamp
+                    block.timestamp,
+                    bytes32(0) // no minted token on failure
                 );
                 request.fulfilled = true;
                 return;
@@ -315,7 +318,8 @@ contract AltarOfAscension is Ownable, ReentrancyGuard, Pausable, IVRFCallback {
             request.burnedTokenIds.length > 0 ? bytes32(request.burnedTokenIds[0]) : bytes32(0),
             outcome,
             targetRarity,
-            block.timestamp
+            block.timestamp,
+            mintedIds.length > 0 ? bytes32(mintedIds[0]) : bytes32(0) // 🚀 Gas 優化：只存第一個ID
         );
 
         // Critical fix: set fulfilled only after all processing complete
