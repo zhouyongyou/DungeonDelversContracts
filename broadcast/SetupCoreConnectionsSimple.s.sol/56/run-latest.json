@@ -7,7 +7,7 @@
       "contractAddress": "0x6c900a1cf182aa5960493bf4646c9efc8eaed16b",
       "function": "setHeroContract(address)",
       "arguments": [
-        "0x52A0Ba2a7efB9519b73E671D924F03575fA64269"
+        "0xc09b6613c32a505bf05f97ed2f567b4959914396"
       ],
       "transaction": {
         "from": "0x84cd63a840274d267acb19e708d7f6298c315e75",
@@ -28,7 +28,7 @@
       "contractAddress": "0x6c900a1cf182aa5960493bf4646c9efc8eaed16b",
       "function": "setRelicContract(address)",
       "arguments": [
-        "0x04c6bc2548B9F5C38be2bE0902259D428f1FEc2b"
+        "0xf4ae79568a34af621bbea06b716e8fb84b5b41b6"
       ],
       "transaction": {
         "from": "0x84cd63a840274d267acb19e708d7f6298c315e75",
@@ -49,7 +49,7 @@
       "contractAddress": "0x6c900a1cf182aa5960493bf4646c9efc8eaed16b",
       "function": "setPartyContract(address)",
       "arguments": [
-        "0x73953a4daC5339b28E13C38294E758655E62DFDe"
+        "0x2d32d9b03f4febe9f2e1d1ef2cc5f6a0239f6129"
       ],
       "transaction": {
         "from": "0x84cd63a840274d267acb19e708d7f6298c315e75",
@@ -91,7 +91,7 @@
       "contractAddress": "0x6c900a1cf182aa5960493bf4646c9efc8eaed16b",
       "function": "setVipStaking(address)",
       "arguments": [
-        "0xd82ef4be9e6d037140bD54Afa04BE983673637Fb"
+        "0xeee539746a302ac5c08f4fe4bbc55878d57a1d6d"
       ],
       "transaction": {
         "from": "0x84cd63a840274d267acb19e708d7f6298c315e75",
@@ -214,14 +214,14 @@
       "hash": "0x68516e43931ad8b0ca229590c0941fb1d807c4156d31ef5363b8dcacd2d661f5",
       "transactionType": "CALL",
       "contractName": "Hero",
-      "contractAddress": "0x52a0ba2a7efb9519b73e671d924f03575fa64269",
+      "contractAddress": "0xc09b6613c32a505bf05f97ed2f567b4959914396",
       "function": "setDungeonCore(address)",
       "arguments": [
         "0x6C900a1Cf182aA5960493BF4646C9EFC8eaeD16b"
       ],
       "transaction": {
         "from": "0x84cd63a840274d267acb19e708d7f6298c315e75",
-        "to": "0x52a0ba2a7efb9519b73e671d924f03575fa64269",
+        "to": "0xc09b6613c32a505bf05f97ed2f567b4959914396",
         "gas": "0x13170",
         "value": "0x0",
         "input": "0x6ab1b29b0000000000000000000000006c900a1cf182aa5960493bf4646c9efc8eaed16b",
@@ -235,14 +235,14 @@
       "hash": "0x86864adc0b32580730c887d8ef609215b9b52143f37ea483eabc7252ae3eab4f",
       "transactionType": "CALL",
       "contractName": "Relic",
-      "contractAddress": "0x04c6bc2548b9f5c38be2be0902259d428f1fec2b",
+      "contractAddress": "0xf4ae79568a34af621bbea06b716e8fb84b5b41b6",
       "function": "setDungeonCore(address)",
       "arguments": [
         "0x6C900a1Cf182aA5960493BF4646C9EFC8eaeD16b"
       ],
       "transaction": {
         "from": "0x84cd63a840274d267acb19e708d7f6298c315e75",
-        "to": "0x04c6bc2548b9f5c38be2be0902259d428f1fec2b",
+        "to": "0xf4ae79568a34af621bbea06b716e8fb84b5b41b6",
         "gas": "0x1203a",
         "value": "0x0",
         "input": "0x6ab1b29b0000000000000000000000006c900a1cf182aa5960493bf4646c9efc8eaed16b",
@@ -256,14 +256,14 @@
       "hash": "0xfe6475ba2c10d26415aa80c2df0ec3c5f6a7affdb28afe912ece1b71e0408eb2",
       "transactionType": "CALL",
       "contractName": "Party",
-      "contractAddress": "0x73953a4dac5339b28e13c38294e758655e62dfde",
+      "contractAddress": "0x2d32d9b03f4febe9f2e1d1ef2cc5f6a0239f6129",
       "function": "setDungeonCore(address)",
       "arguments": [
         "0x6C900a1Cf182aA5960493BF4646C9EFC8eaeD16b"
       ],
       "transaction": {
         "from": "0x84cd63a840274d267acb19e708d7f6298c315e75",
-        "to": "0x73953a4dac5339b28e13c38294e758655e62dfde",
+        "to": "0x2d32d9b03f4febe9f2e1d1ef2cc5f6a0239f6129",
         "gas": "0x100ce",
         "value": "0x0",
         "input": "0x6ab1b29b0000000000000000000000006c900a1cf182aa5960493bf4646c9efc8eaed16b",
@@ -298,14 +298,14 @@
       "hash": "0xe6b309e7d3137f19b1668ade8cf2820844b65ea9b79a305b2745ae03464c2189",
       "transactionType": "CALL",
       "contractName": "VIPStaking",
-      "contractAddress": "0xd82ef4be9e6d037140bd54afa04be983673637fb",
+      "contractAddress": "0xeee539746a302ac5c08f4fe4bbc55878d57a1d6d",
       "function": "setDungeonCore(address)",
       "arguments": [
         "0x6C900a1Cf182aA5960493BF4646C9EFC8eaeD16b"
       ],
       "transaction": {
         "from": "0x84cd63a840274d267acb19e708d7f6298c315e75",
-        "to": "0xd82ef4be9e6d037140bd54afa04be983673637fb",
+        "to": "0xeee539746a302ac5c08f4fe4bbc55878d57a1d6d",
         "gas": "0x1004c",
         "value": "0x0",
         "input": "0x6ab1b29b0000000000000000000000006c900a1cf182aa5960493bf4646c9efc8eaed16b",
@@ -760,7 +760,7 @@
       "cumulativeGasUsed": "0x16c5a4f",
       "logs": [
         {
-          "address": "0x52a0ba2a7efb9519b73e671d924f03575fa64269",
+          "address": "0xc09b6613c32a505bf05f97ed2f567b4959914396",
           "topics": [
             "0x14662a0fccd762a05d5e1fa6afdd204554c4cf90fe58b5c5947f664fb71925f5",
             "0x0000000000000000000000006c900a1cf182aa5960493bf4646c9efc8eaed16b",
@@ -784,7 +784,7 @@
       "gasUsed": "0xd0d9",
       "effectiveGasPrice": "0x5f5e100",
       "from": "0x84cd63a840274d267acb19e708d7f6298c315e75",
-      "to": "0x52a0ba2a7efb9519b73e671d924f03575fa64269",
+      "to": "0xc09b6613c32a505bf05f97ed2f567b4959914396",
       "contractAddress": null
     },
     {
@@ -792,7 +792,7 @@
       "cumulativeGasUsed": "0x16d2afc",
       "logs": [
         {
-          "address": "0x04c6bc2548b9f5c38be2be0902259d428f1fec2b",
+          "address": "0xf4ae79568a34af621bbea06b716e8fb84b5b41b6",
           "topics": [
             "0x14662a0fccd762a05d5e1fa6afdd204554c4cf90fe58b5c5947f664fb71925f5",
             "0x0000000000000000000000006c900a1cf182aa5960493bf4646c9efc8eaed16b",
@@ -816,7 +816,7 @@
       "gasUsed": "0xd0ad",
       "effectiveGasPrice": "0x5f5e100",
       "from": "0x84cd63a840274d267acb19e708d7f6298c315e75",
-      "to": "0x04c6bc2548b9f5c38be2be0902259d428f1fec2b",
+      "to": "0xf4ae79568a34af621bbea06b716e8fb84b5b41b6",
       "contractAddress": null
     },
     {
@@ -824,7 +824,7 @@
       "cumulativeGasUsed": "0x16de4e9",
       "logs": [
         {
-          "address": "0x73953a4dac5339b28e13c38294e758655e62dfde",
+          "address": "0x2d32d9b03f4febe9f2e1d1ef2cc5f6a0239f6129",
           "topics": [
             "0x45e919947eac4ba070dccb2545cf1e7e330fd110330232d74a6996e9e2308f24",
             "0x0000000000000000000000006c900a1cf182aa5960493bf4646c9efc8eaed16b"
@@ -847,7 +847,7 @@
       "gasUsed": "0xb9ed",
       "effectiveGasPrice": "0x5f5e100",
       "from": "0x84cd63a840274d267acb19e708d7f6298c315e75",
-      "to": "0x73953a4dac5339b28e13c38294e758655e62dfde",
+      "to": "0x2d32d9b03f4febe9f2e1d1ef2cc5f6a0239f6129",
       "contractAddress": null
     },
     {
@@ -871,7 +871,7 @@
       "cumulativeGasUsed": "0x185f684",
       "logs": [
         {
-          "address": "0xd82ef4be9e6d037140bd54afa04be983673637fb",
+          "address": "0xeee539746a302ac5c08f4fe4bbc55878d57a1d6d",
           "topics": [
             "0x45e919947eac4ba070dccb2545cf1e7e330fd110330232d74a6996e9e2308f24",
             "0x0000000000000000000000006c900a1cf182aa5960493bf4646c9efc8eaed16b"
@@ -894,7 +894,7 @@
       "gasUsed": "0xb98f",
       "effectiveGasPrice": "0x5f5e100",
       "from": "0x84cd63a840274d267acb19e708d7f6298c315e75",
-      "to": "0xd82ef4be9e6d037140bd54afa04be983673637fb",
+      "to": "0xeee539746a302ac5c08f4fe4bbc55878d57a1d6d",
       "contractAddress": null
     },
     {

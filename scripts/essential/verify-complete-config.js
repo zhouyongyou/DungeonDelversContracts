@@ -6,12 +6,12 @@ const NEW_ADDRESSES = {
     DungeonStorage: "0x8878a235d36f8a44f53d87654fdfb0e3c5b2c791",
     VRFConsumerV2Plus: "0xcd6bad326c68ba4f4c07b2d3f9c945364e56840c", 
     PlayerVault: "0x81dad3af7edcf1026fe18977172fb6e24f3cf7d0",
-    Hero: "0x6d4393AD1507012039A6f1364f70B8De3AfCB3Bd",
-    Relic: "0x3bCB4Af9d94B343B1F154a253a6047b707Ba74BD", 
-    Party: "0x73953a4dac5339b28e13c38294e758655e62dfde",
+    Hero: "0xc09b6613c32a505bf05f97ed2f567b4959914396",
+    Relic: "0xf4ae79568a34af621bbea06b716e8fb84b5b41b6", 
+    Party: "0x2d32d9b03f4febe9f2e1d1ef2cc5f6a0239f6129",
     PlayerProfile: "0xea827e472937abd1117f0d4104a76e173724a061",
     VIPStaking: "0x0440634aa6e4028efAFEFe7683B39E3a7BEC0EBC",
-    AltarOfAscension: "0x1357c546ce8cd529a1914e53f98405e1ebfbfc53", 
+    AltarOfAscension: "0x3dfd80271eb96c3be8d1e841643746954ffda11d", 
     DungeonMaster: "0xa573ccf8332a5b1e830ea04a87856a28c99d9b53"
 };
 

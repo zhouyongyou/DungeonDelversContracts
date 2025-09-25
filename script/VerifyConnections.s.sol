@@ -25,7 +25,7 @@ contract VerifyConnections is Script {
     address constant DUNGEONCORE = 0x6c900a1cf182aa5960493bf4646c9efc8eaed16b;
     address constant DUNGEONMASTER = 0xa573ccf8332a5b1e830ea04a87856a28c99d9b53;
     address constant DUNGEONSTORAGE = 0x8878a235d36f8a44f53d87654fdfb0e3c5b2c791;
-    address constant ALTAROFASCENSION = 0x1357c546ce8cd529a1914e53f98405e1ebfbfc53;
+    address constant ALTAROFASCENSION = 0x3dfd80271eb96c3be8d1e841643746954ffda11d;
     address constant VRF_MANAGER_V2PLUS = 0xcd6bad326c68ba4f4c07b2d3f9c945364e56840c;
 
     address constant HERO = 0x52a0ba2a7efb9519b73e671d924f03575fa64269;

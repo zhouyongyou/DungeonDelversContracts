@@ -7,21 +7,21 @@
 DUNGEONCORE:        0x6c900a1cf182aa5960493bf4646c9efc8eaed16b  # 中央控制合約 🎯
 DUNGEONMASTER:      0xa573ccf8332a5b1e830ea04a87856a28c99d9b53  # 遊戲邏輯控制器
 DUNGEONSTORAGE:     0x8878a235d36f8a44f53d87654fdfb0e3c5b2c791  # 數據存儲合約
-ALTAROFASCENSION:   0x1357c546ce8cd529a1914e53f98405e1ebfbfc53  # NFT 升級系統
+ALTAROFASCENSION:   0x3dfd80271eb96c3be8d1e841643746954ffda11d  # NFT 升級系統
 VRF_MANAGER_V2PLUS: 0xcd6bad326c68ba4f4c07b2d3f9c945364e56840c  # 隨機數管理器
 ```
 
 ### **NFT 系統 (NFT System)**
 ```yaml
-HERO:               0x52a0ba2a7efb9519b73e671d924f03575fa64269  # 英雄 NFT
-RELIC:              0x04c6bc2548b9f5c38be2be0902259d428f1fec2b  # 聖物 NFT
-PARTY:              0x73953a4dac5339b28e13c38294e758655e62dfde  # 隊伍 NFT
+HERO:               0xc09b6613c32a505bf05f97ed2f567b4959914396  # 英雄 NFT
+RELIC:              0xf4ae79568a34af621bbea06b716e8fb84b5b41b6  # 聖物 NFT
+PARTY:              0x2d32d9b03f4febe9f2e1d1ef2cc5f6a0239f6129  # 隊伍 NFT
 ```
 
 ### **玩家系統 (Player System)**
 ```yaml
 PLAYERPROFILE:      0xea827e472937abd1117f0d4104a76e173724a061  # 玩家檔案 SBT
-VIPSTAKING:         0xd82ef4be9e6d037140bd54afa04be983673637fb  # VIP 質押系統
+VIPSTAKING:         0xeee539746a302ac5c08f4fe4bbc55878d57a1d6d  # VIP 質押系統
 PLAYERVAULT:        0x81dad3af7edcf1026fe18977172fb6e24f3cf7d0  # 玩家金庫
 ```
 
@@ -43,14 +43,14 @@ DungeonCore 是整個系統的中央控制器，需要註冊所有衛星合約�
 
 ```javascript
 // 在 DungeonCore 中需要設置的地址：
-await dungeonCore.setHeroContract("0x52a0ba2a7efb9519b73e671d924f03575fa64269");
-await dungeonCore.setRelicContract("0x04c6bc2548b9f5c38be2be0902259d428f1fec2b");
-await dungeonCore.setPartyContract("0x73953a4dac5339b28e13c38294e758655e62dfde");
+await dungeonCore.setHeroContract("0xc09b6613c32a505bf05f97ed2f567b4959914396");
+await dungeonCore.setRelicContract("0xf4ae79568a34af621bbea06b716e8fb84b5b41b6");
+await dungeonCore.setPartyContract("0x2d32d9b03f4febe9f2e1d1ef2cc5f6a0239f6129");
 await dungeonCore.setPlayerProfile("0xea827e472937abd1117f0d4104a76e173724a061");
-await dungeonCore.setVipStaking("0xd82ef4be9e6d037140bd54afa04be983673637fb");
+await dungeonCore.setVipStaking("0xeee539746a302ac5c08f4fe4bbc55878d57a1d6d");
 await dungeonCore.setPlayerVault("0x81dad3af7edcf1026fe18977172fb6e24f3cf7d0");
 await dungeonCore.setDungeonMaster("0xa573ccf8332a5b1e830ea04a87856a28c99d9b53");
-await dungeonCore.setAltarOfAscension("0x1357c546ce8cd529a1914e53f98405e1ebfbfc53");
+await dungeonCore.setAltarOfAscension("0x3dfd80271eb96c3be8d1e841643746954ffda11d");
 await dungeonCore.setVRFManager("0xcd6bad326c68ba4f4c07b2d3f9c945364e56840c");
 await dungeonCore.setDungeonStorage("0x8878a235d36f8a44f53d87654fdfb0e3c5b2c791");
 
@@ -90,7 +90,7 @@ VRF Manager 需要授權哪些合約可以請求隨機數：
 ```javascript
 // 授權需要隨機數的合約
 await vrfManager.setAuthorizedContract("0xa573ccf8332a5b1e830ea04a87856a28c99d9b53", true); // DungeonMaster
-await vrfManager.setAuthorizedContract("0x1357c546ce8cd529a1914e53f98405e1ebfbfc53", true); // AltarOfAscension
+await vrfManager.setAuthorizedContract("0x3dfd80271eb96c3be8d1e841643746954ffda11d", true); // AltarOfAscension
 ```
 
 ---
@@ -149,21 +149,21 @@ await vrfManager.setAuthorizedContract("0x1357c546ce8cd529a1914e53f98405e1ebfbfc
 ### **需要更新的合約地址**
 ```yaml
 # subgraph.yaml 中需要更新：
-Hero:               0x52a0ba2a7efb9519b73e671d924f03575fa64269  # ✅ 已更新
-Relic:              0x04c6bc2548b9f5c38be2be0902259d428f1fec2b  # ✅ 已更新
-Party:              0x73953a4dac5339b28e13c38294e758655e62dfde  # ✅ 已更新
+Hero:               0xc09b6613c32a505bf05f97ed2f567b4959914396  # ✅ 已更新
+Relic:              0xf4ae79568a34af621bbea06b716e8fb84b5b41b6  # ✅ 已更新
+Party:              0x2d32d9b03f4febe9f2e1d1ef2cc5f6a0239f6129  # ✅ 已更新
 DungeonMaster:      0xa573ccf8332a5b1e830ea04a87856a28c99d9b53  # ✅ 已更新
-AltarOfAscension:   0x1357c546ce8cd529a1914e53f98405e1ebfbfc53  # ✅ 已更新
-VIPStaking:         0xd82ef4be9e6d037140bd54afa04be983673637fb  # ✅ 已更新
+AltarOfAscension:   0x3dfd80271eb96c3be8d1e841643746954ffda11d  # ✅ 已更新
+VIPStaking:         0xeee539746a302ac5c08f4fe4bbc55878d57a1d6d  # ✅ 已更新
 PlayerProfile:      0xea827e472937abd1117f0d4104a76e173724a061  # ✅ 已更新
 PlayerVault:        0x81dad3af7edcf1026fe18977172fb6e24f3cf7d0  # ✅ 已更新
 ```
 
 ### **起始區塊設置**
-所有合約都設置為統一的起始區塊：`61800862`
+所有合約都設置為統一的起始區塊：`62385903`
 
 ---
 
 *文檔生成時間: 2025-09-20*
-*子圖版本: v1.4.0.0*
+*子圖版本: v1.4.0.3*
 *合約架構: Diamond Proxy + Satellite Pattern*

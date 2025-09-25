@@ -11,11 +11,11 @@ const NETWORK_CONFIG = {
   rpcUrl: "https://bsc-dataseed.binance.org/"
 };
 
-// 📍 v1.4.0.0 合約地址
+// 📍 v1.4.0.3 合約地址
 const ADDRESSES = {
-  HERO: "0x52a0ba2a7efb9519b73e671d924f03575fa64269",
-  RELIC: "0x04c6bc2548b9f5c38be2be0902259d428f1fec2b",
-  ALTAROFASCENSION: "0x1357c546ce8cd529a1914e53f98405e1ebfbfc53",
+  HERO: "0xc09b6613c32a505bf05f97ed2f567b4959914396",
+  RELIC: "0xf4ae79568a34af621bbea06b716e8fb84b5b41b6",
+  ALTAROFASCENSION: "0x3dfd80271eb96c3be8d1e841643746954ffda11d",
   DUNGEONCORE: "0x6c900a1cf182aa5960493bf4646c9efc8eaed16b"
 };
 

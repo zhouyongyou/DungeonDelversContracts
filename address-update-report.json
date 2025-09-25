@@ -1,0 +1,59 @@
+{
+  "timestamp": "2025-09-25T08:58:09.846Z",
+  "summary": {
+    "totalAddressUpdates": 3,
+    "totalBlockUpdates": 1,
+    "totalFilesUpdated": 12
+  },
+  "details": {
+    "addresses": {
+      "altarOfAscension": {
+        "old": "0x1357c546ce8cd529a1914e53f98405e1ebfbfc53",
+        "new": "0x3dfd80271eb96c3be8d1e841643746954ffda11d",
+        "description": "AltarOfAscension NFT升級系統"
+      },
+      "hero": {
+        "old": "0x6d4393ad1507012039a6f1364f70b8de3afcb3bd",
+        "new": "0xc09b6613c32a505bf05f97ed2f567b4959914396",
+        "description": "Hero NFT合約"
+      },
+      "relic": {
+        "old": "0x3bcb4af9d94b343b1f154a253a6047b707ba74bd",
+        "new": "0xf4ae79568a34af621bbea06b716e8fb84b5b41b6",
+        "description": "Relic NFT合約"
+      }
+    },
+    "blockNumbers": {
+      "startBlock": {
+        "old": "61800862",
+        "new": "62385903",
+        "description": "子圖起始區塊號碼"
+      }
+    }
+  },
+  "updatedFiles": [
+    "CONTRACT_DEPLOYMENT_CONFIGURATION.md",
+    "scripts/essential/batch-address-updater.js",
+    "scripts/essential/check-address-sync.js",
+    "scripts/essential/complete-config-manager.js",
+    "scripts/essential/verify-complete-config.js",
+    "scripts/fix-altar-connections.js",
+    "scripts/setup-core-connections.js",
+    "script/SetupCoreConnections.s.sol",
+    "script/SetupCoreConnectionsSimple.s.sol",
+    "script/VerifyConnections.s.sol",
+    "update-env-with-new-contracts.js",
+    "deployment-results/direct-deploy-1758349327403.json"
+  ],
+  "notesOnRemainingOldAddresses": [
+    "broadcast/SetupCoreConnectionsSimple.s.sol/56/run-latest.json",
+    "broadcast/SetupCoreConnectionsSimple.s.sol/56/run-1758355436.json"
+  ],
+  "nextSteps": [
+    "檢查子圖配置是否需要重新部署",
+    "檢查前端環境變數配置",
+    "檢查後端 contracts.json 配置",
+    "執行整合測試確保所有系統正常",
+    "清理備份檔案"
+  ]
+}

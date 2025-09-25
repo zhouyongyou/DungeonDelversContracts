@@ -4,12 +4,12 @@ const path = require('path');
 
 // 地址映射
 const ADDRESS_MAPPING = {
-    '0x6d4393ad1507012039a6f1364f70b8de3afcb3bd': '0x52a0ba2a7efb9519b73e671d924f03575fa64269', // HERO
-    '0x3bcb4af9d94b343b1f154a253a6047b707ba74bd': '0x04c6bc2548b9f5c38be2be0902259d428f1fec2b', // RELIC
-    '0xbdc1413268d55d1aa694f610783cac1ea4fed07a': '0x73953a4dac5339b28e13c38294e758655e62dfde', // PARTY
-    '0x0440634aa6e4028efafefe7683b39e3a7bec0ebc': '0xd82ef4be9e6d037140bd54afa04be983673637fb', // VIPSTAKING
+    '0xc09b6613c32a505bf05f97ed2f567b4959914396': '0xc09b6613c32a505bf05f97ed2f567b4959914396', // HERO
+    '0xf4ae79568a34af621bbea06b716e8fb84b5b41b6': '0xf4ae79568a34af621bbea06b716e8fb84b5b41b6', // RELIC
+    '0xbdc1413268d55d1aa694f610783cac1ea4fed07a': '0x2d32d9b03f4febe9f2e1d1ef2cc5f6a0239f6129', // PARTY
+    '0x0440634aa6e4028efafefe7683b39e3a7bec0ebc': '0xeee539746a302ac5c08f4fe4bbc55878d57a1d6d', // VIPSTAKING
     '0x6fe7d8a3771bca13b9b9b11cdfd30edba5ed3c2e': '0xea827e472937abd1117f0d4104a76e173724a061', // PLAYERPROFILE
-    '0xaf333612398f061fc9f17b4574d66b5ca550ada4': '0x1357c546ce8cd529a1914e53f98405e1ebfbfc53', // ALTAROFASCENSION
+    '0xaf333612398f061fc9f17b4574d66b5ca550ada4': '0x3dfd80271eb96c3be8d1e841643746954ffda11d', // ALTAROFASCENSION
     '0xdfdeb32633232b15fa22dd25407fb2e485a33700': '0xa573ccf8332a5b1e830ea04a87856a28c99d9b53', // DUNGEONMASTER
     '0x67614515b159d80caadd04027687fc10372c2dc5': '0x8878a235d36f8a44f53d87654fdfb0e3c5b2c791', // DUNGEONSTORAGE
     '0xdc4089a4fb178dd826bf7dcd08210afaefc4b6ce': '0x81dad3af7edcf1026fe18977172fb6e24f3cf7d0', // PLAYERVAULT
@@ -18,8 +18,8 @@ const ADDRESS_MAPPING = {
 
 // 版本映射
 const VERSION_MAPPING = {
-    'v1.3.6': 'v1.4.0.0',
-    'v1.3.7': 'v1.4.0.0',
+    'v1.3.6': 'v1.4.0.3',
+    'v1.3.7': 'v1.4.0.3',
     '60555454': '60663015'
 };
 
@@ -77,7 +77,7 @@ function updateFile(filePath, replacements) {
 }
 
 function main() {
-    console.log('🔄 開始自動更新 v1.4.0.0 地址和版本');
+    console.log('🔄 開始自動更新 v1.4.0.3 地址和版本');
     console.log('='.repeat(60));
 
     const results = {

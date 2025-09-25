@@ -2,7 +2,7 @@
 const { ethers } = require("hardhat");
 
 const DUNGEONCORE_ADDRESS = "0x6c900a1cf182aa5960493bf4646c9efc8eaed16b";
-const PARTY_ADDRESS = "0x73953a4dac5339b28e13c38294e758655e62dfde";
+const PARTY_ADDRESS = "0x2d32d9b03f4febe9f2e1d1ef2cc5f6a0239f6129";
 
 async function checkPartyConfig() {
     console.log("🔍 檢查 Party 合約的 DungeonCore 配置");

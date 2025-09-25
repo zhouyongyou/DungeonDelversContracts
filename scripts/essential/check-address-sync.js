@@ -2,14 +2,14 @@
 const fs = require('fs');
 const path = require('path');
 
-// v1.4.0.0 新地址（統一小寫）
+// v1.4.0.3 新地址（統一小寫）
 const NEW_ADDRESSES = {
-    HERO: '0x52a0ba2a7efb9519b73e671d924f03575fa64269',
-    RELIC: '0x04c6bc2548b9f5c38be2be0902259d428f1fec2b',
-    PARTY: '0x73953a4dac5339b28e13c38294e758655e62dfde',
-    VIPSTAKING: '0xd82ef4be9e6d037140bd54afa04be983673637fb',
+    HERO: '0xc09b6613c32a505bf05f97ed2f567b4959914396',
+    RELIC: '0xf4ae79568a34af621bbea06b716e8fb84b5b41b6',
+    PARTY: '0x2d32d9b03f4febe9f2e1d1ef2cc5f6a0239f6129',
+    VIPSTAKING: '0xeee539746a302ac5c08f4fe4bbc55878d57a1d6d',
     PLAYERPROFILE: '0xea827e472937abd1117f0d4104a76e173724a061',
-    ALTAROFASCENSION: '0x1357c546ce8cd529a1914e53f98405e1ebfbfc53',
+    ALTAROFASCENSION: '0x3dfd80271eb96c3be8d1e841643746954ffda11d',
     DUNGEONMASTER: '0xa573ccf8332a5b1e830ea04a87856a28c99d9b53',
     DUNGEONSTORAGE: '0x8878a235d36f8a44f53d87654fdfb0e3c5b2c791',
     PLAYERVAULT: '0x81dad3af7edcf1026fe18977172fb6e24f3cf7d0',
@@ -101,7 +101,7 @@ function scanDirectory(dirPath, searchTexts, excludeDirs = ['node_modules', '.gi
 }
 
 async function main() {
-    console.log('🔍 DungeonDelvers v1.4.0.0 地址同步檢查');
+    console.log('🔍 DungeonDelvers v1.4.0.3 地址同步檢查');
     console.log('='.repeat(60));
     
     const allResults = {};
@@ -154,7 +154,7 @@ async function main() {
     const versionPatterns = {
         'v1.3.6': 'v1.3.6',
         'v1.3.7': 'v1.3.7',
-        'v1-4-0-0': 'v1-4-0-0',  // 子圖版本
+        'v1-4-0-3': 'v1-4-0-3',  // 子圖版本
         '60976874': '60976874', // 舊區塊
     };
     
