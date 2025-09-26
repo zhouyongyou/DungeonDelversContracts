@@ -118,7 +118,7 @@ DungeonMaster AltarOfAscension PlayerVault
   - SBT 表示 VIP 質押位階，`stake` / `requestUnstake` / `claimUnstaked`。
   - `unstakeCooldown` 預設 24h，未領取前金額記錄於 `unstakeQueue`。
   - VIP Level 計算：
-    - 將 SoulShard 質押量轉換 USD 後，`level = sqrt(value / 100 USD)`，上限 255。
+    - 將 SoulShard 質押量轉換 USD 後，`level = sqrt(value / 100 USD)`，上限 20。
     - 每級提供 0.5% 稅率折扣（PlayerVault 用）。
   - 所有質押者持有的 VIP NFT 為 SBT（`locked()` 恒回 true），等級變動會觸發 `VipLevelChanged` 與 ERC-4906 事件。
 
