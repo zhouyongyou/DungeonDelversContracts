@@ -25,6 +25,7 @@ contract VIPStaking is ERC721, Ownable, ReentrancyGuard, Pausable, IERC4906 {
     uint256 public unstakeCooldown;
     uint256 public totalPendingUnstakes;
     uint256 public totalStaked;
+    bool public emergencyMode;
 
     struct StakeInfo {
         uint256 amount;
@@ -46,6 +47,10 @@ contract VIPStaking is ERC721, Ownable, ReentrancyGuard, Pausable, IERC4906 {
     event BaseURISet(string newBaseURI);
     event ContractURIUpdated(string newContractURI);
     event ExcessSoulShardWithdrawn(uint256 amount, uint256 remainingBalance);
+    event EmergencyModeEnabled();
+    event EmergencyModeDisabled();
+    event EmergencyClaim(address indexed user, uint256 amount);
+    event EmergencyForceUnstake(address indexed user, uint256 amount);
 
     uint256 public constant VIP_TAX_REDUCTION_PER_LEVEL = 50; // 0.5% in basis points
 
@@ -254,6 +259,21 @@ contract VIPStaking is ERC721, Ownable, ReentrancyGuard, Pausable, IERC4906 {
     function supportsInterface(bytes4 interfaceId) public view virtual override(ERC721, IERC165) returns (bool) {
         return interfaceId == type(IERC4906).interfaceId || super.supportsInterface(interfaceId);
     }
+
+    function enableEmergencyMode() external onlyOwner {
+        require(paused(), "VIP: Pause first");
+        if (!emergencyMode) {
+            emergencyMode = true;
+            emit EmergencyModeEnabled();
+        }
+    }
+
+    function disableEmergencyMode() external onlyOwner {
+        if (emergencyMode) {
+            emergencyMode = false;
+            emit EmergencyModeDisabled();
+        }
+    }
     
     function withdrawStakedTokens(uint256 amount) external onlyOwner {
         address tokenAddr = _getSoulShardToken();
@@ -298,7 +318,87 @@ contract VIPStaking is ERC721, Ownable, ReentrancyGuard, Pausable, IERC4906 {
         (bool success, ) = owner().call{value: balance}("");
         require(success, "VIPStaking: BNB transfer failed");
     }
-    
+
+    function emergencyClaimAll() external nonReentrant whenPaused {
+        require(emergencyMode, "VIP: Emergency disabled");
+
+        StakeInfo storage stake = userStakes[msg.sender];
+        UnstakeRequest storage request = unstakeQueue[msg.sender];
+
+        uint256 principal = stake.amount;
+        uint256 pending = request.amount;
+        require(principal > 0 || pending > 0, "VIP: Nothing to claim");
+
+        uint8 oldVipLevel = getVipLevel(msg.sender);
+        uint256 tokenId = stake.tokenId;
+
+        if (principal > 0) {
+            totalStaked -= principal;
+            stake.amount = 0;
+        }
+
+        if (pending > 0) {
+            totalPendingUnstakes -= pending;
+            delete unstakeQueue[msg.sender];
+        }
+
+        uint256 refund = principal + pending;
+        address tokenAddr = _getSoulShardToken();
+        require(tokenAddr != address(0), "VIP: Token address not set");
+        IERC20(tokenAddr).safeTransfer(msg.sender, refund);
+
+        emit EmergencyClaim(msg.sender, refund);
+
+        if (tokenId != 0) {
+            emit MetadataUpdate(tokenId);
+        }
+
+        uint8 newVipLevel = getVipLevel(msg.sender);
+        if (newVipLevel != oldVipLevel) {
+            emit VipLevelChanged(msg.sender, oldVipLevel, newVipLevel);
+        }
+    }
+
+    function emergencyForceUnstake(address user) external onlyOwner whenPaused nonReentrant {
+        require(emergencyMode, "VIP: Emergency disabled");
+
+        StakeInfo storage stake = userStakes[user];
+        UnstakeRequest storage request = unstakeQueue[user];
+
+        uint256 principal = stake.amount;
+        uint256 pending = request.amount;
+        require(principal > 0 || pending > 0, "VIP: Nothing to force");
+
+        uint8 oldVipLevel = getVipLevel(user);
+        uint256 tokenId = stake.tokenId;
+
+        if (principal > 0) {
+            totalStaked -= principal;
+            stake.amount = 0;
+        }
+
+        if (pending > 0) {
+            totalPendingUnstakes -= pending;
+            delete unstakeQueue[user];
+        }
+
+        uint256 refund = principal + pending;
+        address tokenAddr = _getSoulShardToken();
+        require(tokenAddr != address(0), "VIP: Token address not set");
+        IERC20(tokenAddr).safeTransfer(user, refund);
+
+        emit EmergencyForceUnstake(user, refund);
+
+        if (tokenId != 0) {
+            emit MetadataUpdate(tokenId);
+        }
+
+        uint8 newVipLevel = getVipLevel(user);
+        if (newVipLevel != oldVipLevel) {
+            emit VipLevelChanged(user, oldVipLevel, newVipLevel);
+        }
+    }
+
     /**
      * @notice Allow contract to receive BNB
      */

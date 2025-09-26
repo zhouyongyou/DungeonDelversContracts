@@ -120,6 +120,7 @@ DungeonMaster AltarOfAscension PlayerVault
   - VIP Level 計算：
     - 將 SoulShard 質押量轉換 USD 後，`level = sqrt(value / 100 USD)`，上限 20。
     - 每級提供 0.5% 稅率折扣（PlayerVault 用）。
+  - 支援緊急模式：Owner 可 `pause` 後啟用 `enableEmergencyMode`，使用者可 `emergencyClaimAll`，Owner 則可 `emergencyForceUnstake` 協助退款。
   - 所有質押者持有的 VIP NFT 為 SBT（`locked()` 恒回 true），等級變動會觸發 `VipLevelChanged` 與 ERC-4906 事件。
 
 ### 4.3 DeFi / Token 模組

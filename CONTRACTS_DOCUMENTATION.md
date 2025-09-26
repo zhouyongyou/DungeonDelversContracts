@@ -23,6 +23,7 @@
 - **PlayerProfile / VIPStaking**
   - 皆為 SBT，支援 ERC-4906 事件更新。
   - Profile 記錄經驗，VIP 以 `sqrt(USD/100)` 推導等級（封頂 20）並提供稅率折扣。
+  - Owner 可在 `pause()` 後切換緊急模式，協助玩家透過 `emergencyClaimAll` 或 `emergencyForceUnstake` 取回質押。
 
 ## 地下城流程
 1. `requestExpedition` 檢查隊伍權限、冷卻、戰力後收取 0.0015 BNB 探險費。 
