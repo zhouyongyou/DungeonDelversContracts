@@ -47,6 +47,8 @@ contract VIPStaking is ERC721, Ownable, ReentrancyGuard, Pausable, IERC4906 {
     event ContractURIUpdated(string newContractURI);
     event ExcessSoulShardWithdrawn(uint256 amount, uint256 remainingBalance);
 
+    uint256 public constant VIP_TAX_REDUCTION_PER_LEVEL = 50; // 0.5% in basis points
+
     // EIP-5192: Minimal Non-Transferable NFTs Event
     event Locked(uint256 tokenId);
 
@@ -130,8 +132,10 @@ contract VIPStaking is ERC721, Ownable, ReentrancyGuard, Pausable, IERC4906 {
         emit UnstakeRequested(msg.sender, _amount, availableAt, newVipLevel);
         
         // EIP-4906: Emit MetadataUpdate for OKX marketplace refresh (staked amount changed)
-        emit MetadataUpdate(userStake.tokenId);
-        
+        if (userStake.tokenId != 0) {
+            emit MetadataUpdate(userStake.tokenId);
+        }
+
         // If VIP level changed, emit level change event
         if (newVipLevel != oldVipLevel) {
             emit VipLevelChanged(msg.sender, oldVipLevel, newVipLevel);
@@ -151,7 +155,9 @@ contract VIPStaking is ERC721, Ownable, ReentrancyGuard, Pausable, IERC4906 {
         // Calculate current VIP level (should be same as after requestUnstake)
         uint8 currentVipLevel = getVipLevel(msg.sender);
 
-        IERC20(_getSoulShardToken()).safeTransfer(msg.sender, amountToClaim);
+        address tokenAddr = _getSoulShardToken();
+        require(tokenAddr != address(0), "VIP: Token address not set");
+        IERC20(tokenAddr).safeTransfer(msg.sender, amountToClaim);
         emit UnstakeClaimed(msg.sender, amountToClaim, currentVipLevel);
     }
     
@@ -200,7 +206,7 @@ contract VIPStaking is ERC721, Ownable, ReentrancyGuard, Pausable, IERC4906 {
     
     function getVipTaxReduction(address _user) external view returns (uint256) {
         uint8 level = getVipLevel(_user);
-        return uint256(level) * 50; // 50 = 0.5% per level in basis points
+        return uint256(level) * VIP_TAX_REDUCTION_PER_LEVEL;
     }
     
     function tokenURI(uint256 _tokenId) public view override returns (string memory) {
@@ -244,6 +250,10 @@ contract VIPStaking is ERC721, Ownable, ReentrancyGuard, Pausable, IERC4906 {
     function setUnstakeCooldown(uint256 _newCooldown) external onlyOwner {
         unstakeCooldown = _newCooldown;
     }
+
+    function supportsInterface(bytes4 interfaceId) public view virtual override(ERC721, IERC165) returns (bool) {
+        return interfaceId == type(IERC4906).interfaceId || super.supportsInterface(interfaceId);
+    }
     
     function withdrawStakedTokens(uint256 amount) external onlyOwner {
         address tokenAddr = _getSoulShardToken();
@@ -262,7 +272,8 @@ contract VIPStaking is ERC721, Ownable, ReentrancyGuard, Pausable, IERC4906 {
         require(amount > 0, "VIP: No excess funds");
 
         token.safeTransfer(owner(), amount);
-        emit ExcessSoulShardWithdrawn(amount, token.balanceOf(address(this)));
+        uint256 finalBalance = contractBalance - amount;
+        emit ExcessSoulShardWithdrawn(amount, finalBalance);
     }
     
     /**

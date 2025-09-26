@@ -179,7 +179,7 @@ contract PlayerVault is Ownable, ReentrancyGuard {
         usernameExists[username] = true;
         
         emit UsernameUpdated(
-            msg.sender, 
+            msg.sender,
             "",        // Empty string indicates new registration
             username
         );
@@ -218,8 +218,8 @@ contract PlayerVault is Ownable, ReentrancyGuard {
             newUsername
         );
 
-        uint256 refund = msg.value - usernameRegistrationFee;
-        if (refund > 0) {
+        if (msg.value > usernameRegistrationFee) {
+            uint256 refund = msg.value - usernameRegistrationFee;
             (bool success, ) = msg.sender.call{value: refund}("");
             require(success, "Vault: Fee refund failed");
         }
