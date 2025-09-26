@@ -85,3 +85,6 @@ test-local/
 
 out/
 deployment-results/
+
+# Foundry libraries
+lib/
