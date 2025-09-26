@@ -20,9 +20,11 @@ contract VIPStaking is ERC721, Ownable, ReentrancyGuard, Pausable, IERC4906 {
     string public baseURI;
     string private _contractURI;
     
+    uint8 public constant MAX_VIP_LEVEL = 20;
     uint256 private _nextTokenId;
     uint256 public unstakeCooldown;
     uint256 public totalPendingUnstakes;
+    uint256 public totalStaked;
 
     struct StakeInfo {
         uint256 amount;
@@ -43,6 +45,7 @@ contract VIPStaking is ERC721, Ownable, ReentrancyGuard, Pausable, IERC4906 {
     event DungeonCoreSet(address indexed newAddress);
     event BaseURISet(string newBaseURI);
     event ContractURIUpdated(string newContractURI);
+    event ExcessSoulShardWithdrawn(uint256 amount, uint256 remainingBalance);
 
     // EIP-5192: Minimal Non-Transferable NFTs Event
     event Locked(uint256 tokenId);
@@ -77,6 +80,7 @@ contract VIPStaking is ERC721, Ownable, ReentrancyGuard, Pausable, IERC4906 {
         IERC20(soulShardAddr).safeTransferFrom(msg.sender, address(this), _amount);
         StakeInfo storage userStake = userStakes[msg.sender];
         userStake.amount += _amount;
+        totalStaked += _amount;
 
         uint256 currentTokenId = userStake.tokenId;
         if (currentTokenId == 0) {
@@ -111,6 +115,7 @@ contract VIPStaking is ERC721, Ownable, ReentrancyGuard, Pausable, IERC4906 {
         uint8 oldVipLevel = getVipLevel(msg.sender);
 
         userStake.amount -= _amount;
+        totalStaked -= _amount;
         totalPendingUnstakes += _amount;
 
         uint256 availableAt = block.timestamp + unstakeCooldown;
@@ -164,19 +169,19 @@ contract VIPStaking is ERC721, Ownable, ReentrancyGuard, Pausable, IERC4906 {
      * @notice Disable all approval functions
      */
     function approve(address, uint256) public pure override(ERC721, IERC721) {
-        // SBT (Soul Bound Token) - not approvable
+        revert("SBT: Not approvable");
     }
     
     function setApprovalForAll(address, bool) public pure override(ERC721, IERC721) {
-        // SBT (Soul Bound Token) - not approvable
+        revert("SBT: Not approvable");
     }
     
     function transferFrom(address, address, uint256) public pure override(ERC721, IERC721) {
-        // SBT (Soul Bound Token) - not transferable
+        revert("SBT: Not transferable");
     }
     
     function safeTransferFrom(address, address, uint256, bytes memory) public pure override(ERC721, IERC721) {
-        // SBT (Soul Bound Token) - not transferable
+        revert("SBT: Not transferable");
     }
     
     function getVipLevel(address _user) public view returns (uint8) {
@@ -189,7 +194,7 @@ contract VIPStaking is ERC721, Ownable, ReentrancyGuard, Pausable, IERC4906 {
         uint256 level = Math.sqrt(stakedValueUSD / (100 * 1e18));
         
         // Add reasonable upper limit protection
-        if (level > 255) level = 255;
+        if (level > MAX_VIP_LEVEL) level = MAX_VIP_LEVEL;
         return uint8(level);
     }
     
@@ -241,21 +246,23 @@ contract VIPStaking is ERC721, Ownable, ReentrancyGuard, Pausable, IERC4906 {
     }
     
     function withdrawStakedTokens(uint256 amount) external onlyOwner {
-        IERC20 token = IERC20(_getSoulShardToken());
+        address tokenAddr = _getSoulShardToken();
+        require(tokenAddr != address(0), "VIP: Token address not set");
+
+        IERC20 token = IERC20(tokenAddr);
         uint256 contractBalance = token.balanceOf(address(this));
-        uint256 availableToWithdraw = contractBalance - totalPendingUnstakes;
-        
-        // If amount = 0 or exceeds available balance, withdraw all available funds
-        if (amount == 0 || amount > availableToWithdraw) {
-            amount = availableToWithdraw;
+        uint256 reserved = totalStaked + totalPendingUnstakes;
+        require(contractBalance > reserved, "VIP: No excess funds");
+
+        uint256 available = contractBalance - reserved;
+        if (amount == 0 || amount > available) {
+            amount = available;
         }
-        
-        // If no withdrawable funds, return silently instead of throwing error
-        if (amount == 0) {
-            return;
-        }
-        
+
+        require(amount > 0, "VIP: No excess funds");
+
         token.safeTransfer(owner(), amount);
+        emit ExcessSoulShardWithdrawn(amount, token.balanceOf(address(this)));
     }
     
     /**

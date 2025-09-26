@@ -77,6 +77,12 @@ contract Party is ERC721, Ownable, ReentrancyGuard, Pausable, ERC721Holder, IERC
         IRelic relicContract = IRelic(_getRelicContract());
         require(address(heroContract) != address(0) && address(relicContract) != address(0), "Party: Contracts not set");
 
+        uint256 feeRefund = msg.value - platformFee;
+        if (feeRefund > 0) {
+            (bool refundSuccess, ) = msg.sender.call{value: feeRefund}("");
+            require(refundSuccess, "Party: Fee refund failed");
+        }
+
         uint256 totalPower = 0;
         uint256 totalCapacity = 0;
         

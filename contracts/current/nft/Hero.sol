@@ -220,7 +220,6 @@ contract Hero is ERC721, Ownable, ReentrancyGuard, Pausable, IVRFCallback, IERC4
         uint256 baseRandomWord
     ) private {
         uint256[] memory tokenIds = request.pendingTokenIds;
-        bool allProcessedSuccessfully = true;
         
         // Use single random number to generate seeds for all NFTs
         // Reveal each NFT
@@ -253,24 +252,8 @@ contract Hero is ERC721, Ownable, ReentrancyGuard, Pausable, IVRFCallback, IERC4
         
         // Critical fix: Set fulfilled only after all processing is complete
         request.fulfilled = true;
-        
-        // If processing successful, emit completion event with requestId
-        if (allProcessedSuccessfully) {
-            emit BatchMintCompleted(user, request.requestId, request.quantity, request.maxRarity, tokenIds);
-        }
-    }
 
-    function _determineRarityFromSeed(uint256 randomValue) internal pure returns (uint8) {
-        uint256 rarityRoll = randomValue % 100;
-        uint8 rarity;
-        
-        if (rarityRoll < 44) rarity = 1;
-        else if (rarityRoll < 79) rarity = 2;
-        else if (rarityRoll < 94) rarity = 3;
-        else if (rarityRoll < 99) rarity = 4;
-        else rarity = 5;
-        
-        return rarity;
+        emit BatchMintCompleted(user, request.requestId, request.quantity, request.maxRarity, tokenIds);
     }
 
     function _mintHero(address _to, uint8 _rarity, uint16 _power) private returns (uint256) {

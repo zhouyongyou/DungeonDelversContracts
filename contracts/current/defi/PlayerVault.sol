@@ -38,6 +38,8 @@ contract PlayerVault is Ownable, ReentrancyGuard {
     mapping(address => uint256) public totalCommissionPaid;
     mapping(address => uint256) public virtualCommissionBalance;
     uint256 public virtualTaxBalance;
+    uint256 public totalWithdrawableBalance;
+    uint256 public totalCommissionBalance;
 
     // ============ NEW: Custom Username Features ============
     mapping(string => address) public usernameToAddress;    // "john" → 0x123...
@@ -61,6 +63,18 @@ contract PlayerVault is Ownable, ReentrancyGuard {
     uint256 public periodDuration = 1 days;
 
     uint256 public commissionRate = 500; // 5%
+
+    function _requiredReserves() internal view returns (uint256) {
+        return totalWithdrawableBalance + totalCommissionBalance + virtualTaxBalance;
+    }
+
+    function _availableExcess(uint256 balance) internal view returns (uint256) {
+        uint256 required = _requiredReserves();
+        if (balance <= required) {
+            return 0;
+        }
+        return balance - required;
+    }
 
     // Enhanced events with precomputed statistics
     event Deposited(
@@ -108,6 +122,9 @@ contract PlayerVault is Ownable, ReentrancyGuard {
         uint256 totalCommissionWithdrawn      // Lifetime commission withdrawals
     );
     event VirtualTaxCollected(uint256 amount);
+    event TaxWithdrawn(uint256 amount);
+    event RevenueWithdrawn(uint256 amount);
+    event EmergencySoulShardWithdrawn(uint256 amount);
     event DungeonCoreSet(address indexed newAddress);
     event TaxParametersUpdated(uint256 standardRate, uint256 largeRate, uint256 decreaseRate, uint256 period);
     event WithdrawThresholdsUpdated(uint256 smallAmount, uint256 largeAmount);
@@ -166,6 +183,12 @@ contract PlayerVault is Ownable, ReentrancyGuard {
             "",        // Empty string indicates new registration
             username
         );
+
+        uint256 refund = msg.value - usernameRegistrationFee;
+        if (refund > 0) {
+            (bool success, ) = msg.sender.call{value: refund}("");
+            require(success, "Vault: Fee refund failed");
+        }
     }
     
     /**
@@ -194,6 +217,12 @@ contract PlayerVault is Ownable, ReentrancyGuard {
             oldUsername, 
             newUsername
         );
+
+        uint256 refund = msg.value - usernameRegistrationFee;
+        if (refund > 0) {
+            (bool success, ) = msg.sender.call{value: refund}("");
+            require(success, "Vault: Fee refund failed");
+        }
     }
     
     /**
@@ -338,6 +367,7 @@ contract PlayerVault is Ownable, ReentrancyGuard {
         
         virtualCommissionBalance[msg.sender] = 0;
         info.totalCommissionWithdrawn += commission;
+        totalCommissionBalance -= commission;
         
         IERC20(_getSoulShardToken()).safeTransfer(msg.sender, commission);
         
@@ -355,6 +385,7 @@ contract PlayerVault is Ownable, ReentrancyGuard {
         PlayerInfo storage info = playerInfo[_player];
         info.withdrawableBalance += _amount;
         info.totalDeposited += _amount;
+        totalWithdrawableBalance += _amount;
         
         emit Deposited(
             _player, 
@@ -370,6 +401,7 @@ contract PlayerVault is Ownable, ReentrancyGuard {
         
         info.withdrawableBalance -= _amount;
         info.totalGameSpent += _amount;
+        totalWithdrawableBalance -= _amount;
         
         emit GameSpending(
             _player, 
@@ -382,6 +414,7 @@ contract PlayerVault is Ownable, ReentrancyGuard {
 
     function _processWithdrawal(PlayerInfo storage player, address _withdrawer, uint256 _amount, uint256 _taxRate) private {
         player.withdrawableBalance -= _amount;
+        totalWithdrawableBalance -= _amount;
         player.totalWithdrawn += _amount; // Track gross withdrawal amount
         player.lastWithdrawTimestamp = block.timestamp;
 
@@ -402,6 +435,7 @@ contract PlayerVault is Ownable, ReentrancyGuard {
             commissionAmount = (amountAfterTaxes * commissionRate) / PERCENT_DIVISOR;
             if (commissionAmount > 0) {
                 virtualCommissionBalance[referrer] += commissionAmount;
+                totalCommissionBalance += commissionAmount;
                 totalCommissionPaid[referrer] += commissionAmount;
                 
                 // Update referrer's commission earnings
@@ -499,39 +533,54 @@ contract PlayerVault is Ownable, ReentrancyGuard {
     function withdrawTax() external onlyOwner {
         uint256 tax = virtualTaxBalance;
         require(tax > 0, "Vault: No tax to withdraw");
-        
+
+        address tokenAddr = _getSoulShardToken();
+        require(tokenAddr != address(0), "Vault: SoulShard token not set");
+
+        IERC20 token = IERC20(tokenAddr);
+        uint256 balance = token.balanceOf(address(this));
+        uint256 reservesAfter = totalWithdrawableBalance + totalCommissionBalance; // virtualTaxBalance will become 0
+
+        require(balance >= tax, "Vault: Insufficient balance");
+        require(balance - tax >= reservesAfter, "Vault: Insufficient reserves");
+
         virtualTaxBalance = 0;
-        IERC20(_getSoulShardToken()).safeTransfer(owner(), tax);
+        token.safeTransfer(owner(), tax);
+        emit TaxWithdrawn(tax);
     }
 
     function withdrawGameRevenue(uint256 amount) external onlyOwner {
-        IERC20 token = IERC20(_getSoulShardToken());
-        uint256 contractBalance = token.balanceOf(address(this));
-        
-        if (amount == 0 || amount > contractBalance) {
-            amount = contractBalance;
+        address tokenAddr = _getSoulShardToken();
+        require(tokenAddr != address(0), "Vault: SoulShard token not set");
+
+        IERC20 token = IERC20(tokenAddr);
+        uint256 balance = token.balanceOf(address(this));
+        uint256 available = _availableExcess(balance);
+        require(available > 0, "Vault: No excess funds");
+
+        if (amount == 0 || amount > available) {
+            amount = available;
         }
-        
-        if (amount == 0) {
-            return;
-        }
-        
+
         token.safeTransfer(owner(), amount);
+        emit RevenueWithdrawn(amount);
     }
 
     function emergencyWithdrawSoulShard(uint256 _amount) external onlyOwner {
-        IERC20 token = IERC20(_getSoulShardToken());
-        uint256 contractBalance = token.balanceOf(address(this));
-        
-        if (_amount == 0 || _amount > contractBalance) {
-            _amount = contractBalance;
+        address tokenAddr = _getSoulShardToken();
+        require(tokenAddr != address(0), "Vault: SoulShard token not set");
+
+        IERC20 token = IERC20(tokenAddr);
+        uint256 balance = token.balanceOf(address(this));
+        uint256 available = _availableExcess(balance);
+        require(available > 0, "Vault: No excess funds");
+
+        if (_amount == 0 || _amount > available) {
+            _amount = available;
         }
-        
-        if (_amount == 0) {
-            return;
-        }
-        
+
         token.safeTransfer(owner(), _amount);
+        emit EmergencySoulShardWithdrawn(_amount);
     }
 
     function getPlayerInfo(address _player) external view returns (
